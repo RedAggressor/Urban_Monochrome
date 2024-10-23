@@ -1,6 +1,7 @@
 ﻿using Infrastucture.Models;
 using Infrastucture.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastucture.Services
@@ -33,10 +34,12 @@ namespace Infrastucture.Services
         private async Task ExecuteSafeAsync(Func<CancellationToken, Task> action,
             CancellationToken cancellationToken = default)
         {
-            await using var transaction = await _dbContextWrapper.BeginTransactionAsycn(cancellationToken);
+            IDbContextTransaction transaction = null;            
 
             try
             {
+                transaction = await _dbContextWrapper.BeginTransactionAsycn(cancellationToken);
+
                 await action(cancellationToken);
 
                 await transaction.CommitAsync(cancellationToken);
@@ -46,16 +49,21 @@ namespace Infrastucture.Services
                 await transaction.RollbackAsync(cancellationToken);
                 _logger.LogError(ex, "transaction is rollbacked");
             }
+            finally
+            {
+                transaction.Dispose();
+            }
         }
         
         private async Task<TResult> ExecuteSafeAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
             CancellationToken cancellationToken = default)
             where TResult : BaseResponse, new()        
         {
-            await using var transaction = await _dbContextWrapper.BeginTransactionAsycn(cancellationToken);
+            IDbContextTransaction transaction = null;            
 
             try
             {
+                transaction = await _dbContextWrapper.BeginTransactionAsycn(cancellationToken);
                 var result = await action(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
 
@@ -70,6 +78,10 @@ namespace Infrastucture.Services
                 { 
                     ErrorMessage = ex.Message,
                 };
+            }
+            finally
+            {
+                transaction.Dispose();
             }
         }
     }

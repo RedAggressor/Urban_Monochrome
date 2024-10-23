@@ -5,8 +5,8 @@ namespace Catalog.Host.Mapping
 {
     public static class ItemMapExtensions
     {
-        public static ItemDto MapToItemDto(this ItemEntity itemEntity) =>
-         new ItemDto()
+        public static ItemDto? MapToItemDto(this ItemEntity itemEntity) =>
+         itemEntity is null ? null : new ItemDto()
             {
                 Id = itemEntity.Id,
                 Name = itemEntity.Name,
@@ -20,8 +20,8 @@ namespace Catalog.Host.Mapping
                 Type = itemEntity.Type,
             };
 
-        public static ItemEntity MApToItemEntity(this ItemDto itemDto) =>
-            new ItemEntity()
+        public static ItemEntity? MApToItemEntity(this ItemDto itemDto) =>
+            itemDto is null ? null : new ItemEntity()
             {
                 Id = itemDto.Id,
                 Name = itemDto.Name,
