@@ -1,4 +1,4 @@
-docker-compose build --no-cache
+#rebuild-docker docker-compose build --no-cache
 
 #start-docker docker-compose up
 
@@ -9,3 +9,10 @@ docker-compose build --no-cache
 #Remove-Migration dotnet ef --startup-project Catalog migrations remove --project Catalog -f
 
 #check-enpoint http://localhost:5000/swagger/index.html
+
+#інстрікція як запустити докер і базу у себе на локалі. йдемо до папки hosts в мене була на шляху 
+C:\Windows\System32\drivers\etc відкриваємо файл hosts без розширення, назва повина співпадати. і з правами адміністора через блокнот змінюємо вміст на наступний
+127.0.0.1 www.urbanmonochrome.com
+0.0.0.0 www.urbanmonochrome.com
+192.168.0.1 www.urbanmonochrome.com
+без цих зміни до бази доступу не буде
