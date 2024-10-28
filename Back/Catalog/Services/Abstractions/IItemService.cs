@@ -6,8 +6,9 @@ namespace Catalog.Host.Services.Abstractions
 {
     public interface IItemService
     {
-        Task<DataResponse<int>> AddItemAsync(DataRequest<ItemDto> itemDto);
-        Task<DataResponse<ItemDto>> GetItemByIdAsync(DataRequest<int> data);
-        Task<DataResponse<string>> DeleteItemByIdAsync(DataRequest<int> data);
+        Task<DataResponse<int>> AddItemAsync(ItemDto itemDto);
+        Task<DataResponse<ItemDto>> GetItemByIdAsync(int? id);
+        Task<DataResponse<string>> DeleteItemByIdAsync(int? id);
+        Task<DataResponse<ItemDto>> UpdateOrChangeItemAsync(ItemDto itemDto);
     }
 }

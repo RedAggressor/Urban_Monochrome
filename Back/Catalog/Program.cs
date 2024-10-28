@@ -1,4 +1,3 @@
-using Catalog.Host.Configurations;
 using Catalog.Host.Data;
 using Catalog.Host.Repositories;
 using Catalog.Host.Repositories.Abstractions;
@@ -11,6 +10,12 @@ var configuration = GetConfiguration();
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<HttpGlobalExceptionFilter>();
+})
+    .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -21,7 +26,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.Configure<CatalogConfig>(configuration);
+//builder.Services.Configure<CatalogConfig>(configuration);
 
 builder.Services.AddTransient<ICatalogService, CatalogService>();
 builder.Services.AddTransient<IItemRepository, ItemRepository>();
@@ -34,7 +39,7 @@ builder.Services
 builder.Services
     .AddScoped<IDbContextWrapper<ApplicationDbContext>, DbContextWrapper<ApplicationDbContext>>();
 
-builder.Services.AddCors(options =>
+builder.Services.AddCors(options => 
 {
     options.AddPolicy("AllowAll",
         builder =>

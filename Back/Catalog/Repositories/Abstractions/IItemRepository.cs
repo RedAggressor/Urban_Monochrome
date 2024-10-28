@@ -6,10 +6,11 @@ namespace Catalog.Host.Repositories.Abstractions
 {
     public interface IItemRepository
     {
-        Task<PaginatedItems<ItemEntity>> GetItemsByPageAsync(int indexPage, int pageSize, OrderType orderType);
-        Task<ItemEntity> GetItemsByName(string name);
+        Task<PaginatedItems<ItemEntity>> GetItemsByPageAsync(int indexPage, int pageSize, SortByType? orderType = SortByType.None, List<string>? typeFilters = null, List<string>? nestedFilters = null);
+        Task<ItemEntity> GetItemsByNameAsync(string name);
         Task<int> AddItemAsync(ItemEntity itemEntity);
-        Task<ItemEntity> GetItemById(int id);
-        Task<string> DeleteItemById(int id);
+        Task<ItemEntity> GetItemByIdAsync(int? id);
+        Task<string> DeleteItemByIdAsync(int? id);
+        Task<ItemEntity> UpdateOrChangeItemAsync(ItemEntity itemForUpdate);
     }
 }

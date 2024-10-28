@@ -7,7 +7,7 @@ using System.Net;
 
 namespace Catalog.Host.Controllers
 {
-    [ApiController]
+    [ApiController]    
     [Route(ComponentDefaults.DefaultRoute)]
     public class ItemController : ControllerBase
     {
@@ -18,27 +18,39 @@ namespace Catalog.Host.Controllers
         }
 
         [HttpPost]
+        [ValidateRequestBody]
         [ProducesResponseType(typeof(DataResponse<int>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> AddItemAsync(DataRequest<ItemDto> data)
+        public async Task<IActionResult> AddItemAsync(DataRequest<ItemDto?>? data)
         {
-            var response = await _itemService.AddItemAsync(data);
+            var response = await _itemService.AddItemAsync(data?.Data!);
             return Ok(response);
         }
 
         [HttpPost]
+        [ValidateRequestBody]
         [ProducesResponseType(typeof(DataResponse<ItemDto>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetItemByIdAsync(DataRequest<int> data)
+        public async Task<IActionResult> GetItemByIdAsync(DataRequest<int?>? data)
         {
-            var response = await _itemService.GetItemByIdAsync(data);
+            var response = await _itemService.GetItemByIdAsync(data?.Data!);
             return Ok(response);
         }
 
         [HttpPost]
+        [ValidateRequestBody]
         [ProducesResponseType(typeof(DataResponse<string>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteItemById(DataRequest<int> data)
+        public async Task<IActionResult> DeleteItemById(DataRequest<int?>? data)
         {
-            var response = await _itemService.DeleteItemByIdAsync(data);
+            var response = await _itemService.DeleteItemByIdAsync(data?.Data!);
             return Ok(response);
+        }
+
+        [HttpPost]
+        [ValidateRequestBody]
+        [ProducesResponseType(typeof(DataResponse<ItemDto>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> UpdateOrChageItem(DataRequest<ItemDto> data)
+        {
+            var resonse = await _itemService.UpdateOrChangeItemAsync(data?.Data!);
+            return Ok(resonse);
         }
     }
 }

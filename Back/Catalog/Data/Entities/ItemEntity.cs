@@ -1,5 +1,4 @@
 ﻿using Catalog.Host.enums;
-using System.Drawing;
 
 namespace Catalog.Host.Data.Entities
 {
@@ -10,7 +9,10 @@ namespace Catalog.Host.Data.Entities
         public string? Description { get; set; }
         public double Price {  get; set; }
         public int Quantity { get; set; }
-        public string Type { get; set; } = null!;
+        public int TypeId { get; set; }
+        public TypeEntity Type { get; set; } = null!;
+        public int NestedTypeId { get; set; }
+        public NestedTypeEntity NestedType { get; set; } = null!;
         public double Size { get; set; }
         public string Color { get; set; } = null!;
         public SexType Sex { get; set; }

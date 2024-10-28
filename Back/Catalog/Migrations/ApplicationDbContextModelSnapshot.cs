@@ -24,6 +24,12 @@ namespace Catalog.Host.Migrations
             modelBuilder.HasSequence("item_hilo")
                 .IncrementsBy(10);
 
+            modelBuilder.HasSequence("nested_type_hilo")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("type_hilo")
+                .IncrementsBy(10);
+
             modelBuilder.Entity("Catalog.Host.Data.Entities.ItemEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -47,6 +53,9 @@ namespace Catalog.Host.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("NestedTypeId")
+                        .HasColumnType("integer");
+
                     b.Property<double>("Price")
                         .HasColumnType("double precision");
 
@@ -59,13 +68,97 @@ namespace Catalog.Host.Migrations
                     b.Property<double>("Size")
                         .HasColumnType("double precision");
 
-                    b.Property<string>("Type")
+                    b.Property<int>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NestedTypeId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Item", (string)null);
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.NestedTypeEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "nested_type_hilo");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("NestedType", (string)null);
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.TypeEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "type_hilo");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("item", (string)null);
+                    b.ToTable("Type", (string)null);
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.ItemEntity", b =>
+                {
+                    b.HasOne("Catalog.Host.Data.Entities.NestedTypeEntity", "NestedType")
+                        .WithMany("Items")
+                        .HasForeignKey("NestedTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Catalog.Host.Data.Entities.TypeEntity", "Type")
+                        .WithMany("Items")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NestedType");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.NestedTypeEntity", b =>
+                {
+                    b.HasOne("Catalog.Host.Data.Entities.TypeEntity", "Type")
+                        .WithMany("NestedTypes")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.NestedTypeEntity", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Catalog.Host.Data.Entities.TypeEntity", b =>
+                {
+                    b.Navigation("Items");
+
+                    b.Navigation("NestedTypes");
                 });
 #pragma warning restore 612, 618
         }

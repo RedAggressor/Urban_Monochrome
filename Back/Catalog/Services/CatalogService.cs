@@ -26,7 +26,7 @@ namespace Catalog.Host.Services
         {
             return await ExecuteSafeAsync(async () => 
             {
-                var response = await _itemRepository.GetItemsByPageAsync(info.PageIndex, info.PageSize, info.OrderType);
+                var response = await _itemRepository.GetItemsByPageAsync(info.PageIndex, info.PageSize, info.OrderType, info.typeFilters, info.nestedTypeFilters);
 
                 return new ItemsByPageResponse<ItemDto>()
                 {
@@ -42,7 +42,7 @@ namespace Catalog.Host.Services
         {
             return await ExecuteSafeAsync(async () => 
             {
-                var response = await _itemRepository.GetItemsByName(data.Data!);
+                var response = await _itemRepository.GetItemsByNameAsync(data.Data!);
 
                 return new DataResponse<ItemDto>()
                 {

@@ -1,7 +1,6 @@
 ﻿using Catalog.Host.Data;
 using Catalog.Host.Mapping;
 using Catalog.Host.Models.Dto;
-using Catalog.Host.Models.Request;
 using Catalog.Host.Models.Responses;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Abstractions;
@@ -20,13 +19,13 @@ namespace Catalog.Host.Services
         { 
             _itemRepository = itemRepository;
         }
-        public async Task<DataResponse<int>> AddItemAsync(DataRequest<ItemDto> data)
+        public async Task<DataResponse<int>> AddItemAsync(ItemDto itemDto)
         {
             return await ExecuteSafeAsync(async () =>
             {
-                var itemEntity = data.Data.MApToItemEntity();
+                var itemEntity = itemDto!.MApToItemEntity();
 
-                var response = await _itemRepository.AddItemAsync(itemEntity);
+                var response = await _itemRepository.AddItemAsync(itemEntity!);
 
                 return new DataResponse<int>
                 {
@@ -35,13 +34,11 @@ namespace Catalog.Host.Services
             });            
         }
 
-        public async Task<DataResponse<ItemDto>> GetItemByIdAsync(DataRequest<int> data)
+        public async Task<DataResponse<ItemDto>> GetItemByIdAsync(int? id)
         {
             return await ExecuteSafeAsync(async () => 
             {
-                var id = data.Data;
-
-                var itenEntity = await _itemRepository.GetItemById(id);
+                var itenEntity = await _itemRepository.GetItemByIdAsync(id);
 
                 var itemDto = itenEntity.MapToItemDto();
 
@@ -52,17 +49,30 @@ namespace Catalog.Host.Services
             });
         }
 
-        public async Task<DataResponse<string>> DeleteItemByIdAsync(DataRequest<int> data)
+        public async Task<DataResponse<string>> DeleteItemByIdAsync(int? id)
         {
             return await ExecuteSafeAsync(async () =>
             {
-                var id = data.Data;
-
-                var response = await _itemRepository.DeleteItemById(id);
+                var response = await _itemRepository.DeleteItemByIdAsync(id);
 
                 return new DataResponse<string> 
                 { 
                     Data = response 
+                };
+            });
+        }
+
+        public async Task<DataResponse<ItemDto>> UpdateOrChangeItemAsync(ItemDto itemDto)
+        {
+            return await ExecuteSafeAsync(async () =>
+            {
+                var entity = itemDto!.MApToItemEntity();
+                var response = await _itemRepository.UpdateOrChangeItemAsync(entity!);
+                var dto = response.MapToItemDto();
+
+                return new DataResponse<ItemDto>()
+                {
+                    Data = dto
                 };
             });
         }

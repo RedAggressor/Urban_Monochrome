@@ -23,18 +23,20 @@ namespace Catalog.Host.Controllers
         }
 
         [HttpPost]
+        [ValidateRequestBody]
         [ProducesResponseType(typeof(ItemsByPageResponse<ItemDto>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetPagenatedItem(PageInfoRequest pageInfoRequest)
+        public async Task<IActionResult> GetPagenatedItem(PageInfoRequest? pageInfoRequest)
         {
-            var response = await _catalogService.GetOrderItemByPricePage(pageInfoRequest);
+            var response = await _catalogService.GetOrderItemByPricePage(pageInfoRequest!);
             return Ok(response);
         }
 
         [HttpPost]
+        [ValidateRequestBody]
         [ProducesResponseType(typeof(DataResponse<ItemDto>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetItemByName(DataRequest<string> value)
+        public async Task<IActionResult> GetItemByName(DataRequest<string>? value)
         {
-            var response = await _catalogService.GetItdeByNameAsync(value);
+            var response = await _catalogService.GetItdeByNameAsync(value!);
             return Ok(response);
         }
 

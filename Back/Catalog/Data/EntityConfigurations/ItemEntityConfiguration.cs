@@ -8,7 +8,7 @@ namespace Catalog.Host.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<ItemEntity> builder)
         {
-            builder.ToTable("item");
+            builder.ToTable("Item");
 
             builder
                 .HasKey(k => k.Id);
@@ -16,6 +16,16 @@ namespace Catalog.Host.Data.EntityConfigurations
             builder
                 .Property(k => k.Id)
                 .UseHiLo("item_hilo");
+
+            builder.HasOne(o=>o.Type)
+                .WithMany(m=>m.Items)
+                .HasForeignKey(o => o.TypeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(o => o.NestedType)
+               .WithMany(m => m.Items)
+               .HasForeignKey(o => o.NestedTypeId)
+               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

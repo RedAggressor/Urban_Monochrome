@@ -2,9 +2,10 @@
 {
     public enum SexType
     {
-        None = 0,
-        Child,
+        None = 0,        
         Man,
-        Woman
+        Woman,
+        Children,
+        Unisex
     }
 }
