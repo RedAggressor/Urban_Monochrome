@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>3c2b71e7-0501-49f1-b185-6568dad738a9</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <AssemblyName>Infrastructure</AssemblyName>
+    <RootNamespace>Infrastructure</RootNamespace>
     <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
@@ -22,6 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastucture\Infrastucture.csproj" />
-  </ItemGroup>
+  </ItemGroup>  
 
 </Project>
