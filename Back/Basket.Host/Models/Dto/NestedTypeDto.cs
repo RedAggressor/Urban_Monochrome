@@ -1,4 +1,4 @@
-﻿namespace Catalog.Host.Models.Dto
+﻿namespace Basket.Host.Models.Dto
 {
     public class NestedTypeDto
     {
