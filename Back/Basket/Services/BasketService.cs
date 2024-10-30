@@ -5,7 +5,7 @@ using Basket.Host.Services.Interfaces;
 
 namespace Basket.Host.Services
 {
-    public class BasketService
+    public class BasketService : IBasketService
     {
         private readonly ICacheService _cacheService;
         private readonly string _keyBasket = "basket";

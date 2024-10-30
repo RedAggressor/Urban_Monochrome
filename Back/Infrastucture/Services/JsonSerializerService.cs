@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Infrastucture.Services
 {
-    public class JsonSerializer : IJsonSerializer
+    public class JsonSerializerService : IJsonSerializerService
     {
         public string Serialize<T>(T data) =>
             JsonConvert.SerializeObject(data);

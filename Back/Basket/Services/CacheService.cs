@@ -2,7 +2,6 @@
 using Basket.Host.Services.Interfaces;
 using StackExchange.Redis;
 using Microsoft.Extensions.Options;
-using Infrastucture.Services.Abstractions;
 
 namespace Basket.Host.Services
 {
@@ -11,12 +10,12 @@ namespace Basket.Host.Services
         private readonly RedisConfig _redisConfig;
         private readonly ILogger<CacheService> _logger;
         private readonly IRedisCacheConnectionService _redisService;
-        private readonly IJsonSerializer _jsonSerializer;
+        private readonly IJsonSerializerService _jsonSerializer;
         public CacheService(
             IOptions<RedisConfig> options,
             ILogger<CacheService> logger,
             IRedisCacheConnectionService redisService,
-            IJsonSerializer jsonSerializer
+            IJsonSerializerService jsonSerializer
             ) 
         {
             _redisConfig = options.Value;
@@ -25,8 +24,8 @@ namespace Basket.Host.Services
             _jsonSerializer = jsonSerializer;
         }
 
-        public Task AddOdUpdateAsync<T>(string key, T value) => 
-            AddOdUpdateAsync(key, value);
+        public Task AddOdUpdateAsync<T>(string key, T value) =>
+            AddorUpdateInterAsync(key, value);
 
         public async Task<T> GetAsync<T>(string key)
         {
@@ -39,7 +38,7 @@ namespace Basket.Host.Services
                 default(T)!;
         }
         
-        private async Task AddorUpdateAsync<T>(
+        private async Task AddorUpdateInterAsync<T>(
             string key,
             T value,
             IDatabase redis = null!,
