@@ -4,8 +4,7 @@
     {
         None = 0,        
         Man,
-        Woman,
-        Children,
+        Woman,       
         Unisex
     }
 }

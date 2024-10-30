@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "eShop - Catalog HTTP API",
+        Title = "Urban Monochrome - Catalog HTTP API",
         Version = "v1",
         Description = "The Catalog Service HTTP API"
     });
