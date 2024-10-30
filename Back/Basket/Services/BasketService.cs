@@ -8,7 +8,7 @@ namespace Basket.Host.Services
     public class BasketService : IBasketService
     {
         private readonly ICacheService _cacheService;
-        private readonly string _keyBasket = "basket";
+        private readonly string _keyBasket = "BasketService";
         private readonly ILogger<BasketService> _logger;
         public BasketService(
             ICacheService cacheService,

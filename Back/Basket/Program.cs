@@ -1,3 +1,4 @@
+using Basket.Host.Configs;
 using Basket.Host.Services;
 using Basket.Host.Services.Interfaces;
 using Microsoft.OpenApi.Models;
@@ -20,8 +21,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-//builder.Services.Configure<RedisConfig>(
-    //builder.Configuration.GetSection("Redis"));
+builder.Services.Configure<RedisConfig>(
+    builder.Configuration.GetSection("Redis"));
 
 builder.Services.AddTransient<IBasketService, BasketService>();
 builder.Services.AddTransient<ICacheService, CacheService>();
@@ -59,8 +60,9 @@ app.Run();
 
 IConfiguration GetConfiguration()
 {
-    var builder = new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
+    var builder = new ConfigurationBuilder();
+
+    builder.SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddEnvironmentVariables();
 
