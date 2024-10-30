@@ -15,6 +15,12 @@ namespace Basket.Host.Services
         {
             var redisConfigurationOption = ConfigurationOptions.Parse(config.Value.Host);
 
+            //var redisConfigurationOption = new ConfigurationOptions
+            //{
+            //    EndPoints = { "localhost:6380" },
+            //    ConnectTimeout = 5000,
+            //};
+
             _connectionMultiplex = new Lazy<ConnectionMultiplexer>(() =>
                 ConnectionMultiplexer.Connect(redisConfigurationOption));
         }

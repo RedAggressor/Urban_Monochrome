@@ -44,8 +44,8 @@ namespace Basket.Host.Services
             IDatabase redis = null!,
             TimeSpan? expiry = null!)
         {
-            redis = redis ?? GetRedisDatabase();
-            expiry = expiry ?? _redisConfig.CacheTimeout;
+            redis ??= GetRedisDatabase();
+            expiry ??= _redisConfig.CacheTimeout;
 
             var serialized = _jsonSerializer.Serialize(value);
             
