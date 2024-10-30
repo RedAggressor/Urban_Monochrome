@@ -1,4 +1,3 @@
-using Basket.Host.Configs;
 using Basket.Host.Services;
 using Basket.Host.Services.Interfaces;
 using Microsoft.OpenApi.Models;
@@ -21,8 +20,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.Configure<RedisConfig>(
-    builder.Configuration.GetSection("Redis"));
+//builder.Services.Configure<RedisConfig>(
+    //builder.Configuration.GetSection("Redis"));
 
 builder.Services.AddTransient<IBasketService, BasketService>();
 builder.Services.AddTransient<ICacheService, CacheService>();
@@ -52,13 +51,9 @@ app.UseSwagger().UseSwaggerUI(setup =>
 app.UseRouting();
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute();
-    endpoints.MapControllers();
-});
+app.MapControllers();
 
 app.Run();
 
