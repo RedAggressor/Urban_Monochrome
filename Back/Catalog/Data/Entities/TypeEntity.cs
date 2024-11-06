@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;       
-        public List<ItemEntity> Items { get; set; } = new List<ItemEntity>();
-        public List<NestedTypeEntity> NestedTypes { get; set; } = new List<NestedTypeEntity>();
+        public ICollection<ItemEntity> Items { get; set; } = new List<ItemEntity>();
+        public ICollection<NestedTypeEntity> NestedTypes { get; set; } = new List<NestedTypeEntity>();
     }
 }

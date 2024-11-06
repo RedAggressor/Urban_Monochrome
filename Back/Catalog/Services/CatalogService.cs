@@ -10,13 +10,13 @@ using Catalog.Host.Services.Abstractions;
 
 namespace Catalog.Host.Services
 {
-    public class CatalogService : BaseDataService<ApplicationDbContext>, ICatalogService
+    public class CatalogService : BaseDataService<CatalogDbContext>, ICatalogService
     {
         private readonly IItemRepository _itemRepository;
         public CatalogService(
             IItemRepository itemRepository,
-            IDbContextWrapper<ApplicationDbContext> dbContextWrapper,
-            ILogger<BaseDataService<ApplicationDbContext>> loggerBase)
+            IDbContextWrapper<CatalogDbContext> dbContextWrapper,
+            ILogger<BaseDataService<CatalogDbContext>> loggerBase)
             : base(dbContextWrapper, loggerBase) 
         {
             _itemRepository = itemRepository;
@@ -31,7 +31,7 @@ namespace Catalog.Host.Services
                 return new ItemsByPageResponse<ItemDto>()
                 {
                     TotalCountItem = response.TotalCountItem,
-                    Data = response.Data.Select(item => item.MapToItemDto()),
+                    Data = response.Data.Select(item => item.MapToItemDto())!,
                     PageIndex = info.PageIndex,
                     PageSize = info.PageSize
                 };

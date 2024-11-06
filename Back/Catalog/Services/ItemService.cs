@@ -7,14 +7,14 @@ using Catalog.Host.Services.Abstractions;
 
 namespace Catalog.Host.Services
 {
-    public class ItemService : BaseDataService<ApplicationDbContext>, IItemService
+    public class ItemService : BaseDataService<CatalogDbContext>, IItemService
     {
         private readonly IItemRepository _itemRepository;
 
         public ItemService(
             IItemRepository itemRepository,
-            IDbContextWrapper<ApplicationDbContext> dbContextWrapper,
-            ILogger<BaseDataService<ApplicationDbContext>> loggerBase)
+            IDbContextWrapper<CatalogDbContext> dbContextWrapper,
+            ILogger<BaseDataService<CatalogDbContext>> loggerBase)
             : base( dbContextWrapper, loggerBase)
         { 
             _itemRepository = itemRepository;

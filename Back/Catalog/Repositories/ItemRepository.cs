@@ -8,10 +8,10 @@ namespace Catalog.Host.Repositories
 {
     public class ItemRepository : IItemRepository
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly CatalogDbContext _dbContext;
         private readonly ILogger<IItemRepository> _logger;
         public ItemRepository(
-            IDbContextFactory<ApplicationDbContext> dbContext,
+            IDbContextFactory<CatalogDbContext> dbContext,
             ILogger<IItemRepository> logger)
         {
             _dbContext = dbContext.CreateDbContext();
@@ -95,7 +95,7 @@ namespace Catalog.Host.Repositories
                 .Include(item => item.NestedType)
                 .FirstOrDefaultAsync(f => f.Id == itemForUpdate.Id);
                         
-            itemEntity.Name = (itemEntity.Name == itemForUpdate.Name) || (itemForUpdate.Name == GetDefaualtValue(itemForUpdate.Name)) ? itemEntity.Name : itemForUpdate.Name;
+            itemEntity!.Name = (itemEntity.Name == itemForUpdate.Name) || (itemForUpdate.Name == GetDefaualtValue(itemForUpdate.Name)) ? itemEntity.Name : itemForUpdate.Name;
             itemEntity.Price = (itemEntity.Price == itemForUpdate.Price) || (itemForUpdate.Price == GetDefaualtValue(itemForUpdate.Price)) ? itemEntity.Price : itemForUpdate.Price;
             itemEntity.Quantity = (itemEntity.Quantity == itemForUpdate.Quantity) || (itemForUpdate.Quantity == GetDefaualtValue(itemForUpdate.Quantity)) ? itemEntity.Quantity : itemForUpdate.Quantity;
             itemEntity.Sex = (itemEntity.Sex == itemForUpdate.Sex) || (itemForUpdate.Sex == GetDefaualtValue(itemForUpdate.Sex)) ? itemEntity.Sex : itemForUpdate.Sex;

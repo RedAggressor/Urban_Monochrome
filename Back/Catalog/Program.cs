@@ -33,11 +33,11 @@ builder.Services.AddTransient<IItemRepository, ItemRepository>();
 builder.Services.AddTransient<IItemService, ItemService>();
 
 builder.Services
-    .AddDbContextFactory<ApplicationDbContext>(options => 
+    .AddDbContextFactory<CatalogDbContext>(options => 
         options.UseNpgsql(configuration["ConnectionString"]));
 
 builder.Services
-    .AddScoped<IDbContextWrapper<ApplicationDbContext>, DbContextWrapper<ApplicationDbContext>>();
+    .AddScoped<IDbContextWrapper<CatalogDbContext>, DbContextWrapper<CatalogDbContext>>();
 
 builder.Services.AddCors(options => 
 {
@@ -88,7 +88,7 @@ void CreateDbIfNotExists(IHost host)
         var services = scope.ServiceProvider;
         try
         {
-            var context = services.GetRequiredService<ApplicationDbContext>();
+            var context = services.GetRequiredService<CatalogDbContext>();
 
             InitializeDatabase.Initialize(context).Wait();
         }

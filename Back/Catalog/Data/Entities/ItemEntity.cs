@@ -14,8 +14,8 @@ namespace Catalog.Host.Data.Entities
         public int NestedTypeId { get; set; }
         public NestedTypeEntity NestedType { get; set; } = null!;
         public double Size { get; set; }
-        public string Color { get; set; } = null!;
+        public string? Color { get; set; }
         public SexType Sex { get; set; }
-        public string ImageUrl { get; set; } = null!;
+        public string? ImageUrl { get; set; }
     }
 }

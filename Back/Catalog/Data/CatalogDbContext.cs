@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Host.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class CatalogDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
+        public CatalogDbContext(DbContextOptions<CatalogDbContext> options) 
             : base(options) { }
 
         public DbSet<ItemEntity> Items { get; set; } = null!;

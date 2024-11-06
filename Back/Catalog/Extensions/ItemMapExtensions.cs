@@ -39,7 +39,7 @@ namespace Catalog.Host.Mapping
                 Color = itemDto?.Color!,
                 Description = itemDto?.Description,
                 ImageUrl = itemDto?.ImageUrl!,
-                Price = itemDto.Price,
+                Price = itemDto!.Price,
                 Quantity = itemDto.Quantity,
                 Sex = itemDto.Sex,
                 Size = itemDto.Size,                
