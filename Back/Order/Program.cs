@@ -20,8 +20,11 @@ builder.Services.AddControllers(options =>
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
     });
 
+builder.Services.AddHttpClient();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IOrderService, OrderService>();
+builder.Services.AddTransient<ICatalogHttpService, CatalogHttpService>();
+builder.Services.AddTransient<IHttpClientService, HttpClientService>();
 
 builder.Services
     .AddDbContextFactory<OrderDbContext>(options =>
@@ -29,6 +32,17 @@ builder.Services
 
 builder.Services
     .AddScoped<IDbContextWrapper<OrderDbContext>, DbContextWrapper<OrderDbContext>>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -41,6 +55,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowAll");
+
+app.UseSwagger()
+    .UseSwaggerUI(option =>
+        option.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Catalog.API V1"));
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,4 +1,4 @@
-﻿namespace Order.Host.Dto.Requests
+﻿namespace Infrastucture.Models.Requests
 {
     public class DataRequest<T>
     {

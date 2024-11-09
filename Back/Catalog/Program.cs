@@ -55,11 +55,17 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseCors("AllowAll");
+
 app.UseSwagger()
     .UseSwaggerUI(option => 
         option.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Catalog.API V1"));
-
-app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();

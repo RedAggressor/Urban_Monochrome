@@ -30,7 +30,20 @@ services:
     depends_on:
       - postgres
     ports:
-      - 5000:5000    
+      - 5000:5000
+  order.api:
+    container_name: lde.order.api
+    build:
+      context: .
+      dockerfile: Order/Dockerfile
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ASPNETCORE_URLS=http://+:5001
+        - CATALOG_API_URL=http://lde.catalog.api:5000
+    depends_on:
+      - postgres
+    ports:
+      - 5001:5001
   pgadmin4:
     image: dpage/pgadmin4
     container_name: lde.pgadmin4

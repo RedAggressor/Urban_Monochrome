@@ -5,14 +5,14 @@ namespace Order.Host.Extenctions
 {
     public static class OrderMapExtemtion
     {
-        public static OrderDto? MapToOrderDto(this OrderEntity? orderEntity)
+        public static OrderDto? MapToOrderDto(this OrderEntity? orderEntity, Dictionary<int, ItemDto> items)
         {
             return orderEntity is null ? null : new OrderDto()
             {
                 Id = orderEntity.Id,
                 UserId = orderEntity.UserId,
                 OrderStatus = orderEntity.StatusOrder,
-                OrderItems = orderEntity.OrderItems.Select(orderItem => orderItem.MapToOrderItemDto()).ToList()!,
+                OrderItems = orderEntity.OrderItems.Select(orderItem => orderItem.MapToOrderItemDto(items[orderItem.ItemId])).ToList()!,
                 CreatedAt = orderEntity.CreatedAt,
                 UpdatedAt = orderEntity.UpdatedAt,
                 PaymentStatus = orderEntity.PaymentStatus,

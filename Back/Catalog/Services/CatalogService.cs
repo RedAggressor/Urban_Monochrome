@@ -1,5 +1,4 @@
 ﻿using Catalog.Host.Data;
-using Catalog.Host.Data.Entities;
 using Catalog.Host.Mapping;
 using Catalog.Host.Models.Dto;
 using Catalog.Host.Models.Request;
@@ -22,33 +21,53 @@ namespace Catalog.Host.Services
             _itemRepository = itemRepository;
         }
 
-        public async Task<ItemsByPageResponse<ItemDto>> GetOrderItemByPricePage(PageInfoRequest info)
+        public async Task<ItemsByPageResponse<ItemDto>> GetOrderItemByPricePage(PageInfoRequest infoRequest)
         {
             return await ExecuteSafeAsync(async () => 
             {
-                var response = await _itemRepository.GetItemsByPageAsync(info.PageIndex, info.PageSize, info.OrderType, info.typeFilters, info.nestedTypeFilters);
+                var response = await _itemRepository.GetItemsByPageAsync(
+                    infoRequest.PageIndex,
+                    infoRequest.PageSize,
+                    infoRequest.OrderType,
+                    infoRequest.typeFilters,
+                    infoRequest.nestedTypeFilters);
 
                 return new ItemsByPageResponse<ItemDto>()
                 {
                     TotalCountItem = response.TotalCountItem,
                     Data = response.Data.Select(item => item.MapToItemDto())!,
-                    PageIndex = info.PageIndex,
-                    PageSize = info.PageSize
+                    PageIndex = infoRequest.PageIndex,
+                    PageSize = infoRequest.PageSize
                 };
             });            
         }
 
-        public async Task<DataResponse<ItemDto>> GetItdeByNameAsync(DataRequest<string> data)
+        public async Task<DataResponse<ItemDto>> GetItdeByNameAsync(DataRequest<string> dataRequest)
         {
             return await ExecuteSafeAsync(async () => 
             {
-                var response = await _itemRepository.GetItemsByNameAsync(data.Data!);
+                var response = await _itemRepository.GetItemsByNameAsync(dataRequest.Data!);
 
                 return new DataResponse<ItemDto>()
                 {
                     Data = response.MapToItemDto()
                 };
             });            
+        }
+
+        public async Task<DataResponse<IEnumerable<ItemDto>>> GetItemsByIdAsync(DataRequest<List<int>> dataRequest)
+        {
+            return await ExecuteSafeAsync(async () =>
+            {
+                var listItemId = dataRequest.Data!;
+                var result = await _itemRepository.GetItemsByIdAsync(listItemId);
+
+                return new DataResponse<IEnumerable<ItemDto>>()
+                {
+                    Data = result.Select(s => s.MapToItemDto()).ToList()!
+                };
+            });
+            
         }
     }
 }

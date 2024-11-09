@@ -1,6 +1,4 @@
-﻿using Order.Host.Dto.Requests;
-using Order.Host.Dto.Responses;
-using Order.Host.Models.Dto;
+﻿using Order.Host.Models.Dto;
 
 namespace Order.Host.Services.Interfaces
 {

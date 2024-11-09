@@ -1,6 +1,4 @@
 ﻿using Catalog.Host.Models.Dto;
-using Catalog.Host.Models.Request;
-using Catalog.Host.Models.Responses;
 using Catalog.Host.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

@@ -16,14 +16,15 @@ namespace Order.Host.Extenctions
             };
         }
 
-        public static OrderItem? MapToOrderItemDto(this OrderItemEntity? orderItemEntity)
+        public static OrderItem? MapToOrderItemDto(this OrderItemEntity? orderItemEntity, ItemDto itemDto)
         {
             return orderItemEntity is null ? null : new OrderItem()
             {
                 Id = orderItemEntity.Id,
                 Count = orderItemEntity.Count,
                 ItemId = orderItemEntity.ItemId,
-                Price = orderItemEntity.Price
+                Price = orderItemEntity.Price,
+                Item = itemDto
             };
         }
     }
