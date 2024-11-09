@@ -33,11 +33,11 @@ builder.Services.AddTransient<IItemRepository, ItemRepository>();
 builder.Services.AddTransient<IItemService, ItemService>();
 
 builder.Services
-    .AddDbContextFactory<ApplicationDbContext>(options => 
+    .AddDbContextFactory<CatalogDbContext>(options => 
         options.UseNpgsql(configuration["ConnectionString"]));
 
 builder.Services
-    .AddScoped<IDbContextWrapper<ApplicationDbContext>, DbContextWrapper<ApplicationDbContext>>();
+    .AddScoped<IDbContextWrapper<CatalogDbContext>, DbContextWrapper<CatalogDbContext>>();
 
 builder.Services.AddCors(options => 
 {
@@ -55,11 +55,17 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseCors("AllowAll");
+
 app.UseSwagger()
     .UseSwaggerUI(option => 
         option.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Catalog.API V1"));
-
-app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -88,7 +94,7 @@ void CreateDbIfNotExists(IHost host)
         var services = scope.ServiceProvider;
         try
         {
-            var context = services.GetRequiredService<ApplicationDbContext>();
+            var context = services.GetRequiredService<CatalogDbContext>();
 
             InitializeDatabase.Initialize(context).Wait();
         }

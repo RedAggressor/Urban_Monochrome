@@ -4,7 +4,7 @@ namespace Catalog.Host.Data
 {
     public static class InitializeDatabase
     {
-        public static async Task Initialize(ApplicationDbContext context)
+        public static async Task Initialize(CatalogDbContext context)
         {
             await context.Database.EnsureCreatedAsync();
 

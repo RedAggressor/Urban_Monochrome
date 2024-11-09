@@ -8,10 +8,10 @@ namespace Catalog.Host.Repositories
 {
     public class ItemRepository : IItemRepository
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly CatalogDbContext _dbContext;
         private readonly ILogger<IItemRepository> _logger;
         public ItemRepository(
-            IDbContextFactory<ApplicationDbContext> dbContext,
+            IDbContextFactory<CatalogDbContext> dbContext,
             ILogger<IItemRepository> logger)
         {
             _dbContext = dbContext.CreateDbContext();
@@ -59,8 +59,10 @@ namespace Catalog.Host.Repositories
             };
         }
 
-        public async Task<ItemEntity> GetItemsByNameAsync(string name) => 
-            await _dbContext.Items.Include(i=>i.Type).FirstOrDefaultAsync(f=>f.Name == name);
+        public async Task<ItemEntity?> GetItemsByNameAsync(string name) => 
+            await _dbContext.Items
+            .Include(i=>i.Type)
+            .FirstOrDefaultAsync(f=>f.Name == name);
 
         public async Task<int> AddItemAsync(ItemEntity itemEntity)
         {
@@ -71,10 +73,11 @@ namespace Catalog.Host.Repositories
             return entity.Entity.Id;
         }
         
-        public async Task<ItemEntity> GetItemByIdAsync(int? id) =>
+        public async Task<ItemEntity?> GetItemByIdAsync(int? id) =>
             await _dbContext.Items
             .Include(i=>i.Type)
             .Include(t=>t.NestedType)
+            .ThenInclude(i => i.Type)
             .FirstOrDefaultAsync(f=>f.Id == id);
         
         public async Task<string> DeleteItemByIdAsync(int? id)
@@ -88,14 +91,25 @@ namespace Catalog.Host.Repositories
             return response.State.ToString();
         }
 
-        public async Task<ItemEntity> UpdateOrChangeItemAsync(ItemEntity itemForUpdate)
+        public async Task<ICollection<ItemEntity>?> GetItemsByIdAsync(List<int> listId)
+        {
+            return await _dbContext.Items
+                .Include(inc => inc.NestedType)
+                .ThenInclude(i=>i.Type)
+                .Include(inc => inc.Type)
+                .Where(item => listId.Contains(item.Id))
+                .ToListAsync();
+        }        
+
+        public async Task<ItemEntity?> UpdateOrChangeItemAsync(ItemEntity itemForUpdate)
         {
             var itemEntity = await _dbContext.Items
                 .Include(item => item.Type)
                 .Include(item => item.NestedType)
+                .ThenInclude(it=>it.Type)
                 .FirstOrDefaultAsync(f => f.Id == itemForUpdate.Id);
                         
-            itemEntity.Name = (itemEntity.Name == itemForUpdate.Name) || (itemForUpdate.Name == GetDefaualtValue(itemForUpdate.Name)) ? itemEntity.Name : itemForUpdate.Name;
+            itemEntity!.Name = (itemEntity.Name == itemForUpdate.Name) || (itemForUpdate.Name == GetDefaualtValue(itemForUpdate.Name)) ? itemEntity.Name : itemForUpdate.Name;
             itemEntity.Price = (itemEntity.Price == itemForUpdate.Price) || (itemForUpdate.Price == GetDefaualtValue(itemForUpdate.Price)) ? itemEntity.Price : itemForUpdate.Price;
             itemEntity.Quantity = (itemEntity.Quantity == itemForUpdate.Quantity) || (itemForUpdate.Quantity == GetDefaualtValue(itemForUpdate.Quantity)) ? itemEntity.Quantity : itemForUpdate.Quantity;
             itemEntity.Sex = (itemEntity.Sex == itemForUpdate.Sex) || (itemForUpdate.Sex == GetDefaualtValue(itemForUpdate.Sex)) ? itemEntity.Sex : itemForUpdate.Sex;

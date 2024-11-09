@@ -1,0 +1,26 @@
+﻿using Catalog.Host.Models.Dto;
+using Catalog.Host.Services.Abstractions;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+
+namespace Catalog.Host.Controllers
+{
+    [ApiController]
+    [Route(ComponentDefaults.DefaultRoute)]
+    public class CatalogBFSController : ControllerBase
+    {
+        private readonly ICatalogService _catalogService;
+        public CatalogBFSController(ICatalogService catalogService)
+        {
+            _catalogService = catalogService;
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(DataResponse<IEnumerable<ItemDto>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetItemsById(DataRequest<List<int>> dataRequest)
+        {
+            var response = await _catalogService.GetItemsByIdAsync(dataRequest);
+            return Ok(response);
+        }
+    }
+}

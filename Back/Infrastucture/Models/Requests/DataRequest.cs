@@ -1,4 +1,4 @@
-﻿namespace Catalog.Host.Models.Request
+﻿namespace Infrastucture.Models.Requests
 {
     public class DataRequest<T>
     {

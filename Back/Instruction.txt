@@ -8,6 +8,13 @@
 
 #Remove-Migration dotnet ef --startup-project Catalog migrations remove --project Catalog -f
 
+
+#Add-Migration dotnet ef --startup-project Order migrations add InitialMigration --project Order
+
+#Update-Migration dotnet ef --startup-project Order database update InitialMigration --project Order
+
+#Remove-Migration dotnet ef --startup-project Order migrations remove --project Order -f
+
 #check-enpoint-catalog http://localhost:5000/swagger/index.html
 #check-enpoint-basket http://localhost:5003/swagger/index.html
 
