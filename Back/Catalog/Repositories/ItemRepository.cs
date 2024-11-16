@@ -47,6 +47,7 @@ namespace Catalog.Host.Repositories
             var itemOnPage = await quary.Select(x => x)
                 .Include(i => i.Type)
                 .Include(i => i.NestedType)
+                .ThenInclude(i=>i.Type)
                 .Skip(indexPage * pageSize)
                 .Take(pageSize).ToListAsync();
 
@@ -62,7 +63,9 @@ namespace Catalog.Host.Repositories
         public async Task<ItemEntity?> GetItemsByNameAsync(string name) => 
             await _dbContext.Items
             .Include(i=>i.Type)
-            .FirstOrDefaultAsync(f=>f.Name == name);
+            .Include(i=>i.NestedType)
+            .ThenInclude(i => i.Type)
+            .FirstOrDefaultAsync(f=>f.Name.Contains(name));
 
         public async Task<int> AddItemAsync(ItemEntity itemEntity)
         {

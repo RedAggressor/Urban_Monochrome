@@ -31,7 +31,7 @@ namespace Catalog.Host.Mapping
              }
          };
 
-        public static ItemEntity? MApToItemEntity(this ItemDto itemDto) =>
+        public static ItemEntity? MapToItemEntity(this ItemDto itemDto) =>
             itemDto is null ? null : new ItemEntity()
             {
                 Id = itemDto.Id,

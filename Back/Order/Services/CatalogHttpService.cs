@@ -11,7 +11,7 @@ namespace Order.Host.Services
         public CatalogHttpService(IHttpClientService httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
-            _urlCatalog = configuration["CATALOG_API_URL"];
+            _urlCatalog = configuration["CATALOG_API_URL"]!;
         }
 
         public async Task<ICollection<ItemDto>> GetItemsByIdAsync(List<int> listId)

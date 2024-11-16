@@ -29,8 +29,8 @@ namespace Catalog.Host.Services
                     infoRequest.PageIndex,
                     infoRequest.PageSize,
                     infoRequest.OrderType,
-                    infoRequest.typeFilters,
-                    infoRequest.nestedTypeFilters);
+                    infoRequest.TypeFilters,
+                    infoRequest.NestedTypeFilters);
 
                 return new ItemsByPageResponse<ItemDto>()
                 {

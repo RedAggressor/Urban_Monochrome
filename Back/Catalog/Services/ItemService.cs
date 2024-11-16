@@ -23,7 +23,7 @@ namespace Catalog.Host.Services
         {
             return await ExecuteSafeAsync(async () =>
             {
-                var itemEntity = itemDto!.MApToItemEntity();
+                var itemEntity = itemDto!.MapToItemEntity();
 
                 var response = await _itemRepository.AddItemAsync(itemEntity!);
 
@@ -66,7 +66,7 @@ namespace Catalog.Host.Services
         {
             return await ExecuteSafeAsync(async () =>
             {
-                var entity = itemDto!.MApToItemEntity();
+                var entity = itemDto!.MapToItemEntity();
                 var response = await _itemRepository.UpdateOrChangeItemAsync(entity!);
                 var dto = response.MapToItemDto();
 

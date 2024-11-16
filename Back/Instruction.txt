@@ -17,6 +17,7 @@
 
 #check-enpoint-catalog http://localhost:5000/swagger/index.html
 #check-enpoint-basket http://localhost:5003/swagger/index.html
+#check-enpoint-order http://localhost:5001/swagger/index.html
 
 #інстрікція як запустити докер і базу у себе на локалі. йдемо до папки hosts в мене була на шляху 
 C:\Windows\System32\drivers\etc відкриваємо файл hosts без розширення, назва повина співпадати. і з правами адміністора через блокнот змінюємо вміст на наступний
