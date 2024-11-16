@@ -1,7 +1,6 @@
 ﻿using Infrastucture.Models;
 using Infrastucture.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastucture.Services
