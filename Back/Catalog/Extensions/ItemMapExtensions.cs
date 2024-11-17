@@ -28,6 +28,11 @@ namespace Catalog.Host.Mapping
              {
                  Id = itemEntity.NestedType.Id,
                  Name = itemEntity.NestedType.Name,
+                 Type = new TypeDto()
+                 {
+                     Id = itemEntity.NestedType.Type.Id,
+                     Name = itemEntity.NestedType.Type.Name                    
+                 }
              }
          };
 

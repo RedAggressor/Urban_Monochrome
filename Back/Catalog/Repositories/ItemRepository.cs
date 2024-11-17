@@ -34,12 +34,12 @@ namespace Catalog.Host.Repositories
                     quary.OrderByDescending(o => o.Price);
             }                
 
-            if (typeFilters is not null)
+            if (typeFilters is not null && typeFilters.Any())
             {
                 quary = quary.Where(item => typeFilters.Contains(item.Type.Name));                
             }
 
-            if(nestedTypeFilters is not null)
+            if(nestedTypeFilters is not null && nestedTypeFilters.Any())
             {                
                  quary = quary.Where(item => nestedTypeFilters.Contains(item.NestedType.Name));               
             }

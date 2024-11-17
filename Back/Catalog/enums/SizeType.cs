@@ -7,6 +7,7 @@
         S,
         M,
         L,
-        Xl
+        Xl,
+        XXL
     }
 }
