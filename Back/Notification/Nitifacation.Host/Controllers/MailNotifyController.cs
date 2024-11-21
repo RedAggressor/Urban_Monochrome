@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Nitifacation.Host.Models;
 using Nitifacation.Host.Services.Interfaces;
 
 namespace Nitifacation.Host.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [ValidateRequestBody]
+    [Route(ComponentDefaults.DefaultRoute)]
     public class MailNotifyController : ControllerBase
     {
         private readonly ISendPulseService _sendPulseService;
@@ -15,10 +17,12 @@ namespace Nitifacation.Host.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendMailMessage(string to, string subject, string body)
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> SendMailMessage(SendMailRequest sendMail)
         {
-            await _sendPulseService.SendMailAsync(to, subject, body);
-            return Ok();
+            // email costumer from identity
+            var response = await _sendPulseService.SendMailAsync(sendMail);
+            return Ok(response);
         }
     }
 }

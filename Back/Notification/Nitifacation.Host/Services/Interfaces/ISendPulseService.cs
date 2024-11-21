@@ -1,7 +1,9 @@
-﻿namespace Nitifacation.Host.Services.Interfaces
+﻿using Nitifacation.Host.Models;
+
+namespace Nitifacation.Host.Services.Interfaces
 {
     public interface ISendPulseService
     {
-        Task SendMailAsync(string to, string subject, string body);
+        Task<BaseResponse> SendMailAsync(SendMailRequest sendMail);
     }
 }

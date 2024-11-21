@@ -1,30 +1,52 @@
+using Microsoft.OpenApi.Models;
+using Nitifacation.Host.Configs;
 using Nitifacation.Host.Services;
 using Nitifacation.Host.Services.Interfaces;
-
 
 var configuration = GetConfiguration();
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddControllers(
+    option => option.Filters.Add<HttpGlobalExceptionFilter>())
+    .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+
+builder.Services.AddSwaggerGen(
+    options => options.SwaggerDoc("v1", new OpenApiInfo()
+    {
+        Title = "Urban Monochrome - Notification HTTP API",
+        Version = "v1",
+        Description = "The Notification Service HTTP API"
+    }));
 
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<IHttpClientService, HttpClientService>();
-builder.Services.AddTransient<ISendPulseService, SendPulseService>();
+builder.Services.AddTransient<ISendPulseService, SendMailService>();
+builder.Services.AddTransient<IJsonSerializerService, JsonSerializerService>();
+
+builder.Services.Configure<CredentialConfig>(configuration.GetSection("Credential"));
+
+builder.Services.AddCors(options => 
+    options.AddPolicy("AllowALL",
+        builder =>
+             builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()                   
+    ));
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("AllowALL");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

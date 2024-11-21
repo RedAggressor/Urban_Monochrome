@@ -6,4 +6,3 @@ global using Infrastucture.Attributes;
 global using Infrastucture.Filters;
 global using Infrastucture.Models.Requests;
 global using Infrastucture.Models.Responses;
-
