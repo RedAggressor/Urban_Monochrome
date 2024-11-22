@@ -93,7 +93,7 @@ namespace Infrastucture.Attributes
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception($"Помилка у властивості {parentName}{property.Name}: {ex.Message}", ex);
+                    throw new Exception($"error in field {parentName}{property.Name}: {ex.Message}", ex);
                 }
             }
                 return (false, string.Empty);

@@ -65,7 +65,11 @@ app.UseCors("AllowAll");
 
 app.UseSwagger()
     .UseSwaggerUI(option => 
-        option.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Catalog.API V1"));
+        option.SwaggerEndpoint(
+            $"{configuration["PathBase"]}/swagger/v1/swagger.json",
+            "Catalog.API V1"
+        )
+    );
 
 app.UseAuthentication();
 app.UseAuthorization();
