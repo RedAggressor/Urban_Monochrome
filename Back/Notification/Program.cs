@@ -46,6 +46,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowALL");
 
+app.UseSwagger()
+    .UseSwaggerUI(option =>
+        option.SwaggerEndpoint(
+            $"{configuration["PathBase"]}/swagger/v1/swagger.json",
+            "Notification.API V1"
+        )
+    );
+
 app.UseAuthentication();
 app.UseAuthorization();
 
