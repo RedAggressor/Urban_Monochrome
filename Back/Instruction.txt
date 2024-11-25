@@ -15,6 +15,14 @@
 
 #Remove-Migration dotnet ef --startup-project Order migrations remove --project Order -f
 
+
+#Add-Migration dotnet ef --startup-project Identity migrations add InitialMigration --project Identity
+
+#Update-Migration dotnet ef --startup-project Identity database update InitialMigration --project Identity
+
+#Remove-Migration dotnet ef --startup-project Identity migrations remove --project Identity -f
+
+
 #check-enpoint-catalog http://localhost:5000/swagger/index.html
 #check-enpoint-basket http://localhost:5003/swagger/index.html
 #check-enpoint-order http://localhost:5001/swagger/index.html
