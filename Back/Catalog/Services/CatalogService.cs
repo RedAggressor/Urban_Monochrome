@@ -1,11 +1,11 @@
 ﻿using Catalog.Host.Data;
+using Catalog.Host.enums;
+using Catalog.Host.Extensions;
 using Catalog.Host.Mapping;
-using Catalog.Host.Models.Dto;
 using Catalog.Host.Models.Request;
 using Catalog.Host.Models.Responses;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Abstractions;
-
 
 namespace Catalog.Host.Services
 {
@@ -25,12 +25,21 @@ namespace Catalog.Host.Services
         {
             return await ExecuteSafeAsync(async () => 
             {
-                var response = await _itemRepository.GetItemsByPageAsync(
-                    infoRequest.PageIndex,
-                    infoRequest.PageSize,
-                    infoRequest.OrderType,
-                    infoRequest.TypeFilters,
-                    infoRequest.NestedTypeFilters);
+                var filter = new FilterItems
+                {
+                    PageIndex = infoRequest.PageIndex,
+                    PageSize = infoRequest.PageSize,
+                    ColorFilterById = infoRequest.ColorFiltersById,
+                    SexFilters = infoRequest.SexFilters.ConvertEnum<SexType>(),
+                    GroupeFiltersById = infoRequest.GroupeFiltersById,
+                    SortBy = infoRequest.SortBy.ConvertEnum<SortByType>(),
+                    HotItems = infoRequest.HotItems,
+                    SizeFiltersById = infoRequest.SizeFiltersById,
+                    TypeFiltersById = infoRequest.TypeFiltersById,
+                    PriceFilter = infoRequest.PriceFilter                     
+                };
+
+                var response = await _itemRepository.GetItemsByPageAsync(filter);
 
                 return new ItemsByPageResponse<ItemDto>()
                 {
@@ -42,15 +51,16 @@ namespace Catalog.Host.Services
             });            
         }
 
-        public async Task<DataResponse<ItemDto>> GetItdeByNameAsync(DataRequest<string> dataRequest)
+        public async Task<DataResponse<IEnumerable<ItemDto>>> GetItdeByNameAsync(DataRequest<string> dataRequest)
         {
             return await ExecuteSafeAsync(async () => 
             {
-                var response = await _itemRepository.GetItemsByNameAsync(dataRequest.Data!);
+                var searchValue = dataRequest.Data!;
+                var response = await _itemRepository.GetItemsByNameAsync(searchValue);
 
-                return new DataResponse<ItemDto>()
+                return new DataResponse<IEnumerable<ItemDto>>()
                 {
-                    Data = response.MapToItemDto()
+                    Data = response?.Select(s=>s.MapToItemDto()).ToList()!
                 };
             });            
         }
@@ -64,7 +74,7 @@ namespace Catalog.Host.Services
 
                 return new DataResponse<IEnumerable<ItemDto>>()
                 {
-                    Data = result.Select(s => s.MapToItemDto()).ToList()!
+                    Data = result?.Select(s => s.MapToItemDto()).ToList()!
                 };
             });
             

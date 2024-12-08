@@ -1,11 +1,13 @@
-﻿namespace Catalog.Host.Data.Entities
+﻿using System.Data;
+
+namespace Catalog.Host.Data.Entities
 {
-    public class NestedTypeEntity
+    public class GroupeEntity
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public int TypeId { get; set; }
-        public TypeEntity Type { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public ICollection<ItemEntity> Items { get; set; } = new List<ItemEntity>();
     }
 }

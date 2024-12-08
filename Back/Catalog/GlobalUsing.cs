@@ -6,3 +6,7 @@ global using Infrastucture.Attributes;
 global using Infrastucture.Filters;
 global using Infrastucture.Models.Requests;
 global using Infrastucture.Models.Responses;
+global using Newtonsoft.Json;
+global using System;
+global using System.Text.Json.Serialization;
+global using Infrastucture.Models.Item;
