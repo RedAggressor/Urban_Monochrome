@@ -2,8 +2,8 @@
 {
     public enum ColorType
     {
-        None = 0,
-        White,
-        Black
+        None,
+        Black,
+        White
     }
 }

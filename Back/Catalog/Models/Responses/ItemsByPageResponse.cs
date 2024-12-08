@@ -1,6 +1,4 @@
-﻿using Infrastucture.Models;
-
-namespace Catalog.Host.Models.Responses
+﻿namespace Catalog.Host.Models.Responses
 {
     public class ItemsByPageResponse<T> : BaseResponse
     {

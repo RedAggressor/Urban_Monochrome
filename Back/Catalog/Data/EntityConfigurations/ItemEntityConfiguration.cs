@@ -17,14 +17,14 @@ namespace Catalog.Host.Data.EntityConfigurations
                 .Property(k => k.Id)
                 .UseHiLo("item_hilo");
 
-            builder.HasOne(o=>o.Type)
-                .WithMany(m=>m.Items)
+            builder.HasOne(o => o.Type)
+                .WithMany(m => m.Items)
                 .HasForeignKey(o => o.TypeId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(o => o.NestedType)
+            builder.HasOne(o => o.Groupe)
                .WithMany(m => m.Items)
-               .HasForeignKey(o => o.NestedTypeId)
+               .HasForeignKey(o => o.GroupeId)
                .OnDelete(DeleteBehavior.Cascade);
         }
     }

@@ -8,14 +8,16 @@ namespace Catalog.Host.Data.Entities
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public double Price {  get; set; }
-        public int Quantity { get; set; }
         public int TypeId { get; set; }
         public TypeEntity Type { get; set; } = null!;
-        public int NestedTypeId { get; set; }
-        public NestedTypeEntity NestedType { get; set; } = null!;
-        public double Size { get; set; }
-        public string? Color { get; set; }
+        public int GroupeId { get; set; }
+        public GroupeEntity Groupe { get; set; } = null!;
+        public ICollection<ItemSpecificationEntity> ItemSpecifications { get; set; } = new List<ItemSpecificationEntity>();
         public SexType Sex { get; set; }
         public string? ImageUrl { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set;}
+        public double Discount { get; set; }
+        public int Sold { get; set; }        
     }
 }
