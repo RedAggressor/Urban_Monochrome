@@ -60,5 +60,10 @@ namespace Catalog.Host.Repositories
 
             return entity;
         }
+
+        public async Task<ICollection<ColorEntity>> GetColorsAsync()
+        {
+            return await _dbContext.Colors.ToListAsync();
+        }
     }
 }

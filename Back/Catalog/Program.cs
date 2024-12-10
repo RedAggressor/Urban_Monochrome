@@ -37,6 +37,10 @@ builder.Services.AddTransient<ISizeRepository, SizeRepository>();
 builder.Services.AddTransient<ISizeService, SizeService>();
 builder.Services.AddTransient<IItemSpecificationRepository, ItemSpecificationRepository>();
 builder.Services.AddTransient<IItemSpecificationService, ItemSpecificationService>();
+builder.Services.AddTransient<ITypeRepository, TypeRepository>();
+builder.Services.AddTransient<ITypeService, TypeService>();
+builder.Services.AddTransient<IGroupeRepository, GroupeRepository>();
+builder.Services.AddTransient<IGroupeService, GroupeService>();
 
 builder.Services
     .AddDbContextFactory<CatalogDbContext>(options => 

@@ -38,7 +38,6 @@ namespace Catalog.Host.Repositories
             return entity;
         }
 
-
         public async Task<string> DeleteSizeByIdAsync(int id)
         {
             var entity = await GetSizeByIdAsync(id);
@@ -59,6 +58,11 @@ namespace Catalog.Host.Repositories
             await _dbContext.SaveChangesAsync();
 
             return entity;
+        }
+
+        public async Task<ICollection<SizeEntity>> GetSizesAsync()
+        {
+            return await _dbContext.Sizes.ToListAsync();
         }
     }
 }

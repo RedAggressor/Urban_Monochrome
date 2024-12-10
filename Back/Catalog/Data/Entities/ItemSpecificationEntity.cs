@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.Metrics;
-using System.Xml.Linq;
-
-namespace Catalog.Host.Data.Entities
+﻿namespace Catalog.Host.Data.Entities
 {
     public class ItemSpecificationEntity
     {
@@ -21,10 +18,16 @@ namespace Catalog.Host.Data.Entities
                 return Id == spec.Id &&
                     ItemId == spec.ItemId &&
                     SizeId == spec.SizeId &&
-                    ColorId == spec.ColorId;
+                    ColorId == spec.ColorId &&
+                    Quantity == spec.Quantity;
             }
 
             return false;            
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, ItemId, SizeId, ColorId, Quantity);
         }
     }
 }

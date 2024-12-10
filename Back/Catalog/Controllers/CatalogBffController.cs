@@ -1,3 +1,4 @@
+using Catalog.Host.Models.Dto;
 using Catalog.Host.Models.Request;
 using Catalog.Host.Models.Responses;
 using Catalog.Host.Services.Abstractions;
@@ -35,5 +36,13 @@ namespace Catalog.Host.Controllers
             return Ok(response);
         }
 
+
+        [HttpPost]
+        [ProducesResponseType(typeof(DataResponse<ExistFilters>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAllFilters()
+        {
+            var response = await _catalogService.GetAllFilters();
+            return Ok(response);
+        }
     }
 }

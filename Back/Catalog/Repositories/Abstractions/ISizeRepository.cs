@@ -9,5 +9,6 @@ namespace Catalog.Host.Repositories.Abstractions
         Task<SizeEntity> GetSizeByIdAsync(int id);
         Task<string> DeleteSizeByIdAsync(int id);
         Task<SizeEntity> UpdateSizeAsync(int id, string name);
+        Task<ICollection<SizeEntity>> GetSizesAsync();
     }
 }

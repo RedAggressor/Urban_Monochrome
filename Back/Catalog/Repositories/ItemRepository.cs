@@ -4,7 +4,6 @@ using Catalog.Host.enums;
 using Catalog.Host.Helper;
 using Catalog.Host.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Immutable;
 
 namespace Catalog.Host.Repositories
 {
@@ -47,7 +46,7 @@ namespace Catalog.Host.Repositories
 
         public async Task<ICollection<ItemEntity>?> GetItemsByNameAsync(string searchValue)
         {
-            var words = searchValue.Split(' ');
+            var words = searchValue.ToLower().Split(' ');
 
             var query = _dbContext.Items
            .Include(i => i.Type)
@@ -60,14 +59,16 @@ namespace Catalog.Host.Repositories
 
             foreach (var word in words)
             {
-                query = query.Where(f => f.Name.Contains(word) ||
-                    f.Type.Name.Contains(word) ||
-                    f.ItemSpecifications.Any(s => s.Color.Name.Contains(word) || s.Size.Name.Contains(word)));                
+                query = query.Where(f => 
+                    f.Name.ToLower().Contains(word) ||
+                    f.Type.Name.ToLower().Contains(word) ||
+                    f.ItemSpecifications.Any(s => 
+                        s.Color.Name.ToLower().Contains(word) ||
+                        s.Size.Name.ToLower().Contains(word)));                
             }
 
             return await query.ToListAsync();
-        }
-           
+        }           
 
         public async Task<int> AddItemAsync(ItemEntity itemEntity)
         {
@@ -109,6 +110,7 @@ namespace Catalog.Host.Repositories
 
             if (result is null)
             {
+                _logger.LogError("Id is wrong or item doesn`t exthist");
                 throw new Exception("Id is wrong or item doesn`t exthist");
             }
 
@@ -140,6 +142,7 @@ namespace Catalog.Host.Repositories
 
             if(result is null || result.Count() == 0)
             {
+                _logger.LogWarning("the List of items don`t exthist");
                 throw new Exception("the List of items don`t exthist");
             }
 

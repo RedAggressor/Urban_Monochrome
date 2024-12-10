@@ -8,5 +8,6 @@ namespace Catalog.Host.Repositories.Abstractions
         Task<ColorEntity> GetColorByIdAsync(int id);
         Task<string> DeleteColorAsync(int id);
         Task<ColorEntity> UpdateColorAsync(int id, string newName);
+        Task<ICollection<ColorEntity>> GetColorsAsync();
     }
 }
