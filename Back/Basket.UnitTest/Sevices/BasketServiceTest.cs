@@ -95,7 +95,7 @@ namespace Basket.UnitTest.Sevices
 
             //act
 
-            var result = await _service.AddDataAsync(testKey, testEntity);
+            var result = await _service.AddDataAsync(testKey!, testEntity);
 
             //assert
 
@@ -155,8 +155,8 @@ namespace Basket.UnitTest.Sevices
             response.Data[0].Name.Should().Be("Test");
             response.Data[0].Type.Should().NotBeNull();
             response.Data[0].NestedType.Should().NotBeNull();
-            response.Data[0].Type.Name.Should().Be("Test");
-            response.Data[0].NestedType.Name.Should().Be("Test");
+            response.Data[0].Type!.Name.Should().Be("Test");
+            response.Data[0].NestedType!.Name.Should().Be("Test");
             _cacheService
                 .Verify(ve => ve.GetAsync<DataResponse<ItemDto>>(
                     It.Is<string>(s => s.Equals(redisTestKey))),
@@ -181,7 +181,7 @@ namespace Basket.UnitTest.Sevices
 
             //act
 
-            var result = await _service.GetDataAsync(testKey);
+            var result = await _service.GetDataAsync(testKey!);
 
             //asert
 

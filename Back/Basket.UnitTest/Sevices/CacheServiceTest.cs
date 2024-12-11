@@ -128,7 +128,7 @@ namespace Basket.UnitTest.Sevices
 
             //act
 
-            var result = await _cacheService.AddOrUpdateAsync(testKey, testData);
+            var result = await _cacheService.AddOrUpdateAsync(testKey!, testData);
 
             //asert
 
@@ -203,7 +203,7 @@ namespace Basket.UnitTest.Sevices
 
             //act
 
-            var result = await _cacheService.GetAsync<List<ItemDto>>(testKey);
+            var result = await _cacheService.GetAsync<List<ItemDto>>(testKey!);
 
             //asert
 

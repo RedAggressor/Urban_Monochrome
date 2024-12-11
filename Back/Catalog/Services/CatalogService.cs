@@ -41,8 +41,8 @@ namespace Catalog.Host.Services
             {
                 var filter = new FilterItems
                 {
-                    PageIndex = infoRequest.PageIndex,
-                    PageSize = infoRequest.PageSize,
+                    PageIndex = infoRequest.PageIndex ?? 0,
+                    PageSize = infoRequest.PageSize ?? 0,
                     ColorFilterById = infoRequest.ColorFiltersById,
                     SexFilters = infoRequest.SexFilters.ConvertEnum<SexType>(),
                     GroupeFiltersById = infoRequest.GroupeFiltersById,
@@ -59,8 +59,8 @@ namespace Catalog.Host.Services
                 {
                     TotalCountItem = response.TotalCountItem,
                     Data = response.Data.Select(item => item.MapToItemDto())!,
-                    PageIndex = infoRequest.PageIndex,
-                    PageSize = infoRequest.PageSize
+                    PageIndex = infoRequest.PageIndex ?? 0,
+                    PageSize = infoRequest.PageSize ?? 0
                 };
             });
         }

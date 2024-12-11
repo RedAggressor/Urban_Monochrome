@@ -51,7 +51,7 @@ namespace Catalog.Host.Services
         {
             return await ExecuteSafeAsync(async () =>
             {
-                var result = await _colorRepository.UpdateColorAsync(request.Data!.Id, request.Data.Name);
+                var result = await _colorRepository.UpdateColorAsync(request.Data!.Id ?? 0, request.Data.Name);
 
                 return new DataResponse<ColorDto>
                 {
