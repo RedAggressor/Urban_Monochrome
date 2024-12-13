@@ -28,6 +28,7 @@ builder.Services.AddTransient<IBasketService, BasketService>();
 builder.Services.AddTransient<ICacheService, CacheService>();
 builder.Services.AddTransient<IRedisCacheConnectionService, RedisCacheConnectionService>();
 builder.Services.AddTransient<IJsonSerializerService, JsonSerializerService>();
+builder.Services.AddTransient<ILikeItemService, LikeItemService>();
 
 builder.Services.AddCors(options =>
 {
@@ -40,22 +41,28 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
 var app = builder.Build();
+
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
+
+app.UseCors("AllowAll");
 
 app.UseSwagger().UseSwaggerUI(setup =>
 {
-    setup.SwaggerEndpoint($"{configuration["BasePath"]}/swagger/v1/swagger.json", "Basket.API V1");
-    setup.OAuthClientId("basketswaggerui");
-    setup.OAuthAppName("Basket Swagger UI");
+    setup.SwaggerEndpoint($"{configuration["BasePath"]}/swagger/v1/swagger.json",
+        "Basket.API V1");    
 });
-
-app.UseRouting();
-app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
 
 IConfiguration GetConfiguration()
