@@ -1,0 +1,56 @@
+@import 'normalize.css';
+@import '../styles/variables';
+
+@font-face {
+  font-family: 'Medium';
+  src: url('../../../public/Medium.otf') format('opentype');
+  font-weight: 400;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: #181516;
+  color: $white-text;
+  font-family: "Roboto", sans-serif;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+.wrapper {
+  display: flex; 
+  flex-direction: column; 
+  min-height: 100vh; 
+}
+
+main {
+  flex: 1 1 auto;
+}
+
+a {
+  text-decoration: none;
+  color: $white-text;
+} 
+
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Medium", sans-serif;
+}
+
+main {
+  flex: 1;
+}

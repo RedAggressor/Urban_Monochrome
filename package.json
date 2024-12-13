@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@types/node-sass": "^4.11.8",
+    "sass": "^1.81.0"
+  }
+}
