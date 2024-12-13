@@ -4,8 +4,8 @@ namespace Catalog.Host.Models.Request
 {
     public class PageInfoRequest
     {
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
+        public int? PageIndex { get; set; }
+        public int? PageSize { get; set; }
         public string? SortBy { get; set; } = null;
         [JsonPropertyName("CategoryFilters")]
         public List<int>? TypeFiltersById { get; set; } = null;

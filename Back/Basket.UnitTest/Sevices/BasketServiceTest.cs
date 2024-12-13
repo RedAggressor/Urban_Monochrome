@@ -95,7 +95,7 @@ namespace Basket.UnitTest.Sevices
 
             //act
 
-            var result = await _service.AddDataAsync(testKey, testEntity);
+            var result = await _service.AddDataAsync(testKey!, testEntity);
 
             //assert
 
@@ -181,7 +181,7 @@ namespace Basket.UnitTest.Sevices
 
             //act
 
-            var result = await _service.GetDataAsync(testKey);
+            var result = await _service.GetDataAsync(testKey!);
 
             //asert
 

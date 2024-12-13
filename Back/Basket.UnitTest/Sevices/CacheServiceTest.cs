@@ -128,7 +128,7 @@ namespace Basket.UnitTest.Sevices
 
             //act
 
-            var result = await _cacheService.AddOrUpdateAsync(testKey, testData);
+            var result = await _cacheService.AddOrUpdateAsync(testKey!, testData);
 
             //asert
 
