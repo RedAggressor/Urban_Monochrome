@@ -6,7 +6,7 @@ namespace Basket.Host.Services.Interfaces
 {
     public interface IBasketService
     {
-        Task<DataResponse<ItemDto>> GetDataAsync(string key);
-        Task<BaseResponse> AddDataAsync(string key, DataRequest<ItemDto> data);
+        Task<DataResponse<Item>> GetDataAsync(string key);
+        Task<BaseResponse> AddDataAsync(string key, DataRequest<Item> data);
     }
 }

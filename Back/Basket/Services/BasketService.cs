@@ -15,7 +15,7 @@ namespace Basket.Host.Services
         {
             _cacheService = cacheService;
         }
-        public async Task<BaseResponse> AddDataAsync(string key, DataRequest<ItemDto> data)
+        public async Task<BaseResponse> AddDataAsync(string key, DataRequest<Item> data)
         {
             return await SafeExecuteAsync(async () =>
             {
@@ -24,12 +24,12 @@ namespace Basket.Host.Services
             });
         }
 
-        public async Task<DataResponse<ItemDto>> GetDataAsync(string key)
+        public async Task<DataResponse<Item>> GetDataAsync(string key)
         {
             return await SafeExecuteAsync(async () =>
             {
                 var keyRedis = $"{_keyBasket}{key}";
-                return await _cacheService.GetAsync<DataResponse<ItemDto>>(keyRedis);
+                return await _cacheService.GetAsync<DataResponse<Item>>(keyRedis);
             });
         }
     }

@@ -20,7 +20,7 @@ namespace Basket.Host.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> AddDataToCache(DataRequest<ItemDto?>? data)
+        public async Task<IActionResult> AddDataToCache(DataRequest<Item?>? data)
         {
             var contextId = HttpContext.Connection.Id;
             var key = $"{_keyControler}{contextId}";
@@ -30,7 +30,7 @@ namespace Basket.Host.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(DataResponse<ItemDto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(DataResponse<Item>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetDataFromCache()
         {
             var contextId = HttpContext.Connection.Id;

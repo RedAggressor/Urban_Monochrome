@@ -24,25 +24,25 @@ namespace Basket.UnitTest.Sevices
         public async Task AddDataAsync_Success()
         {
             // arrange
-            var testEntity = new DataRequest<ItemDto>()
+            var testEntity = new DataRequest<Item>()
             {
-                Data = new List<ItemDto>
+                Data = new List<Item>
                 {
-                    new ItemDto
+                    new Item
                     {
                         Id = 1,
-                        Color = "testColor",
+                        //Color = "testColor",
                         Name = "testName",
-                        Type = new TypeDto()
-                        {
-                            Id = 1,
-                            Name = "test"
-                        },
-                        NestedType = new NestedTypeDto()
-                        {
-                            Id = 1,
-                            Name = "test"
-                        }
+                        //Type = new TypeDto()
+                        //{
+                        //    Id = 1,
+                        //    Name = "test"
+                        //},
+                        //NestedType = new NestedTypeDto()
+                        //{
+                        //    Id = 1,
+                        //    Name = "test"
+                        //}
                     }
                 }
             };
@@ -55,7 +55,7 @@ namespace Basket.UnitTest.Sevices
             _cacheService
                 .Setup(s => s.AddOrUpdateAsync(
                     It.IsAny<string>(),
-                    It.IsAny<DataRequest<ItemDto>>()))
+                    It.IsAny<DataRequest<Item>>()))
                 .ReturnsAsync(response);
 
             // act
@@ -74,7 +74,7 @@ namespace Basket.UnitTest.Sevices
         {
             //arrange
 
-            var testEntity = new DataRequest<ItemDto>()
+            var testEntity = new DataRequest<Item>()
             {
                 Data = null!
             };
@@ -90,7 +90,7 @@ namespace Basket.UnitTest.Sevices
             _cacheService
                 .Setup(s => s.AddOrUpdateAsync(
                     It.IsAny<string>(),
-                    It.IsAny<DataRequest<ItemDto>>()))
+                    It.IsAny<DataRequest<Item>>()))
                 .ThrowsAsync(new Exception("Test error"));
 
             //act
@@ -111,24 +111,24 @@ namespace Basket.UnitTest.Sevices
         {
             //arrange
 
-            var testGetData = new DataResponse<ItemDto>()
+            var testGetData = new DataResponse<Item>()
             {
-                Data = new List<ItemDto>()
+                Data = new List<Item>()
                 {
-                    new ItemDto()
+                    new Item()
                     {
                         Id = 1,
                         Name = "Test",
-                        Type = new TypeDto()
-                        {
-                            Id = 1,
-                            Name = "Test",
-                        },
-                        NestedType = new NestedTypeDto()
-                        {
-                            Id = 1,
-                            Name = "Test",
-                        }
+                        //Type = new TypeDto()
+                        //{
+                        //    Id = 1,
+                        //    Name = "Test",
+                        //},
+                        //NestedType = new NestedTypeDto()
+                        //{
+                        //    Id = 1,
+                        //    Name = "Test",
+                        //}
                     }
                 }
             };
@@ -138,7 +138,7 @@ namespace Basket.UnitTest.Sevices
 
             _cacheService
                 .Setup(st => 
-                    st.GetAsync<DataResponse<ItemDto>>(It.IsAny<string>()))
+                    st.GetAsync<DataResponse<Item>>(It.IsAny<string>()))
                 .ReturnsAsync(testGetData);
 
             //act
@@ -154,11 +154,11 @@ namespace Basket.UnitTest.Sevices
             response.Data[0].Id.Should().Be(1);
             response.Data[0].Name.Should().Be("Test");
             response.Data[0].Type.Should().NotBeNull();
-            response.Data[0].NestedType.Should().NotBeNull();
-            response.Data[0].Type!.Name.Should().Be("Test");
-            response.Data[0].NestedType!.Name.Should().Be("Test");
+            //response.Data[0].NestedType.Should().NotBeNull();
+            //response.Data[0].Type.Name.Should().Be("Test");
+            //response.Data[0].NestedType.Name.Should().Be("Test");
             _cacheService
-                .Verify(ve => ve.GetAsync<DataResponse<ItemDto>>(
+                .Verify(ve => ve.GetAsync<DataResponse<Item>>(
                     It.Is<string>(s => s.Equals(redisTestKey))),
                     Times.Once);
         }
@@ -175,7 +175,7 @@ namespace Basket.UnitTest.Sevices
             };
 
             _cacheService
-                .Setup(st => st.GetAsync<DataResponse<ItemDto>>(
+                .Setup(st => st.GetAsync<DataResponse<Item>>(
                     It.IsAny<string>()))
                 .ThrowsAsync(new Exception("test error"));
 
@@ -190,7 +190,7 @@ namespace Basket.UnitTest.Sevices
             result.ErrorMessage.Should().NotBeNullOrEmpty();
             result.ErrorMessage.Should().Be("test error");
             _cacheService.Verify(ve => 
-                ve.GetAsync<DataResponse<ItemDto>>(redisTestKey),
+                ve.GetAsync<DataResponse<Item>>(redisTestKey),
                 Times.Once);
         }
     }
