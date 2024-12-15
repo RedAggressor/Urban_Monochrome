@@ -24,15 +24,15 @@ namespace Catalog.Host.Migrations
                 incrementBy: 10);
 
             migrationBuilder.CreateSequence(
-                name: "itemSpecification_hilo",
-                incrementBy: 10);
-
-            migrationBuilder.CreateSequence(
                 name: "size_hilo",
                 incrementBy: 10);
 
             migrationBuilder.CreateSequence(
                 name: "type_hilo",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence(
+                name: "uniqueItem_hilo",
                 incrementBy: 10);
 
             migrationBuilder.CreateTable(
@@ -120,7 +120,7 @@ namespace Catalog.Host.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ItemSpecification",
+                name: "UniqueItem",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
@@ -131,21 +131,21 @@ namespace Catalog.Host.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ItemSpecification", x => x.Id);
+                    table.PrimaryKey("PK_UniqueItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ItemSpecification_Color_ColorId",
+                        name: "FK_UniqueItem_Color_ColorId",
                         column: x => x.ColorId,
                         principalTable: "Color",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ItemSpecification_Item_ItemId",
+                        name: "FK_UniqueItem_Item_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Item",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ItemSpecification_Size_SizeId",
+                        name: "FK_UniqueItem_Size_SizeId",
                         column: x => x.SizeId,
                         principalTable: "Size",
                         principalColumn: "Id",
@@ -163,18 +163,18 @@ namespace Catalog.Host.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemSpecification_ColorId",
-                table: "ItemSpecification",
+                name: "IX_UniqueItem_ColorId",
+                table: "UniqueItem",
                 column: "ColorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemSpecification_ItemId",
-                table: "ItemSpecification",
+                name: "IX_UniqueItem_ItemId",
+                table: "UniqueItem",
                 column: "ItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemSpecification_SizeId",
-                table: "ItemSpecification",
+                name: "IX_UniqueItem_SizeId",
+                table: "UniqueItem",
                 column: "SizeId");
         }
 
@@ -182,7 +182,7 @@ namespace Catalog.Host.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ItemSpecification");
+                name: "UniqueItem");
 
             migrationBuilder.DropTable(
                 name: "Color");
@@ -209,13 +209,13 @@ namespace Catalog.Host.Migrations
                 name: "item_hilo");
 
             migrationBuilder.DropSequence(
-                name: "itemSpecification_hilo");
-
-            migrationBuilder.DropSequence(
                 name: "size_hilo");
 
             migrationBuilder.DropSequence(
                 name: "type_hilo");
+
+            migrationBuilder.DropSequence(
+                name: "uniqueItem_hilo");
         }
     }
 }

@@ -27,9 +27,9 @@ namespace Catalog.Host.Repositories
 
             var itemOnPage = await quary.Select(x => x)
                 .Include(i => i.Type)
-                .Include(i => i.ItemSpecifications)
+                .Include(i => i.UniqueItems)
                     .ThenInclude(i => i.Size)
-                .Include(i => i.ItemSpecifications)
+                .Include(i => i.UniqueItems)
                     .ThenInclude(i => i.Color)
                 .Include(i => i.Groupe)
                 .Skip(filterItems.PageIndex * filterItems.PageSize)
@@ -50,9 +50,9 @@ namespace Catalog.Host.Repositories
 
             var query = _dbContext.Items
            .Include(i => i.Type)
-           .Include(i => i.ItemSpecifications)
+           .Include(i => i.UniqueItems)
                .ThenInclude(i => i.Size)
-           .Include(i => i.ItemSpecifications)
+           .Include(i => i.UniqueItems)
                .ThenInclude(i => i.Color)
            .Include(i => i.Groupe)
            .AsQueryable();
@@ -62,7 +62,7 @@ namespace Catalog.Host.Repositories
                 query = query.Where(f => 
                     f.Name.ToLower().Contains(word) ||
                     f.Type.Name.ToLower().Contains(word) ||
-                    f.ItemSpecifications.Any(s => 
+                    f.UniqueItems.Any(s => 
                         s.Color.Name.ToLower().Contains(word) ||
                         s.Size.Name.ToLower().Contains(word)));                
             }
@@ -78,11 +78,11 @@ namespace Catalog.Host.Repositories
 
             var entity = await _dbContext.Items.AddAsync(itemEntity);
 
-            if (itemEntity.ItemSpecifications is not null)
+            if (itemEntity.UniqueItems is not null)
             {
-                await _dbContext.ItemSpecifications.AddRangeAsync(
+                await _dbContext.UniqueItems.AddRangeAsync(
 
-                    itemEntity.ItemSpecifications.Select(s => new ItemSpecificationEntity
+                    itemEntity.UniqueItems.Select(s => new UniqueItemEntity
                     {
                         ItemId = entity.Entity.Id,
                         ColorId = s.ColorId,
@@ -101,9 +101,9 @@ namespace Catalog.Host.Repositories
         {
             var result = await _dbContext.Items
             .Include(i => i.Type)
-            .Include(i => i.ItemSpecifications)
+            .Include(i => i.UniqueItems)
                 .ThenInclude(i => i.Size)
-            .Include(i => i.ItemSpecifications)
+            .Include(i => i.UniqueItems)
                 .ThenInclude(i => i.Color)
             .Include(i => i.Groupe)
             .FirstOrDefaultAsync(f => f.Id == id);
@@ -132,9 +132,9 @@ namespace Catalog.Host.Repositories
         {
             var result = await _dbContext.Items
                 .Include(i => i.Type)
-                .Include(i => i.ItemSpecifications)
+                .Include(i => i.UniqueItems)
                     .ThenInclude(i => i.Size)
-                .Include(i => i.ItemSpecifications)
+                .Include(i => i.UniqueItems)
                     .ThenInclude(i => i.Color)
                 .Include(i => i.Groupe)
                 .Where(item => listId.Contains(item.Id))
@@ -161,9 +161,9 @@ namespace Catalog.Host.Repositories
             itemEntity.GroupeId = Chacked.IsNeedUpdate(itemEntity.GroupeId, itemForUpdate.GroupeId) ? itemForUpdate.GroupeId : itemEntity.GroupeId;
             itemEntity.TypeId = Chacked.IsNeedUpdate(itemEntity.TypeId, itemForUpdate.TypeId) ? itemForUpdate.TypeId : itemEntity.TypeId;
 
-            foreach(var spec in itemForUpdate.ItemSpecifications)
+            foreach(var spec in itemForUpdate.UniqueItems)
             {
-                var entity = await _dbContext.ItemSpecifications.FirstOrDefaultAsync(s => s.Id == spec.Id);
+                var entity = await _dbContext.UniqueItems.FirstOrDefaultAsync(s => s.Id == spec.Id);
                 if(entity != null && Chacked.IsNeedUpdate(entity, spec))
                 {
                     var sizeEntity = await _dbContext.Sizes.FirstOrDefaultAsync(f=> f.Id == spec.SizeId);
@@ -190,16 +190,16 @@ namespace Catalog.Host.Repositories
                 else if(entity == null)
                 {
                     spec.ItemId = itemEntity.Id;
-                    itemEntity.ItemSpecifications.Add(spec);
+                    itemEntity.UniqueItems.Add(spec);
                 }
             };
 
-            var deleteSpec = itemEntity.ItemSpecifications
-                .Where(spec => !itemForUpdate.ItemSpecifications.Any(a => a.Id == spec.Id)).ToList();
+            var deleteSpec = itemEntity.UniqueItems
+                .Where(spec => !itemForUpdate.UniqueItems.Any(a => a.Id == spec.Id)).ToList();
 
             foreach(var spec in deleteSpec)
             {                
-                itemEntity.ItemSpecifications.Remove(spec);
+                itemEntity.UniqueItems.Remove(spec);
             }
 
             itemEntity.UpdatedAt = DateTime.UtcNow;
@@ -228,7 +228,7 @@ namespace Catalog.Host.Repositories
             if (filterItems.SizeFiltersById is not null && filterItems.SizeFiltersById.Any())
             {
                 quary = quary.Where(item =>
-                    item.ItemSpecifications.Any(i =>
+                    item.UniqueItems.Any(i =>
                     filterItems.SizeFiltersById.Contains(i.Size.Id)));
             }
 
@@ -241,7 +241,7 @@ namespace Catalog.Host.Repositories
             if (filterItems.ColorFilterById != DefaultValue.GetDefaultValue(filterItems.ColorFilterById))
             {
                 quary = quary.Where(item =>
-                    item.ItemSpecifications.Any(i =>
+                    item.UniqueItems.Any(i =>
                         i.Color.Id == filterItems.ColorFilterById));
             }
 

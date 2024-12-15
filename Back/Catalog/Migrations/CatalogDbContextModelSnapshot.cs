@@ -31,13 +31,13 @@ namespace Catalog.Host.Migrations
             modelBuilder.HasSequence("item_hilo")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("itemSpecification_hilo")
-                .IncrementsBy(10);
-
             modelBuilder.HasSequence("size_hilo")
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("type_hilo")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("uniqueItem_hilo")
                 .IncrementsBy(10);
 
             modelBuilder.Entity("Catalog.Host.Data.Entities.ColorEntity", b =>
@@ -131,37 +131,6 @@ namespace Catalog.Host.Migrations
                     b.ToTable("Item", (string)null);
                 });
 
-            modelBuilder.Entity("Catalog.Host.Data.Entities.ItemSpecificationEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "itemSpecification_hilo");
-
-                    b.Property<int>("ColorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SizeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("SizeId");
-
-                    b.ToTable("ItemSpecification", (string)null);
-                });
-
             modelBuilder.Entity("Catalog.Host.Data.Entities.SizeEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -196,6 +165,37 @@ namespace Catalog.Host.Migrations
                     b.ToTable("Type", (string)null);
                 });
 
+            modelBuilder.Entity("Catalog.Host.Data.Entities.UniqueItemEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "uniqueItem_hilo");
+
+                    b.Property<int>("ColorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("UniqueItem", (string)null);
+                });
+
             modelBuilder.Entity("Catalog.Host.Data.Entities.ItemEntity", b =>
                 {
                     b.HasOne("Catalog.Host.Data.Entities.GroupeEntity", "Groupe")
@@ -215,22 +215,22 @@ namespace Catalog.Host.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("Catalog.Host.Data.Entities.ItemSpecificationEntity", b =>
+            modelBuilder.Entity("Catalog.Host.Data.Entities.UniqueItemEntity", b =>
                 {
                     b.HasOne("Catalog.Host.Data.Entities.ColorEntity", "Color")
-                        .WithMany("ItemSpecifications")
+                        .WithMany("UniqueItems")
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Catalog.Host.Data.Entities.ItemEntity", "Item")
-                        .WithMany("ItemSpecifications")
+                        .WithMany("UniqueItems")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Catalog.Host.Data.Entities.SizeEntity", "Size")
-                        .WithMany("ItemSpecifications")
+                        .WithMany("UniqueItems")
                         .HasForeignKey("SizeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -244,7 +244,7 @@ namespace Catalog.Host.Migrations
 
             modelBuilder.Entity("Catalog.Host.Data.Entities.ColorEntity", b =>
                 {
-                    b.Navigation("ItemSpecifications");
+                    b.Navigation("UniqueItems");
                 });
 
             modelBuilder.Entity("Catalog.Host.Data.Entities.GroupeEntity", b =>
@@ -254,12 +254,12 @@ namespace Catalog.Host.Migrations
 
             modelBuilder.Entity("Catalog.Host.Data.Entities.ItemEntity", b =>
                 {
-                    b.Navigation("ItemSpecifications");
+                    b.Navigation("UniqueItems");
                 });
 
             modelBuilder.Entity("Catalog.Host.Data.Entities.SizeEntity", b =>
                 {
-                    b.Navigation("ItemSpecifications");
+                    b.Navigation("UniqueItems");
                 });
 
             modelBuilder.Entity("Catalog.Host.Data.Entities.TypeEntity", b =>

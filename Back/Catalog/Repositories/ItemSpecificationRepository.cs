@@ -15,9 +15,9 @@ namespace Catalog.Host.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<ItemSpecificationEntity> GetSpecificationByIdAsync(int id)
+        public async Task<UniqueItemEntity> GetSpecificationByIdAsync(int id)
         {
-            var result = await _dbContext.ItemSpecifications
+            var result = await _dbContext.UniqueItems
                 .Include(i => i.Color)
                 .Include(i=>i.Item)
                     .ThenInclude(z=>z.Groupe)
@@ -34,9 +34,9 @@ namespace Catalog.Host.Repositories
             return result;
         }
 
-        public async Task<int> AddSpecificationAsync(ItemSpecificationEntity entity)
+        public async Task<int> AddSpecificationAsync(UniqueItemEntity entity)
         {
-            var result = await _dbContext.ItemSpecifications.AddAsync(new ItemSpecificationEntity 
+            var result = await _dbContext.UniqueItems.AddAsync(new UniqueItemEntity 
             { 
                 ItemId = entity.ItemId,
                 ColorId = entity.ColorId,
@@ -53,14 +53,14 @@ namespace Catalog.Host.Repositories
         {
             var entity = await GetSpecificationByIdAsync(id);
 
-            var status = _dbContext.ItemSpecifications.Remove(entity);
+            var status = _dbContext.UniqueItems.Remove(entity);
 
             await _dbContext.SaveChangesAsync();
 
             return status.ToString();
         }
 
-        public async Task<ItemSpecificationEntity> UpdateSpecificationAsync(ItemSpecificationEntity specForUpdate)
+        public async Task<UniqueItemEntity> UpdateSpecificationAsync(UniqueItemEntity specForUpdate)
         {
             var entity = await GetSpecificationByIdAsync(specForUpdate.Id);
 
@@ -72,6 +72,19 @@ namespace Catalog.Host.Repositories
             await _dbContext.SaveChangesAsync();
 
             return entity;
+        }
+
+        public async Task<ICollection<UniqueItemEntity>> GetSpecificationsByIdAsync(List<int> idList)
+        {
+            return await _dbContext.UniqueItems
+                .Include(i => i.Color)
+                .Include(i => i.Item)
+                    .ThenInclude(z => z.Groupe)
+                .Include(i => i.Item)
+                    .ThenInclude(z => z.Type)
+                .Include(i => i.Size)
+                .Where(spec => idList.Contains(spec.Id))
+                .ToListAsync();
         }
     }
 }

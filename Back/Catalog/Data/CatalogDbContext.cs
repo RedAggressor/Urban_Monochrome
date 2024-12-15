@@ -14,7 +14,7 @@ namespace Catalog.Host.Data
         public DbSet<GroupeEntity> Groupes { get; set; } = null!;
         public DbSet<SizeEntity> Sizes { get; set; } = null!;
         public DbSet<ColorEntity> Colors { get; set; } = null!;
-        public DbSet<ItemSpecificationEntity> ItemSpecifications { get; set; } = null!;
+        public DbSet<UniqueItemEntity> UniqueItems { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace Catalog.Host.Data
             modelBuilder.ApplyConfiguration(new GroupeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SizeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ColorEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new ItemSpecificationEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UniqueItemEntityConfiguration());
         }
     }
 }

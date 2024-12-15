@@ -5,3 +5,4 @@ global using Infrastucture.Models.Requests;
 global using Infrastucture.Models.Responses;
 global using Infrastucture.Enums;
 global using Infrastucture;
+global using Infrastucture.Models.Item;

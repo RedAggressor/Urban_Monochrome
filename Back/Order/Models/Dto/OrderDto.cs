@@ -8,6 +8,6 @@
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public string? PaymentStatus {  get; set; }
+        public string? PaymentStatus { get; set; }
     }
 }

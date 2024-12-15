@@ -15,8 +15,8 @@ namespace Catalog.Host.Mapping
                 ImageUrl = itemEntity.ImageUrl,
                 Price = itemEntity.Price,
                 Sex = itemEntity.Sex.ToString(),
-                ItemSpecifications = itemEntity.ItemSpecifications
-                    .Select(s=> new ItemSpecificationDto() 
+                UniqueItems = itemEntity.UniqueItems
+                    .Select(s=> new UniqueItemDto() 
                         {
                             Id = s.Id,
                             Size = new SizeDto 
@@ -56,8 +56,8 @@ namespace Catalog.Host.Mapping
                 ImageUrl = itemDto?.ImageUrl!,
                 Price = itemDto!.Price,               
                 Sex = itemDto!.Sex!.ConvertEnum<SexType>(),
-                ItemSpecifications = itemDto.ItemSpecifications!
-                    .Select(s => new ItemSpecificationEntity 
+                UniqueItems = itemDto.UniqueItems!
+                    .Select(s => new UniqueItemEntity 
                         {
                             Id = s.Id,
                             SizeId = s.Size!.Id,

@@ -12,7 +12,7 @@ namespace Catalog.Host.Data.Entities
         public TypeEntity Type { get; set; } = null!;
         public int GroupeId { get; set; }
         public GroupeEntity Groupe { get; set; } = null!;
-        public ICollection<ItemSpecificationEntity> ItemSpecifications { get; set; } = new List<ItemSpecificationEntity>();
+        public ICollection<UniqueItemEntity> UniqueItems { get; set; } = new List<UniqueItemEntity>();
         public SexType Sex { get; set; }
         public string? ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }

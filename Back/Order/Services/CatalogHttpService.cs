@@ -1,12 +1,11 @@
-﻿using Order.Host.Models.Dto;
-using Order.Host.Services.Interfaces;
+﻿using Order.Host.Services.Interfaces;
 
 namespace Order.Host.Services
 {
     public class CatalogHttpService : ICatalogHttpService
     {
         private readonly IHttpClientService _httpClient;
-        private readonly string _urlCatalog;
+        private readonly string _urlCatalog; //= "http://localhost:5000";
         private readonly string _blockUrl = "/api/v1/CatalogBFS/";
         public CatalogHttpService(IHttpClientService httpClient, IConfiguration configuration)
         {
@@ -14,17 +13,17 @@ namespace Order.Host.Services
             _urlCatalog = configuration["CATALOG_API_URL"]!;
         }
 
-        public async Task<ICollection<ItemDto>> GetItemsByIdAsync(List<int> listId)
+        public async Task<ICollection<UniqueItemRequest>> GetSpecificationByIdAsync(List<int> listId)
         {
             var request = new DataRequest<List<int>>()
             {
                 Data = listId
             };
 
-            var url = $"{_urlCatalog}{_blockUrl}GetItemsById";
+            var url = $"{_urlCatalog}{_blockUrl}GetSpecificationById";
 
             var response = await _httpClient
-                .SendAsync<DataResponse<List<ItemDto>>, DataRequest<List<int>>>
+                .SendAsync<DataResponse<List<UniqueItemRequest>>, DataRequest<List<int>>>
                 (url, HttpMethod.Post, request);
 
             if(response.ResponseCodeType is ResponseCodeType.Success)

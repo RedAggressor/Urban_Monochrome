@@ -4,9 +4,10 @@ namespace Catalog.Host.Repositories.Abstractions
 {
     public interface IItemSpecificationRepository
     {
-        Task<ItemSpecificationEntity> GetSpecificationByIdAsync(int id);
-        Task<int> AddSpecificationAsync(ItemSpecificationEntity entity);
+        Task<UniqueItemEntity> GetSpecificationByIdAsync(int id);
+        Task<int> AddSpecificationAsync(UniqueItemEntity entity);
         Task<string> DeleteSpecificationAsync(int id);
-        Task<ItemSpecificationEntity> UpdateSpecificationAsync(ItemSpecificationEntity specForUpdate);
+        Task<UniqueItemEntity> UpdateSpecificationAsync(UniqueItemEntity specForUpdate);
+        Task<ICollection<UniqueItemEntity>> GetSpecificationsByIdAsync(List<int> idList);
     }
 }

@@ -7,7 +7,6 @@ using Catalog.Host.Models.Request;
 using Catalog.Host.Models.Responses;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Abstractions;
-using System.ComponentModel;
 
 namespace Catalog.Host.Services
 {
@@ -18,6 +17,7 @@ namespace Catalog.Host.Services
         private readonly IGroupeRepository _gropueRepository;
         private readonly ISizeRepository _sizeRepository;
         private readonly IColorRepository _colorRepository;
+        private readonly IItemSpecificationRepository _itemSpecificationRepository;
         public CatalogService(
             IItemRepository itemRepository,
             IDbContextWrapper<CatalogDbContext> dbContextWrapper,
@@ -25,7 +25,8 @@ namespace Catalog.Host.Services
             IColorRepository colorRepository,
             ITypeRepository typeRepository,
             ISizeRepository sizeRepository,
-            IGroupeRepository groupeRepository)
+            IGroupeRepository groupeRepository,
+            IItemSpecificationRepository itemSpecificationRepository)
             : base(dbContextWrapper, loggerBase)
         {
             _itemRepository = itemRepository;
@@ -33,6 +34,7 @@ namespace Catalog.Host.Services
             _sizeRepository = sizeRepository;
             _colorRepository = colorRepository;
             _gropueRepository = groupeRepository;
+            _itemSpecificationRepository = itemSpecificationRepository;
         }
 
         public async Task<ItemsByPageResponse<ItemDto>> GetOrderItemByPricePage(PageInfoRequest infoRequest)
@@ -131,6 +133,36 @@ namespace Catalog.Host.Services
                         }),
                         HotItems = listHotItems
                     }
+                };
+            });
+        }
+
+        public async Task<DataResponse<IEnumerable<UniqueItemResponse>>> GetSpecificationsByIdAsync(DataRequest<List<int>> dataRequest)
+        {
+            return await ExecuteSafeAsync(async () =>
+            {
+                var idList = dataRequest.Data;
+
+                var result = await _itemSpecificationRepository.GetSpecificationsByIdAsync(idList!);
+
+                return new DataResponse<IEnumerable<UniqueItemResponse>>
+                {
+                    Data = result.Select(s => new UniqueItemResponse
+                    {
+                        Id = s.Id,
+                        Color = new ColorDto
+                        {
+                            Id = s.Color.Id,
+                            Name = s.Color.Name
+                        },
+                        Size = new SizeDto
+                        {
+                            Id = s.Size.Id,
+                            Name = s.Size.Name
+                        },
+                        Item = s.Item.MapToItem(),
+                        Quantity = s.Quantity,
+                    }).ToList()
                 };
             });
         }

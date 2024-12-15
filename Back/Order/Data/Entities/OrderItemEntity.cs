@@ -7,6 +7,6 @@
         public int ItemId { get; set; }
         public OrderEntity Order { get; set; } = null!;
         public string OrderId { get; set; } = null!;
-        public decimal Price { get; set; }
+        public double Price { get; set; }
     }
 }

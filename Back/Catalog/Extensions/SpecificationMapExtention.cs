@@ -5,9 +5,9 @@ namespace Catalog.Host.Extensions
 {
     public static class SpecificationMapExtention
     {
-        public static ItemSpecificationEntity? SpecificationMapToEntity(this ItemSpecification itemSpecification)
+        public static UniqueItemEntity? SpecificationMapToEntity(this UniqueItemResponse itemSpecification)
         {
-            return itemSpecification is null ? null : new ItemSpecificationEntity
+            return itemSpecification is null ? null : new UniqueItemEntity
             { 
                 Id = itemSpecification.Id,
                 ColorId = itemSpecification.Color!.Id,
@@ -28,9 +28,9 @@ namespace Catalog.Host.Extensions
             };
         }
 
-        public static ItemSpecification? SpecificationMapToDto(this ItemSpecificationEntity itemSpecificationEntity)
+        public static UniqueItemResponse? SpecificationMapToDto(this UniqueItemEntity itemSpecificationEntity)
         {
-            return itemSpecificationEntity is null ? null : new ItemSpecification
+            return itemSpecificationEntity is null ? null : new UniqueItemResponse
             {
                 Id = itemSpecificationEntity.Id,
                 Color = new ColorDto

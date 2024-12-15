@@ -4,30 +4,30 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Catalog.Host.Data.EntityConfigurations
 {
-    public class ItemSpecificationEntityConfiguration : IEntityTypeConfiguration<ItemSpecificationEntity>
+    public class UniqueItemEntityConfiguration : IEntityTypeConfiguration<UniqueItemEntity>
     {
-        public void Configure(EntityTypeBuilder<ItemSpecificationEntity> builder)
+        public void Configure(EntityTypeBuilder<UniqueItemEntity> builder)
         {
-            builder.ToTable("ItemSpecification");
+            builder.ToTable("UniqueItem");
 
             builder.HasKey(s => s.Id);
 
             builder
                 .Property(k => k.Id)
-                .UseHiLo("itemSpecification_hilo");
+                .UseHiLo("uniqueItem_hilo");
 
             builder.HasOne(o => o.Item)
-                .WithMany(m => m.ItemSpecifications)
+                .WithMany(m => m.UniqueItems)
                 .HasForeignKey(f => f.ItemId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(o => o.Size)
-                .WithMany(m => m.ItemSpecifications)
+                .WithMany(m => m.UniqueItems)
                 .HasForeignKey(f => f.SizeId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(o => o.Color)
-                .WithMany(m => m.ItemSpecifications)
+                .WithMany(m => m.UniqueItems)
                 .HasForeignKey(f => f.ColorId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

@@ -1,5 +1,4 @@
 ﻿using Basket.Host.Configs;
-using Basket.Host.Models.Dto;
 using Basket.Host.Services;
 using Basket.Host.Services.Interfaces;
 
@@ -52,9 +51,9 @@ namespace Basket.UnitTest.Sevices
         {
             //arrange
             var keyTest = "keyTest";
-            var testData = new List<Item>()
+            var testData = new List<ItemResponse>()
             {
-                new Item()
+                new ItemResponse()
                 {
                      Id = 1,
                      Name = "Test",
@@ -75,7 +74,7 @@ namespace Basket.UnitTest.Sevices
                )).ReturnsAsync(false);            
 
             _jsonSerizlizer
-                .Setup(st=>st.Serialize(It.IsAny<List<Item>>()))
+                .Setup(st=>st.Serialize(It.IsAny<List<ItemResponse>>()))
                 .Returns(serializeDataTest);
 
             //act
@@ -106,9 +105,9 @@ namespace Basket.UnitTest.Sevices
 
             string? testKey = null;
 
-            var testData = new List<Item>()
+            var testData = new List<ItemResponse>()
             {
-                new Item()
+                new ItemResponse()
                 {
                      Id = 1,
                      Name = "Test",
@@ -149,9 +148,9 @@ namespace Basket.UnitTest.Sevices
         {
             //arrange
             var testKey = "testKey";
-            var testData = new List<Item>()
+            var testData = new List<ItemResponse>()
             {
-                new Item()
+                new ItemResponse()
                 {
                      Id = 1,
                      Name = "Test",
@@ -168,12 +167,12 @@ namespace Basket.UnitTest.Sevices
                 .ReturnsAsync(redisValue);
 
             _jsonSerizlizer
-                .Setup(s=>s.Deserialize<List<Item>>(It.IsAny<string>()))
+                .Setup(s=>s.Deserialize<List<ItemResponse>>(It.IsAny<string>()))
                 .Returns(testData);
 
             //act
 
-            var result = await _cacheService.GetAsync<List<Item>>(testKey);
+            var result = await _cacheService.GetAsync<List<ItemResponse>>(testKey);
 
             //asert
 
@@ -203,7 +202,7 @@ namespace Basket.UnitTest.Sevices
 
             //act
 
-            var result = await _cacheService.GetAsync<List<Item>>(testKey);
+            var result = await _cacheService.GetAsync<List<ItemResponse>>(testKey);
 
             //asert
 

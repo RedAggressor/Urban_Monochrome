@@ -1,6 +1,5 @@
 ﻿using Catalog.Host.Data;
 using Catalog.Host.Extensions;
-using Catalog.Host.Models.Dto;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Abstractions;
 
@@ -19,7 +18,7 @@ namespace Catalog.Host.Services
             _specificationRepository = specificationRepository;            
         }        
 
-        public async Task<DataResponse<int>> AddSpecificationAsync(DataRequest<ItemSpecification>? request)
+        public async Task<DataResponse<int>> AddSpecificationAsync(DataRequest<UniqueItemResponse>? request)
         {
             return await ExecuteSafeAsync(async () =>
             {
@@ -33,14 +32,14 @@ namespace Catalog.Host.Services
             });
         }
 
-        public async Task<DataResponse<ItemSpecification>> GetSpecifictionById(DataRequest<int>? request)
+        public async Task<DataResponse<UniqueItemResponse>> GetSpecifictionById(DataRequest<int>? request)
         {
             return await ExecuteSafeAsync(async () =>
             {
                 var id = request!.Data;
                 var result = await _specificationRepository.GetSpecificationByIdAsync(id);
 
-                return new DataResponse<ItemSpecification>
+                return new DataResponse<UniqueItemResponse>
                 {
                     Data = result.SpecificationMapToDto()
                 };
@@ -61,14 +60,14 @@ namespace Catalog.Host.Services
             });
         }
 
-        public async Task<DataResponse<ItemSpecification>> UpdateSpecificationAsync(DataRequest<ItemSpecification>? request)
+        public async Task<DataResponse<UniqueItemResponse>> UpdateSpecificationAsync(DataRequest<UniqueItemResponse>? request)
         {
             return await ExecuteSafeAsync(async () =>
             {
                 var specDto = request!.Data;
                 var result = await _specificationRepository.UpdateSpecificationAsync(specDto!.SpecificationMapToEntity()!);
 
-                return new DataResponse<ItemSpecification>
+                return new DataResponse<UniqueItemResponse>
                 {
                     Data = result.SpecificationMapToDto()
                 };

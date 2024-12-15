@@ -1,12 +1,10 @@
-﻿using Catalog.Host.Models.Dto;
-
-namespace Catalog.Host.Services.Abstractions
+﻿namespace Catalog.Host.Services.Abstractions
 {
     public interface IItemSpecificationService
     {
-        Task<DataResponse<int>> AddSpecificationAsync(DataRequest<ItemSpecification>? request);
-        Task<DataResponse<ItemSpecification>> GetSpecifictionById(DataRequest<int>? request);
+        Task<DataResponse<int>> AddSpecificationAsync(DataRequest<UniqueItemResponse>? request);
+        Task<DataResponse<UniqueItemResponse>> GetSpecifictionById(DataRequest<int>? request);
         Task<DataResponse<string>> DeleteSpecificationAsync(DataRequest<int>? request);
-        Task<DataResponse<ItemSpecification>> UpdateSpecificationAsync(DataRequest<ItemSpecification>? request);
+        Task<DataResponse<UniqueItemResponse>> UpdateSpecificationAsync(DataRequest<UniqueItemResponse>? request);
     }
 }

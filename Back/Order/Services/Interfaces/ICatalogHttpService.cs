@@ -1,9 +1,7 @@
-﻿using Order.Host.Models.Dto;
-
-namespace Order.Host.Services.Interfaces
+﻿namespace Order.Host.Services.Interfaces
 {
     public interface ICatalogHttpService
     {
-        Task<ICollection<ItemDto>> GetItemsByIdAsync(List<int> listId);
+        Task<ICollection<UniqueItemRequest>> GetSpecificationByIdAsync(List<int> listId);
     }
 }

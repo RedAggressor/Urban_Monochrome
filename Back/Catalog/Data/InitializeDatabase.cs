@@ -43,75 +43,75 @@ namespace Catalog.Host.Data
                 await context.SaveChangesAsync();
             }
 
-            if (!context.ItemSpecifications.Any())
+            if (!context.UniqueItems.Any())
             {
-                await context.ItemSpecifications.AddRangeAsync(GetPreconfiguredItemSize());
+                await context.UniqueItems.AddRangeAsync(GetPreconfiguredItemSize());
 
                 await context.SaveChangesAsync();
             }
         }
 
-        private static IEnumerable<ItemSpecificationEntity> GetPreconfiguredItemSize()
+        private static IEnumerable<UniqueItemEntity> GetPreconfiguredItemSize()
         {
-            return new List<ItemSpecificationEntity>
+            return new List<UniqueItemEntity>
             {
-                new ItemSpecificationEntity
+                new UniqueItemEntity
                 {
                     SizeId = 1,
                     ItemId = 1,
                     ColorId = 1,
                     Quantity = 100
                 },
-                new ItemSpecificationEntity
+                new UniqueItemEntity
                 {
                     SizeId = 2,
                     ItemId = 1,
                     ColorId = 2,
                     Quantity = 100
                 },
-                new ItemSpecificationEntity
+                new UniqueItemEntity
                 {
                     SizeId = 3,
                     ItemId = 1,
                     ColorId = 2,
                     Quantity = 100
                 },
-                new ItemSpecificationEntity
+                new UniqueItemEntity
                 {
                     SizeId = 4,
                     ItemId = 1,
                     ColorId = 2,
                     Quantity = 100
                 },
-                new ItemSpecificationEntity
+                new UniqueItemEntity
                 {
                     SizeId = 5,
                     ItemId = 1,
                     ColorId = 1,
                     Quantity = 100
                 },
-                new ItemSpecificationEntity
+                new UniqueItemEntity
                 {
                     SizeId = 6,
                     ItemId = 1,
                     ColorId = 1,
                     Quantity = 100
                 },
-                new ItemSpecificationEntity
+                new UniqueItemEntity
                 {
                     SizeId = 1,
                     ItemId = 2,
                     ColorId = 2,
                     Quantity = 100
                 },
-                new ItemSpecificationEntity
+                new UniqueItemEntity
                 {
                     SizeId = 2,
                     ItemId = 2,
                     ColorId = 2,
                     Quantity = 100
                 },
-                new ItemSpecificationEntity
+                new UniqueItemEntity
                 {
                     SizeId = 3,
                     ItemId = 2,

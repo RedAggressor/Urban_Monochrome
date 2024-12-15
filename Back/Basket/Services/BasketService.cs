@@ -1,5 +1,4 @@
-﻿using Basket.Host.Models.Dto;
-using Basket.Host.Models.Requests;
+﻿using Basket.Host.Models.Requests;
 using Basket.Host.Models.Responses;
 using Basket.Host.Services.Interfaces;
 
@@ -15,7 +14,7 @@ namespace Basket.Host.Services
         {
             _cacheService = cacheService;
         }
-        public async Task<BaseResponse> AddDataAsync(string key, DataRequest<Item> data)
+        public async Task<BaseResponse> AddDataAsync(string key, DataRequest<UniqueItemResponse> data)
         {
             return await SafeExecuteAsync(async () =>
             {
@@ -24,12 +23,12 @@ namespace Basket.Host.Services
             });
         }
 
-        public async Task<DataResponse<Item>> GetDataAsync(string key)
+        public async Task<DataResponse<UniqueItemResponse>> GetDataAsync(string key)
         {
             return await SafeExecuteAsync(async () =>
             {
                 var keyRedis = $"{_keyBasket}{key}";
-                return await _cacheService.GetAsync<DataResponse<Item>>(keyRedis);
+                return await _cacheService.GetAsync<DataResponse<UniqueItemResponse>>(keyRedis);
             });
         }
     }

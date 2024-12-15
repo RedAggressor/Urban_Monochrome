@@ -1,6 +1,6 @@
 ﻿namespace Catalog.Host.Data.Entities
 {
-    public class ItemSpecificationEntity
+    public class UniqueItemEntity
     {
         public int Id { get; set; }
         public int ItemId { get; set; }
@@ -13,7 +13,7 @@
 
         public override bool Equals(object? obj)
         {
-            if(obj is ItemSpecificationEntity spec)
+            if(obj is UniqueItemEntity spec)
             {
                 return Id == spec.Id &&
                     ItemId == spec.ItemId &&

@@ -22,5 +22,13 @@ namespace Catalog.Host.Controllers
             var response = await _catalogService.GetItemsByIdAsync(dataRequest);
             return Ok(response);
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(DataResponse<IEnumerable<UniqueItemResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetSpecificationByIdAsync(DataRequest<List<int>> dataRequest)
+        {
+            var response = await _catalogService.GetSpecificationsByIdAsync(dataRequest);
+            return Ok(response);
+        }
     }
 }

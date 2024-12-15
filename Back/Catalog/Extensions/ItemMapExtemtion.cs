@@ -6,9 +6,9 @@ namespace Catalog.Host.Extensions
 {
     public static class ItemMapExtemtion
     {
-        public static Item? MapToItem(this ItemEntity itemEntity)
+        public static ItemResponse? MapToItem(this ItemEntity itemEntity)
         {
-            return itemEntity is null ? null : new Item
+            return itemEntity is null ? null : new ItemResponse
             {
                 Id = itemEntity.Id,
                 Name = itemEntity.Name,
@@ -32,7 +32,7 @@ namespace Catalog.Host.Extensions
             };
         }
 
-        public static ItemEntity? MapToEntity(this Item item) 
+        public static ItemEntity? MapToEntity(this ItemResponse item) 
         {
             return item is null ? null : new ItemEntity
             {
