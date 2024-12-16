@@ -1,0 +1,24 @@
+@import '../../app/styles/mixins';
+@import '../../app/styles/variables';
+
+.header {
+  margin-top: 47px;
+  padding: 0 20px;
+
+  @include media-query(md) {
+    margin-top: 6.5px;
+    padding: 0 112px 0 156px;
+  }
+}
+
+.header_logo {
+  margin-top: -10px;
+
+  @include media-query(md) {
+    margin-top: -16px;
+  }
+}
+
+.icon {
+  padding: 10px;
+}

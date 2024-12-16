@@ -22,5 +22,10 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "global.d.ts",
+    "src/shared/icons/icons_footer/EmailIcon.tsx",
+    "src/shared/icons/icons_footer/MailingIcon.tsx"
+  ]
 }

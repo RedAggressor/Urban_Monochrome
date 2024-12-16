@@ -1,0 +1,35 @@
+@import '../../../app/styles/variables';
+
+.header__search {
+  display: flex;
+  align-items: center;
+  border: 1px solid #fff;
+  border-radius: 8px;
+  padding: 2px;
+  width: 100%;
+  max-width: 330px;
+}
+
+.search__input {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+  height: 40px;
+  background-color: $main;
+  color: #fff;
+}
+
+.search__input::placeholder {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  color: rgba(249, 249, 249, 0.75);
+}
+
+.search__icon {
+  margin-right: 18px;
+  background-color: $main;
+  cursor: pointer;
+}

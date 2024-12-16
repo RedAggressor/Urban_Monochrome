@@ -1,0 +1,24 @@
+@use 'sass:map';
+
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1200px,
+);
+
+@mixin media-query($size, $type: min) {
+  @media (#{$type}-width: map.get($breakpoints, $size)) {
+    @content;
+  }
+}
+
+@mixin flex-align($justify: center, $align: center) {
+  display: flex;
+  justify-content: $justify;
+}
+
+@mixin self-align($justify: center,) {
+  display: flex;
+  justify-self: $justify;
+}
