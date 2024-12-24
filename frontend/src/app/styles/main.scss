@@ -1,5 +1,6 @@
 @import 'normalize.css';
 @import '../styles/variables';
+@import '../styles/mixins';
 
 @font-face {
   font-family: 'Medium';
@@ -12,6 +13,7 @@
   margin: 0;
   border: 0;
   box-sizing: border-box;
+  //overflow-x: hidden;
 }
 
 html,
@@ -49,7 +51,27 @@ h1,
 h2,
 h3 {
   font-family: "Medium", sans-serif;
+  font-weight: 400;
+
+  padding: 0;
+  margin: 0;
 }
+
+// h1 {
+//   font-size: 31px;
+
+//   @include media-query(md) {
+//     font-size: 64px;
+//   }
+// }
+
+// h2 {
+//   font-size: 22px;
+
+//   @include media-query(md) {
+//     font-size: 56px;
+//   }
+// }
 
 main {
   flex: 1;
