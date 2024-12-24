@@ -1,0 +1,36 @@
+@use 'sass:map';
+@import './variables';
+
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1200px,
+);
+
+@mixin media-query($size, $type: min) {
+  @media (#{$type}-width: map.get($breakpoints, $size)) {
+    @content;
+  }
+}
+
+@mixin media-query-tablet($min-size, $max-size) {
+  @media (min-width: map.get($breakpoints, $min-size)) and (max-width: map.get($breakpoints, $max-size)) {
+    @content;
+  }
+}
+
+@mixin flex-align($justify: center, $align: center) {
+  display: flex;
+  justify-content: $justify;
+}
+
+@mixin self-align($justify: center,) {
+  display: flex;
+  justify-self: $justify;
+}
+
+@mixin word-highlight($big: 24px,) {
+  font-size: $big;
+  color: $hover-red;
+}
