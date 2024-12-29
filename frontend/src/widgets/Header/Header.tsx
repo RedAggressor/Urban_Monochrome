@@ -1,13 +1,20 @@
-import '../../widgets/Header/header.scss';
+import cl from './header.module.scss';
 
-import { HeaderMobile } from '../../shared/ui-kit/HeaderMobile/HeaderMobile';
-import { HeaderDesktop } from '../../shared/ui-kit/HeaderDesktop/HeaderDesktop';
+import { Logo } from '../../shared/ui-kit/Logo/Logo';
+import { Container } from '../../shared/Container/Container';
+import { Icon, IconType } from '../../shared/ui-kit/Icon/Icon';
+import { useAppSelector } from '../../shared/hooks';
 
 export const Header = () => {
   return (
-    <header className="header">
-      <HeaderMobile />
-      <HeaderDesktop />
-    </header>
-  )
-}
+    <Container>
+      {' '}
+      <header className={cl.header}>
+        <div className={cl.menuAccountContainer}>
+          <Icon type={IconType.Account} to="/" />
+        </div>
+        <Logo />
+      </header>
+    </Container>
+  );
+};

@@ -1,5 +1,5 @@
-@import '../../app/styles/mixins';
-@import '../../app/styles/variables';
+@import '../../app/styles/mixins.scss';
+@import '../../app/styles/variables.scss';
 
 .footer {
   display: flex;
@@ -18,47 +18,47 @@
   margin-bottom: 16px;
 }
 
-.contacts-desktop {
+.contacts_desktop {
   display: none;
 }
 
 @include media-query(md) {
   .footer {
     display: grid;
-    grid-template-areas: 
-    "header links icons"
-    "subscription links contacts"
-    "subscription links paymentIcons";
+    grid-template-areas:
+      'header links icons'
+      'subscription links contacts'
+      'subscription links paymentIcons';
     grid-template-columns: auto 1fr 1fr;
     padding: 80px 80px 40px 80px;
   }
 
   .footer__header {
-    grid-area: header; 
+    grid-area: header;
     margin-bottom: 48px;
   }
 
   .footer_subscription {
-    grid-area: subscription; 
+    grid-area: subscription;
   }
 
   .footer__nav {
     @include self-align(center);
-    grid-area: links; 
+    grid-area: links;
     align-self: center;
   }
 
   .footer_icons {
     @include self-align(end);
-    grid-area: icons; 
+    grid-area: icons;
   }
 
-  .payment-icons {
+  .payment_icons {
     @include self-align(end);
     grid-area: paymentIcons;
   }
 
-  .contacts-desktop {
+  .contacts_desktop {
     @include self-align(end);
     grid-area: contacts;
     flex-direction: column;
@@ -78,7 +78,7 @@
 }
 
 .updates {
-  font-family: "Lora", sans-serif;
+  font-family: 'Lora', sans-serif;
   color: #ef233c;
   margin-bottom: $subscription-margin-bottom;
 }
@@ -88,12 +88,12 @@
   margin-bottom: $subscription-margin-bottom;
 }
 
-.copyright-info {
+.copyright_info {
   @include flex-align(center);
   font-size: 12px;
   margin-top: 24px;
   margin-bottom: $subscription-margin-bottom;
-} 
+}
 
 .privacy {
   text-decoration: underline;
@@ -109,7 +109,7 @@
   margin-bottom: 65px;
 }
 
-.payment-icons {
+.payment_icons {
   @include flex-align(center);
   gap: 10px;
 }
@@ -124,7 +124,7 @@
     font-size: $desktop-font-size;
   }
 
-  .copyright-info {
+  .copyright_info {
     margin-top: 48px;
     justify-content: start;
     font-size: $desktop-font-size;
@@ -135,7 +135,7 @@
     font-size: 16px;
   }
 
-  .icon-hidden-desktop {
+  .icon_hidden_desktop {
     display: none;
   }
 }

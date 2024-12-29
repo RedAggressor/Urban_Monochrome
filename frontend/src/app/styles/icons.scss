@@ -1,5 +1,5 @@
-@import '../../app//styles/mixins';
-@import '../../app//styles/variables';
+@import '../../app//styles/mixins.scss';
+@import '../../app//styles/variables.scss';
 
 @include media-query(md) {
   .hover__icon .hover__iconPath {
@@ -14,5 +14,4 @@
     stroke: $hover-light-red;
     transition-delay: 0.2s;
   }
-
 }

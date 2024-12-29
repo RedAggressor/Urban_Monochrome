@@ -1,17 +1,13 @@
-@import '../../app/styles/mixins';
-@import '../../app/styles/variables';
+@import '../../app/styles/mixins.scss';
+@import '../../app/styles/variables.scss';
 
 .home-page-main {
-  margin-top: 16px;
+  display: block;
 }
 
 .main-banner {
   position: relative;
   width: 100%;
-
-  @include media-query(md) {
-    margin-top: 60px;
-  }
 }
 
 .wrapper-banner {
@@ -53,7 +49,7 @@
   font-family: 'Lora', sans-serif;
 
   font-size: clamp(1rem, 2.7vw, 1.9rem);
-  top: clamp(5rem, 16vw, 13rem); 
+  top: clamp(5rem, 16vw, 13rem);
   left: clamp(1.5rem, 4vw, 5rem);
 }
 

@@ -1,5 +1,5 @@
 @use 'sass:map';
-@import './variables';
+@import './variables.scss';
 
 $breakpoints: (
   sm: 576px,
@@ -25,12 +25,63 @@ $breakpoints: (
   justify-content: $justify;
 }
 
-@mixin self-align($justify: center,) {
+@mixin self-align($justify: center) {
   display: flex;
   justify-self: $justify;
 }
 
-@mixin word-highlight($big: 24px,) {
+@mixin word-highlight($big: 24px) {
   font-size: $big;
   color: $hover-red;
 }
+
+// #region Міксини від Максима ))
+@mixin hover($property, $toValue, $animDuration: 0.3s) {
+  // для створення анімації при наведенні. Синтаксис: @include hover(transform, scale(1.1), 0.5)
+  transition: #{$property} $animDuration;
+  &:hover {
+    #{$property}: $toValue;
+  }
+}
+
+@mixin on-sm {
+  // альтернатива медіа запитам вище
+  // юзати всередині селектора, наприклад .my-class { @include on-sm { color: red; } }
+  @media (min-width: 576px) {
+    @content;
+  }
+}
+@mixin on-md {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+@mixin on-lg {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+@mixin on-xl {
+  @media (min-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin page-grid {
+  // полегшує використання гріда. Синтакс: @include page-grid;
+  --columns: 4;
+
+  display: grid;
+
+  column-gap: 16px;
+  grid-template-columns: repeat(var(--columns), 1fr);
+
+  @include on-sm {
+    --columns: 8;
+  }
+  @include on-lg {
+    --columns: 12;
+    column-gap: 20px;
+  }
+}
+// #endregion
