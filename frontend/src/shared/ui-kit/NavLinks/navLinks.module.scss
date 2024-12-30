@@ -1,13 +1,11 @@
 @import '../../../app/styles/_mixins.scss';
 @import '../../../app/styles/variables.scss';
 
-.header__nav {
-  display: flex;
+.nav {
   gap: 20px;
-}
-
-.footer__nav {
-  display: none;
+  &__footer {
+    flex-direction: column;
+  }
 }
 
 .nav_link {
@@ -15,20 +13,12 @@
   font-size: 20px;
   color: #f9f9f9;
   transition: color, 0.5s;
-}
+  line-height: 40px;
 
-@include media-query(md) {
-  .footer__nav {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .nav_link:hover {
+  &:hover {
     color: $hover-red;
   }
-
-  .nav_link:hover {
+  &:hover {
     color: $hover-light-red;
     transition-delay: 0.2s;
   }

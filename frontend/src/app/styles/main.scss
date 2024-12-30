@@ -16,6 +16,17 @@
   //overflow-x: hidden;
 }
 
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
 html,
 body {
   height: 100%;
@@ -72,7 +83,3 @@ h3 {
 //     font-size: 56px;
 //   }
 // }
-
-main {
-  flex: 1;
-}

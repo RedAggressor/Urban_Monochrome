@@ -4,7 +4,7 @@
 .container {
   padding-inline: $padd-inl-phone;
 
-  @include on-lg {
+  @include media-query(lg) {
     padding-inline: $padd-inl-desk;
   }
 }
