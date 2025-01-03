@@ -32,8 +32,7 @@ namespace Order.Host.Services
                 {
                     Data = result
                 };
-            });
-            
+            });            
         }
 
         public async Task<DataResponse<string>> AddItemToOrderAsync(
@@ -85,7 +84,7 @@ namespace Order.Host.Services
             });
         }
         
-        private Dictionary<int, ItemDto> ConvertItemsIdToItem(ICollection<ItemDto> Items)
+        private Dictionary<int, UniqueItemRequest> ConvertItemsIdToItem(ICollection<UniqueItemRequest> Items)
         {
             return Items.ToDictionary(item => item.Id);
         }
@@ -107,20 +106,20 @@ namespace Order.Host.Services
                 .ToList();
         }
 
-        private async Task<Dictionary<int, ItemDto>> SubstitutionIdToItem(ICollection<OrderEntity> orders)
+        private async Task<Dictionary<int, UniqueItemRequest>> SubstitutionIdToItem(ICollection<OrderEntity> orders)
         {
             var listItemId = GetItemsId(orders);
 
-            var listItems = await _catalogHttpService.GetItemsByIdAsync(listItemId);
+            var listItems = await _catalogHttpService.GetSpecificationByIdAsync(listItemId);
 
             return ConvertItemsIdToItem(listItems);
         }
 
-        private async Task<Dictionary<int, ItemDto>> SubstitutionIdToItem(OrderEntity orders)
+        private async Task<Dictionary<int, UniqueItemRequest>> SubstitutionIdToItem(OrderEntity orders)
         {
             var listItemId = GetItemsId(orders);
                         
-            var listItems = await _catalogHttpService.GetItemsByIdAsync(listItemId);
+            var listItems = await _catalogHttpService.GetSpecificationByIdAsync(listItemId);
 
             return ConvertItemsIdToItem(listItems);
         }

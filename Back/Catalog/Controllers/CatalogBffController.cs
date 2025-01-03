@@ -11,14 +11,10 @@ namespace Catalog.Host.Controllers
     [Route(ComponentDefaults.DefaultRoute)]
     public class CatalogBffController : ControllerBase
     {        
-        private readonly ILogger<CatalogBffController> _logger;
         private readonly ICatalogService _catalogService;
 
-        public CatalogBffController(
-            ILogger<CatalogBffController> logger,
-            ICatalogService catalogService)
-        {
-            _logger = logger;
+        public CatalogBffController(ICatalogService catalogService)
+        {           
             _catalogService = catalogService;
         }
 
@@ -34,11 +30,19 @@ namespace Catalog.Host.Controllers
         [HttpPost]
         [ValidateRequestBody]
         [ProducesResponseType(typeof(DataResponse<ItemDto>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetItemByName(DataRequest<string>? value)
+        public async Task<IActionResult> GetItemsByName(DataRequest<string>? value)
         {
             var response = await _catalogService.GetItdeByNameAsync(value!);
             return Ok(response);
         }
 
+
+        [HttpPost]
+        [ProducesResponseType(typeof(DataResponse<ExistFilters>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAllFilters()
+        {
+            var response = await _catalogService.GetAllFilters();
+            return Ok(response);
+        }
     }
 }

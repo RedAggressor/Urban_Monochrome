@@ -3,7 +3,7 @@
     public class OrderItemDto
     {      
         public int Count { get; set; }
-        public ItemDto? Item { get; set; }
-        public decimal Price { get; set; }
+        public UniqueItemResponse? Item { get; set; }
+        public double Price { get; set; }
     }
 }

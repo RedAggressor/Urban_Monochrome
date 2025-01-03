@@ -31,6 +31,16 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddTransient<ICatalogService, CatalogService>();
 builder.Services.AddTransient<IItemRepository, ItemRepository>();
 builder.Services.AddTransient<IItemService, ItemService>();
+builder.Services.AddTransient<IColorRepository, ColorRepository>();
+builder.Services.AddTransient<IColorService, ColorService>();
+builder.Services.AddTransient<ISizeRepository, SizeRepository>();
+builder.Services.AddTransient<ISizeService, SizeService>();
+builder.Services.AddTransient<IItemSpecificationRepository, ItemSpecificationRepository>();
+builder.Services.AddTransient<IItemSpecificationService, ItemSpecificationService>();
+builder.Services.AddTransient<ITypeRepository, TypeRepository>();
+builder.Services.AddTransient<ITypeService, TypeService>();
+builder.Services.AddTransient<IGroupeRepository, GroupeRepository>();
+builder.Services.AddTransient<IGroupeService, GroupeService>();
 
 builder.Services
     .AddDbContextFactory<CatalogDbContext>(options => 

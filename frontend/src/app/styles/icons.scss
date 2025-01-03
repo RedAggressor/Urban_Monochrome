@@ -1,0 +1,18 @@
+@import '../../app//styles/mixins';
+@import '../../app//styles/variables';
+
+@include media-query(md) {
+  .hover__icon .hover__iconPath {
+    transition: color, 0.4s;
+  }
+
+  .hover__icon:hover .hover__iconPath {
+    stroke: $hover-red;
+  }
+
+  .hover__icon:hover .hover__iconPath {
+    stroke: $hover-light-red;
+    transition-delay: 0.2s;
+  }
+
+}

@@ -5,6 +5,5 @@
         public int Id { get; set; }
         public string Name { get; set; } = null!;       
         public ICollection<ItemEntity> Items { get; set; } = new List<ItemEntity>();
-        public ICollection<NestedTypeEntity> NestedTypes { get; set; } = new List<NestedTypeEntity>();
     }
 }

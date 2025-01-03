@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Order.Host.Models.Dto;
 using Order.Host.Services.Interfaces;
@@ -10,14 +9,10 @@ namespace Order.Controllers
     [Route(ComponentDefaults.DefaultRoute)]
     public class OrderBffController : ControllerBase
     {
-        private readonly ILogger<OrderBffController> _logger;
         private readonly IOrderService _orderService;
 
-        public OrderBffController(
-            ILogger<OrderBffController> logger,
-            IOrderService orderService)
+        public OrderBffController(IOrderService orderService)
         {
-            _logger = logger;
             _orderService = orderService;
         }
 

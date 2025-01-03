@@ -4,10 +4,9 @@ using Order.Host.Repositories;
 using Order.Host.Repositories.Interfaces;
 using Order.Host.Services;
 using Order.Host.Services.Interfaces;
-using System.Text.Json.Serialization;
-
 
 var configuration = GetConfiguration();
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(options =>
@@ -16,8 +15,7 @@ builder.Services.AddControllers(options =>
 })
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.WriteIndented = true;
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.WriteIndented = true;       
     });
 
 builder.Services.AddHttpClient();

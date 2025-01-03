@@ -1,5 +1,4 @@
 ﻿using Basket.Host.Configs;
-using Basket.Host.Models.Dto;
 using Basket.Host.Services;
 using Basket.Host.Services.Interfaces;
 
@@ -52,14 +51,14 @@ namespace Basket.UnitTest.Sevices
         {
             //arrange
             var keyTest = "keyTest";
-            var testData = new List<ItemDto>()
+            var testData = new List<ItemResponse>()
             {
-                new ItemDto()
+                new ItemResponse()
                 {
                      Id = 1,
                      Name = "Test",
-                     Type = new TypeDto() { Id = 1, Name = "Test" },
-                     NestedType = new NestedTypeDto() { Id = 1, Name = "Test"}
+                     //Type = new TypeDto() { Id = 1, Name = "Test" },
+                     //NestedType = new NestedTypeDto() { Id = 1, Name = "Test"}
                 }
             };
             var serializeDataTest = JsonConvert.SerializeObject(testData);
@@ -75,7 +74,7 @@ namespace Basket.UnitTest.Sevices
                )).ReturnsAsync(false);            
 
             _jsonSerizlizer
-                .Setup(st=>st.Serialize(It.IsAny<List<ItemDto>>()))
+                .Setup(st=>st.Serialize(It.IsAny<List<ItemResponse>>()))
                 .Returns(serializeDataTest);
 
             //act
@@ -106,14 +105,14 @@ namespace Basket.UnitTest.Sevices
 
             string? testKey = null;
 
-            var testData = new List<ItemDto>()
+            var testData = new List<ItemResponse>()
             {
-                new ItemDto()
+                new ItemResponse()
                 {
                      Id = 1,
                      Name = "Test",
-                     Type = new TypeDto() { Id = 1, Name = "Test" },
-                     NestedType = new NestedTypeDto() { Id = 1, Name = "Test"}
+                     //Type = new TypeDto() { Id = 1, Name = "Test" },
+                     //NestedType = new NestedTypeDto() { Id = 1, Name = "Test"}
                 }
             };
 
@@ -128,7 +127,7 @@ namespace Basket.UnitTest.Sevices
 
             //act
 
-            var result = await _cacheService.AddOrUpdateAsync(testKey, testData);
+            var result = await _cacheService.AddOrUpdateAsync(testKey!, testData);
 
             //asert
 
@@ -149,14 +148,14 @@ namespace Basket.UnitTest.Sevices
         {
             //arrange
             var testKey = "testKey";
-            var testData = new List<ItemDto>()
+            var testData = new List<ItemResponse>()
             {
-                new ItemDto()
+                new ItemResponse()
                 {
                      Id = 1,
                      Name = "Test",
-                     Type = new TypeDto() { Id = 1, Name = "Test" },
-                     NestedType = new NestedTypeDto() { Id = 1, Name = "Test"}
+                     //Type = new TypeDto() { Id = 1, Name = "Test" },
+                     //NestedType = new NestedTypeDto() { Id = 1, Name = "Test"}
                 }
             };
 
@@ -168,12 +167,12 @@ namespace Basket.UnitTest.Sevices
                 .ReturnsAsync(redisValue);
 
             _jsonSerizlizer
-                .Setup(s=>s.Deserialize<List<ItemDto>>(It.IsAny<string>()))
+                .Setup(s=>s.Deserialize<List<ItemResponse>>(It.IsAny<string>()))
                 .Returns(testData);
 
             //act
 
-            var result = await _cacheService.GetAsync<List<ItemDto>>(testKey);
+            var result = await _cacheService.GetAsync<List<ItemResponse>>(testKey);
 
             //asert
 
@@ -185,7 +184,7 @@ namespace Basket.UnitTest.Sevices
                 result[i].Id.Should().Be(testData[i].Id);
                 result[i].Name.Should().Be(testData[i].Name);
                 result[i].Type.Should().BeEquivalentTo(testData[i].Type);
-                result[i].NestedType.Should().BeEquivalentTo(testData[i].NestedType); 
+                //result[i].NestedType.Should().BeEquivalentTo(testData[i].NestedType); 
             }
             _database.Verify(v=>v.StringGetAsync(testKey, CommandFlags.None), Times.Once);
         }
@@ -203,7 +202,7 @@ namespace Basket.UnitTest.Sevices
 
             //act
 
-            var result = await _cacheService.GetAsync<List<ItemDto>>(testKey);
+            var result = await _cacheService.GetAsync<List<ItemResponse>>(testKey);
 
             //asert
 

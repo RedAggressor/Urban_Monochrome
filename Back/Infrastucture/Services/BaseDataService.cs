@@ -63,7 +63,7 @@ namespace Infrastucture.Services
             { 
                 await transaction.RollbackAsync(cancellationToken);
                 _logger.LogError(ex, "transaction is rollbacked");
-                throw;                
+                throw new Exception($"{ex.Message}");                
             }
         }
     }
