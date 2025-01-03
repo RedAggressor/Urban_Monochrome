@@ -17,7 +17,7 @@ namespace IdentityServer
         {
             return new List<ApiScope>
             {
-                new ApiScope("test", "My test Api")
+                new ApiScope("api1", "My test Api")
             };
         }
 
@@ -27,17 +27,26 @@ namespace IdentityServer
             {
                 new Client
                 {
-                    ClientId = "client",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets = 
-                    { 
-                        new Secret("secret".Sha256()) 
+                    ClientId = "basket",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,                   
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
                     },
-                    AllowedScopes = { "test" }
+                },
+                new Client
+                {
+                    ClientId = "basketswaggerui",
+                    ClientName = "Basket Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    //RequirePkce = true,
+                    AllowAccessTokensViaBrowser = true,
+                    //ClientSecrets = { new Secret("your-client-secret".Sha256()) },
+                    RedirectUris = { "http://localhost:5003/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { "http://localhost:5003/swagger/" },
+                    AllowedScopes = { "api1", "openid", "profile"}
                 }   
             };
         }
-
-
     }
 }

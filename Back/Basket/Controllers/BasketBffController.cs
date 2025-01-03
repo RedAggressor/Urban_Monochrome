@@ -2,12 +2,16 @@ using Basket.Host.Models.Dto;
 using Basket.Host.Models.Requests;
 using Basket.Host.Models.Responses;
 using Basket.Host.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Runtime.CompilerServices;
 
 namespace Basket.Host.Controllers
 {
+    
     [ApiController]
+    [Authorize(Policy = "AllowEndUser")]    
     [Route(ComponentDefaults.DefaultRoute)]    
     public class BasketBffController : ControllerBase
     {

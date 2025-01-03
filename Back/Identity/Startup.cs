@@ -1,6 +1,12 @@
 ﻿using IdentityServer.Data;
+using IdentityServer.Services;
+using IdentityServer.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 namespace IdentityServer
 {
     public class Startup
@@ -13,12 +19,22 @@ namespace IdentityServer
                 .AddEnvironmentVariables()
                 .Build();
 
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+
             services.AddDbContext<UserDbContext>(options =>
                 options.UseNpgsql(configuration["ConnectionString"]));
+
+            services.AddIdentityCore<IdentityUser>()
+                .AddEntityFrameworkStores<UserDbContext>()
+                .AddApiEndpoints();
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<UserDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddTransient<ITokenService, TokenService>();
 
             services.AddIdentityServer()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
@@ -29,27 +45,30 @@ namespace IdentityServer
 
             services.AddControllersWithViews();
         }
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        { 
-            if (env.IsDevelopment()) 
-            { 
-                app.UseDeveloperExceptionPage();
-            } 
-            else 
-            { 
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
 
-            app.UseHttpsRedirection();
+        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
+        { 
+            app.UseDeveloperExceptionPage();
+                        
+            app.UseIdentityServer();
+
+            app.UseCookiePolicy(new CookiePolicyOptions 
+            { 
+                MinimumSameSitePolicy = SameSiteMode.Strict 
+            });
+
             app.UseStaticFiles();
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+
+            app.UseSwagger();            
+
+            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+
+            var roleService = serviceProvider.GetRequiredService<IRoleService>();
+            roleService.CreateRoleAsync().Wait();
         }
     }
 }
