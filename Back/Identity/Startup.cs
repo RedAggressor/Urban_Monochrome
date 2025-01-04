@@ -3,7 +3,6 @@ using IdentityServer.Data;
 using IdentityServer.Quickstart;
 using Infrastucture.Filters;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +23,7 @@ namespace IdentityServer
             services.AddControllers(option => option.Filters.Add<HttpGlobalExceptionFilter>())
                 .AddJsonOptions(option => option.JsonSerializerOptions.WriteIndented = true);
 
-            services.Configure<AppSettings>(configuration);
+            //services.Configure<AppSettings>(configuration);
 
             services.AddDbContext<UserDbContext>(options =>
                 options.UseNpgsql(configuration["ConnectionString"]));
@@ -47,7 +46,7 @@ namespace IdentityServer
                 .AddAspNetIdentity<IdentityUser>()
                 .AddDeveloperSigningCredential();
 
-            services.AddControllersWithViews();
+            //services.AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app)

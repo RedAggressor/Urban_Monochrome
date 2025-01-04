@@ -1,6 +1,7 @@
 using Basket.Host.Configs;
 using Basket.Host.Services;
 using Basket.Host.Services.Interfaces;
+using Infrastucture.Extensions;
 using Microsoft.OpenApi.Models;
 
 var configuration = GetConfiguration();
@@ -13,13 +14,35 @@ builder.Services.AddControllers(option =>
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo()
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Urban Monochrome - Basket HTTP API",
+        Title = "eShop - Basket HTTP API",
         Version = "v1",
-        Description = "The Basket Service Http Api"
+        Description = "The Basket Service HTTP API"
     });
+
+    var authority = configuration["Authorization:Authority"];
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.OAuth2,
+        Flows = new OpenApiOAuthFlows()
+        {
+            Implicit = new OpenApiOAuthFlow()
+            {
+                AuthorizationUrl = new Uri($"{authority}/connect/authorize"),
+                TokenUrl = new Uri($"{authority}/connect/token"),
+                Scopes = new Dictionary<string, string>()
+                {                    
+                    { "mvc", "website" }
+                }
+            }
+        }
+    });
+
+    options.OperationFilter<AuthorizeCheckOperationFilter>();
 });
+
+builder.AddConfiguration();
 
 builder.Services.Configure<RedisConfig>(
     builder.Configuration.GetSection("Redis"));
@@ -32,46 +55,47 @@ builder.Services.AddTransient<ILikeItemService, LikeItemService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
+options.AddPolicy(
+    "CorsPolicy",
+    builder => builder
+        .SetIsOriginAllowed((host) => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
 });
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+app.UseSwagger()
+    .UseSwaggerUI(setup =>
+    {
+        setup.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Basket.API V1");
+        setup.OAuthClientId("basketswaggerui");
+        setup.OAuthAppName("Basket Swagger UI");
+    });
 
-app.UseCors("AllowAll");
-
-app.UseSwagger().UseSwaggerUI(setup =>
-{
-    setup.SwaggerEndpoint($"{configuration["BasePath"]}/swagger/v1/swagger.json",
-        "Basket.API V1");    
-});
+app.UseRouting();
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+
+
+app.UseEndpoints(endpoints =>
+{
+endpoints.MapDefaultControllerRoute();
+endpoints.MapControllers();
+});
+
 app.Run();
 
 IConfiguration GetConfiguration()
 {
-    var builder = new ConfigurationBuilder();
-
-    builder.SetBasePath(Directory.GetCurrentDirectory())
+    var builder = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddEnvironmentVariables();
 
     return builder.Build();
 }
+

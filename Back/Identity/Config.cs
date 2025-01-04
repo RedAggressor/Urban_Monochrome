@@ -109,7 +109,7 @@ namespace IdentityServer
 
                     AllowedScopes =
                     {
-                        "react", "mvc"
+                        "mvc"
                     }
                 }
             };
