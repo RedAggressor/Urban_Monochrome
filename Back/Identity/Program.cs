@@ -1,16 +1,19 @@
-using IdentityServer;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 
-public class Program
+namespace IdentityServer
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        CreateWebHostBuilder(args).Build().Run();
-    }
+        public static void Main(string[] args)
+        {
+            CreateWebHostBuilder(args).Build().Run();
+        }
 
-    public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-    {
-        return WebHost.CreateDefaultBuilder(args)
-            .UseStartup<Startup>();
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>();
+        }
     }
 }

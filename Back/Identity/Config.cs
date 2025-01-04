@@ -1,4 +1,6 @@
-﻿using Duende.IdentityServer.Models;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+using Duende.IdentityServer.Models;
 
 namespace IdentityServer
 {
@@ -6,29 +8,90 @@ namespace IdentityServer
     {
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
-            return new List<IdentityResource>
-            { 
+            return new IdentityResource[]
+            {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile()
             };
         }
 
-        public static IEnumerable<ApiScope> GetApiScopes()
+        public static IEnumerable<ApiResource> GetApis()
         {
-            return new List<ApiScope>
+            return new ApiResource[]
             {
-                new ApiScope("api1", "My test Api")
+                new ApiResource("www.liqpay.ua")
+                {
+                    Scopes = new List<string>
+                    {
+                        "react"
+                    }
+                },
+                new ApiResource("localhost")
+                {
+                    Scopes = new List<string>
+                    {
+                        "mvc"
+                    },
+                },
+                new ApiResource("catalog")
+                {
+                    Scopes = new List<string>
+                    {
+                        "catalog.catalogbff",
+                        "catalog.catalogitem"
+                    },
+                },
             };
         }
 
-        public static IEnumerable<Client> GetClients()
+        public static IEnumerable<Client> GetClients(IConfiguration configuration)
         {
-            return new List<Client>
+            return new[]
             {
                 new Client
                 {
+                    ClientId = "react_spa",
+                    ClientName = "React SPA",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+                    RedirectUris = { $"{configuration["ReactClientUrl"]}/callback" },
+                    PostLogoutRedirectUris = { $"{configuration["ReactClientUrl"]}/" },
+                    AllowedCorsOrigins = { configuration["ReactClientUrl"], "https://www.liqpay.ua" },
+                    AllowedScopes = { "openid", "profile", "react", "mvc", "catalog.catalogbff", "catalog.catalogitem"},                    
+                    AllowAccessTokensViaBrowser = true                   
+                    
+                },
+                new Client
+                {
+                    ClientId = "catalog",
+                    
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                                        
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                },
+                new Client
+                {
+                    ClientId = "catalogswaggerui",
+                    ClientName = "Catalog Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{configuration["CatalogApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{configuration["CatalogApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        "catalog.catalogbff", "catalog.catalogitem", "react", "mvc"
+                    }
+                },
+                new Client
+                {
                     ClientId = "basket",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,                   
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets =
                     {
                         new Secret("secret".Sha256())
@@ -39,13 +102,16 @@ namespace IdentityServer
                     ClientId = "basketswaggerui",
                     ClientName = "Basket Swagger UI",
                     AllowedGrantTypes = GrantTypes.Implicit,
-                    //RequirePkce = true,
                     AllowAccessTokensViaBrowser = true,
-                    //ClientSecrets = { new Secret("your-client-secret".Sha256()) },
-                    RedirectUris = { "http://localhost:5003/swagger/oauth2-redirect.html" },
-                    PostLogoutRedirectUris = { "http://localhost:5003/swagger/" },
-                    AllowedScopes = { "api1", "openid", "profile"}
-                }   
+
+                    RedirectUris = { $"{configuration["BasketApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{configuration["BasketApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        "react", "mvc"
+                    }
+                }
             };
         }
     }

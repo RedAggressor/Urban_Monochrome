@@ -2,16 +2,8 @@ using Basket.Host.Configs;
 using Basket.Host.Services;
 using Basket.Host.Services.Interfaces;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
-using Microsoft.AspNetCore.Builder;
-using Basket.Host;
-
+using Infrastucture.Filters;
+using Infrastucture.Extensions;
 
 var configuration = GetConfiguration();
 
@@ -22,104 +14,57 @@ builder.Services.AddControllers(option => option.Filters.Add<HttpGlobalException
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo()
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Urban Monochrome - Basket HTTP API",
+        Title = "eShop - Basket HTTP API",
         Version = "v1",
-        Description = "The Basket Service Http Api"
+        Description = "The Basket Service HTTP API"
     });
 
+    var authority = configuration["Authorization:Authority"];
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Type = SecuritySchemeType.OAuth2,
-        Flows = new OpenApiOAuthFlows
+        Flows = new OpenApiOAuthFlows()
         {
-            AuthorizationCode = new OpenApiOAuthFlow
+            Implicit = new OpenApiOAuthFlow()
             {
-                AuthorizationUrl = new Uri("http://localhost:5001/connect/authorize"),
-                TokenUrl = new Uri("http://localhost:5001/connect/token")
+                AuthorizationUrl = new Uri($"{authority}/connect/authorize"),
+                TokenUrl = new Uri($"{authority}/connect/token"),
+                Scopes = new Dictionary<string, string>()
+                {
+                    { "react", "client" },
+                    { "mvc", "website" }
+                }
             }
         }
     });
 
-    var oAuthScheme = new OpenApiSecurityScheme
-    {
-        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
-    };
-
-    options.AddSecurityRequirement(
-       new OpenApiSecurityRequirement
-       {
-           [oAuthScheme] = new[] { "swagger" }
-       });
+    options.OperationFilter<AuthorizeCheckOperationFilter>();
 });
 
+
+builder.AddConfiguration();
 builder.Services.Configure<RedisConfig>(
     builder.Configuration.GetSection("Redis"));
 
-builder.Services.AddSingleton<IAuthorizationHandler, ScopeHandler>();
-
-builder.Services
-    .AddAuthentication()
-    .AddJwtBearer("Internal", options =>
-    {
-        options.Authority = "http://localhost:5001";
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateAudience = false
-        };
-    })
-    .AddJwtBearer("Site", options =>
-    {
-        options.Authority = "http://localhost:5001";
-        options.Audience = "localhost";
-        options.RequireHttpsMetadata = false;
-    });
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AllowEndUser", policy =>
-    {
-        policy.AuthenticationSchemes.Add("Site");
-        policy.RequireClaim(JwtRegisteredClaimNames.Sub);
-    });
-    options.AddPolicy("AllowClient", policy =>
-    {
-        policy.AuthenticationSchemes.Add("Internal");
-        policy.Requirements.Add(new DenyAnonymousAuthorizationRequirement());
-        policy.Requirements.Add(new ScopeRequirement());
-    });
-});
-
-JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-builder.Services.Configure<ClientConfig>(
-            builder.Configuration.GetSection("Client"));
-
-//builder.Services.AddAuthentication("Bearer")
-//    .AddJwtBearer("Bearer", options => 
-//    { 
-//        options.Authority = "http://localhost:5001";
-//        options.RequireHttpsMetadata = false;
-//        options.Audience = "api1";
-//    });
+builder.Services.AddAuthorization(configuration);
 
 builder.Services.AddTransient<IBasketService, BasketService>();
 builder.Services.AddTransient<ICacheService, CacheService>();
 builder.Services.AddTransient<IRedisCacheConnectionService, RedisCacheConnectionService>();
 builder.Services.AddTransient<IJsonSerializerService, JsonSerializerService>();
+builder.Services.AddTransient<ILikeItemService, LikeItemService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.SetIsOriginAllowed((host) => true)
-                   .AllowAnyMethod()
-                   .AllowAnyHeader()
-                   .AllowCredentials();
-        });
+    options.AddPolicy(
+        "CorsPolicy",
+        builder => builder
+            .SetIsOriginAllowed((host) => true)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 
 var app = builder.Build();
@@ -129,18 +74,15 @@ app.UseSwagger()
     {
         setup.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Basket.API V1");
         setup.OAuthClientId("basketswaggerui");
-        //setup.OAuthClientSecret("secret");
         setup.OAuthAppName("Basket Swagger UI");
-        //setup.OAuthUsePkce();
-        
     });
 
 app.UseRouting();
-
-app.UseCors("AllowAll");
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.UseEndpoints(endpoints =>
 {

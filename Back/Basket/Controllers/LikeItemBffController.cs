@@ -1,4 +1,5 @@
-﻿using Basket.Host.Models.Requests;
+﻿using Basket.Host.Models.Dto;
+using Basket.Host.Models.Requests;
 using Basket.Host.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
