@@ -1,0 +1,25 @@
+@import '../../../app/styles/_mixins.scss';
+@import '../../../app/styles/variables.scss';
+
+.nav {
+  gap: 20px;
+  &__footer {
+    flex-direction: column;
+  }
+}
+
+.nav_link {
+  font-weight: 400;
+  font-size: 20px;
+  color: #f9f9f9;
+  transition: color, 0.5s;
+  line-height: 40px;
+
+  &:hover {
+    color: $hover-red;
+  }
+  &:hover {
+    color: $hover-light-red;
+    transition-delay: 0.2s;
+  }
+}

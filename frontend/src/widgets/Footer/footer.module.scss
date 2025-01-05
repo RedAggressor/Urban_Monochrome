@@ -1,0 +1,147 @@
+@import '../../app/styles/mixins.scss';
+@import '../../app/styles/variables.scss';
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  background-color: $footer;
+
+  &_mob {
+    gap: 16px;
+    padding-block: 18px;
+  }
+  &_desk {
+    gap: 48px;
+    padding-block: 40px;
+  }
+}
+
+.logoTitle {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  &__title {
+    font-size: $mobile-font-size;
+
+    @include media-query(sm) {
+      font-size: 24px;
+    }
+    @include media-query(lg) {
+      font-size: 20px;
+    }
+  }
+}
+
+.upToDateContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  @include media-query(lg) {
+    gap: 20px;
+    max-width: 400px;
+  }
+
+  &_title {
+    font-size: $mobile-font-size;
+    color: $red-text;
+
+    @include media-query(sm) {
+      font-size: 24px;
+    }
+    @include media-query(lg) {
+      font-size: $desktop-font-size;
+    }
+  }
+  &_text {
+    font-size: 14px;
+    @include media-query(sm) {
+      font-size: 16px;
+    }
+  }
+  &_form {
+    height: 40px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid $white-text;
+    border-radius: 8px;
+    @include media-query(lg) {
+      max-width: 80%;
+    }
+
+    &__input {
+      color: $white-text;
+      background-color: transparent;
+      outline: none;
+    }
+
+    &__icon {
+      height: 16px !important; // прийшлось захардкодити це значення бо там сама іконка іншого розміру
+    }
+  }
+}
+
+.iconsContainer {
+  display: flex;
+  justify-content: space-between;
+  @include media-query(sm) {
+    max-width: 45%;
+  }
+  @include media-query(lg) {
+    gap: 20px;
+  }
+}
+
+.bottomContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  @include media-query(lg) {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  &__info {
+    font-size: 12px;
+    @include media-query(lg) {
+      font-size: $desktop-font-size;
+    }
+  }
+
+  &__paymentIcons {
+    display: flex;
+    gap: 20px;
+    @include media-query(sm) {
+      gap: 25px;
+    }
+    @include media-query(lg) {
+      gap: 20px;
+    }
+  }
+}
+
+// #region desktop elements
+.desk_sectionContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.desk_nav {
+  // записав їх тут бо в корневому елементі чомусь не працює
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.desk_contacts {
+  display: flex;
+  font-style: normal;
+  flex-direction: column;
+  gap: 20px;
+  font-size: $desktop-font-size;
+}
+// #endregion
