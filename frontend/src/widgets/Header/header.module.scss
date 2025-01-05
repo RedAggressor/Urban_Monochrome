@@ -8,7 +8,7 @@
   padding-top: 50px;
   padding-bottom: 16px;
 
-  @include media-query(md) {
+  @include media-query(sm) {
     gap: 20px;
   }
   @include media-query(lg) {
@@ -28,18 +28,18 @@
   justify-content: space-between;
   width: 80px;
 
-  @include media-query(sm) {
-    width: 100px;
-  }
+  // @include media-query(sm) {
+  //   width: 100px;
+  // }
 
-  @include media-query(md) {
+  @include media-query(sm) {
     display: none;
   }
 }
 
 .nav {
   display: none;
-  @include media-query(md) {
+  @include media-query(sm) {
     display: flex;
   }
 }
@@ -50,7 +50,7 @@
   justify-content: space-between;
   width: 160px;
 
-  @include media-query(md) {
+  @include media-query(sm) {
     display: flex;
   }
   @include media-query(lg) {

@@ -11,16 +11,17 @@ import { Container } from '../../shared/Container/Container';
 
 export const Footer = () => {
   const { screenWidth } = useAppSelector(st => st.global);
+  // на малих екранах структура кардинально різна тому простіше так написати
   if (screenWidth < 1024) {
     return (
       <footer>
         <Container className={`${cl.footer} ${cl.footer_mob}`}>
-          <div className={cl.mob_logoTitle}>
+          <div className={cl.logoTitle}>
             <Logo />
-            <h1 className={cl.mob_logoTitle__title}>URBAN MONOCHROME</h1>
+            <h1 className={cl.logoTitle__title}>URBAN MONOCHROME</h1>
           </div>
 
-          <div className={cl.mob_iconsContainer}>
+          <div className={cl.iconsContainer}>
             <Icon type={IconType.Instagram} />
             <Icon type={IconType.Pinterest} />
             <Icon type={IconType.Facebook} />
@@ -29,38 +30,38 @@ export const Footer = () => {
             <Icon type={IconType.Email} />
           </div>
 
-          <section className={cl.mob_upToDateContainer}>
-            <p className={cl.mob_upToDateContainer__title}>[Keep up to date]</p>
-            <p className={cl.mob_upToDateContainer__text}>
+          <section className={cl.upToDateContainer}>
+            <p className={cl.upToDateContainer_title}>[Keep up to date]</p>
+            <p className={cl.upToDateContainer_text}>
               Subscribe to get the latest on new arrivals, exclusive offers and
               style update
             </p>
             <form
               action=""
-              className={cl.mob_upToDateContainer__form}
+              className={cl.upToDateContainer_form}
               onSubmit={e => e.preventDefault()}
             >
               <input
                 type="email"
-                className={cl.mob_upToDateContainer__form___input}
+                className={cl.upToDateContainer_form__input}
                 placeholder="Your email"
               />
               <Icon
                 type={IconType.MailArrow}
-                className={cl.mob_upToDateContainer__form___icon}
+                className={cl.upToDateContainer_form__icon}
                 onClick={() => {}}
               />
             </form>
           </section>
 
-          <section className={cl.mob_bottomContainer}>
-            <p className={cl.mob_bottomContainer__info}>
+          <section className={cl.bottomContainer}>
+            <p className={cl.bottomContainer__info}>
               © 2024 Glossier. All rights reserved. .{' '}
               <a href="">
                 <u>Privacy Policy</u>
               </a>
             </p>
-            <div className={cl.mob_bottomContainer__paymentIcons}>
+            <div className={cl.bottomContainer__paymentIcons}>
               <Icon type={IconType.BankCard} size="small" />
               <Icon type={IconType.PayPal} size="small" />
               <Icon type={IconType.GooglePay} size="small" />
@@ -76,11 +77,11 @@ export const Footer = () => {
     <footer>
       <Container className={`${cl.footer} ${cl.footer_desk}`}>
         <div className={cl.desk_sectionContainer}>
-          <div className={cl.desk_logoTitle}>
+          <div className={cl.logoTitle}>
             <Logo />
-            <h1 className={cl.desk_logoTitle__title}>URBAN MONOCHROME</h1>
+            <h1 className={cl.logoTitle__title}>URBAN MONOCHROME</h1>
           </div>
-          <div className={cl.desk_iconsContainer}>
+          <div className={cl.iconsContainer}>
             <Icon type={IconType.Instagram} />
             <Icon type={IconType.Pinterest} />
             <Icon type={IconType.Facebook} />
@@ -89,27 +90,25 @@ export const Footer = () => {
         </div>
 
         <div className={cl.desk_sectionContainer}>
-          <section className={cl.desk_upToDateContainer}>
-            <p className={cl.desk_upToDateContainer__title}>
-              [Keep up to date]
-            </p>
-            <p className={cl.desk_upToDateContainer__text}>
+          <section className={cl.upToDateContainer}>
+            <p className={cl.upToDateContainer_title}>[Keep up to date]</p>
+            <p className={cl.upToDateContainer_text}>
               Subscribe to get the latest on new arrivals, exclusive offers and
               style update
             </p>
             <form
               action=""
-              className={cl.desk_upToDateContainer__form}
+              className={cl.upToDateContainer_form}
               onSubmit={e => e.preventDefault()}
             >
               <input
                 type="email"
-                className={cl.desk_upToDateContainer__form___input}
+                className={cl.upToDateContainer_form__input}
                 placeholder="Your email"
               />
               <Icon
                 type={IconType.MailArrow}
-                className={cl.desk_upToDateContainer__form___icon}
+                className={cl.upToDateContainer_form__icon}
                 onClick={() => {}}
               />
             </form>
@@ -122,14 +121,14 @@ export const Footer = () => {
           </address>
         </div>
 
-        <div className={cl.desk_sectionContainer}>
-          <p className={cl.desk_bottomInfo}>
+        <div className={cl.bottomContainer}>
+          <p className={cl.bottomContainer__info}>
             © 2024 Glossier. All rights reserved. .{' '}
             <a href="">
               <u>Privacy Policy</u>
             </a>
           </p>
-          <div className={cl.desk_iconsContainer}>
+          <div className={cl.bottomContainer__paymentIcons}>
             <Icon type={IconType.BankCard} />
             <Icon type={IconType.PayPal} />
             <Icon type={IconType.GooglePay} />

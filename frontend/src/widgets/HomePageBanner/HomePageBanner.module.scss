@@ -1,59 +1,53 @@
-@import '../../app/styles/mixins.scss';
-@import '../../app/styles/variables.scss';
+@import '../../app/styles/mixins';
+@import '../../app/styles/variables';
 
-.home-page-main {
-  display: block;
-}
-
-.main-banner {
+.mainBanner {
   position: relative;
   width: 100%;
 }
 
-.wrapper-banner {
+.wrapperBanner {
   width: 100%;
   height: 390px;
-  padding-top: 15px;
   background-color: $white-text;
   margin-bottom: 8px;
 
-  @include media-query(md) {
+  @include media-query(sm) {
     height: 565px;
     padding-top: 0;
   }
 }
 
-.img-banner {
+.imgBanner {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-
-  @include media-query-tablet(md, lg) {
-    //object-fit: contain;
-  }
 }
 
-.home-page-title {
+.homePageTitle {
   position: absolute;
   color: $black-text;
 
   font-size: clamp(1.8rem, 5vw, 4rem);
   top: clamp(1rem, 3vw, 3.75rem);
-  left: clamp(1.5rem, 4vw, 5rem);
+
+  @media (max-width: 370px) {
+    font-size: 24px;
+  }
 }
 
-.home-page-text {
+.homePageText {
   position: absolute;
   color: $black-text;
   font-family: 'Lora', sans-serif;
 
   font-size: clamp(1rem, 2.7vw, 1.9rem);
   top: clamp(5rem, 16vw, 13rem);
-  left: clamp(1.5rem, 4vw, 5rem);
 }
 
-.home-page-button {
+.homePageButton {
+  width: 100%;
   @include flex-align(center);
 
   @include media-query-tablet(md, lg) {
@@ -62,7 +56,9 @@
 
   @include media-query(lg) {
     position: absolute;
+    width: 30%;
     top: 346px;
-    left: 80px;
+    color: $white-text !important;
+    background-color: $black-text !important;
   }
 }

@@ -1,24 +1,27 @@
 @import '../../../app//styles/variables';
 @import '../../../app//styles/mixins';
 
-.button-shop-now {
+.buttonShopNow {
+  cursor: pointer;
   @include flex-align(center);
   align-items: center;
   border-radius: 8px;
   padding: 16px 24px;
-  width: clamp(342px, 40vw, 413px);
   height: clamp(52px, 8vw, 73px);
+  color: $black-text;
   background-color: $white-text;
-  cursor: pointer;
+
+  @include hover(border, 1px solid $hover-red, 0.5s);
+
+  &:active {
+    border: 1px solid $hover-red;
+  }
 
   @include media-query-tablet(md, lg) {
-    width: 696px;
     font-size: 24px;
   }
 
   @include media-query(lg) {
-    background-color: $black-text;
-    color: $white-text;
     font-size: 32px;
   }
 }

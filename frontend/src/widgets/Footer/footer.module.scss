@@ -16,133 +16,118 @@
   }
 }
 
-// #region mobile styles
-.mob_logoTitle {
+.logoTitle {
   display: flex;
   gap: 20px;
   align-items: center;
   &__title {
     font-size: $mobile-font-size;
 
-    @include media-query(md) {
+    @include media-query(sm) {
       font-size: 24px;
+    }
+    @include media-query(lg) {
+      font-size: 20px;
     }
   }
 }
 
-.mob_iconsContainer {
-  display: flex;
-  justify-content: space-between;
-
-  @include media-query(md) {
-    max-width: 45%;
-  }
-}
-
-.mob_upToDateContainer {
+.upToDateContainer {
   display: flex;
   flex-direction: column;
   gap: 8px;
 
-  &__title {
+  @include media-query(lg) {
+    gap: 20px;
+    max-width: 400px;
+  }
+
+  &_title {
     font-size: $mobile-font-size;
     color: $red-text;
+
+    @include media-query(sm) {
+      font-size: 24px;
+    }
+    @include media-query(lg) {
+      font-size: $desktop-font-size;
+    }
   }
-  &__text {
+  &_text {
     font-size: 14px;
+    @include media-query(sm) {
+      font-size: 16px;
+    }
   }
-  &__form {
+  &_form {
     height: 40px;
     padding: 10px;
     display: flex;
     justify-content: space-between;
     border: 1px solid $white-text;
     border-radius: 8px;
+    @include media-query(lg) {
+      max-width: 80%;
+    }
 
-    &___input {
+    &__input {
       color: $white-text;
       background-color: transparent;
       outline: none;
     }
 
-    &___icon {
-      width: 26px !important; // прийшлось захардкодити розміри бо сама картинка з фігми має інші розміри а не 24х24
-      height: 16px !important;
+    &__icon {
+      height: 16px !important; // прийшлось захардкодити це значення бо там сама іконка іншого розміру
     }
   }
 }
 
-.mob_bottomContainer {
+.iconsContainer {
+  display: flex;
+  justify-content: space-between;
+  @include media-query(sm) {
+    max-width: 45%;
+  }
+  @include media-query(lg) {
+    gap: 20px;
+  }
+}
+
+.bottomContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  @include media-query(lg) {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+  }
 
   &__info {
     font-size: 12px;
+    @include media-query(lg) {
+      font-size: $desktop-font-size;
+    }
   }
 
   &__paymentIcons {
     display: flex;
     gap: 20px;
+    @include media-query(sm) {
+      gap: 25px;
+    }
+    @include media-query(lg) {
+      gap: 20px;
+    }
   }
 }
-// #endregion
 
-// #region desktop styles
+// #region desktop elements
 .desk_sectionContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.desk_iconsContainer {
-  display: flex;
-  gap: 20px;
-}
-
-.desk_logoTitle {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  &__title {
-    font-size: 20px;
-  }
-}
-
-.desk_upToDateContainer {
-  display: flex;
-  max-width: 400px;
-  flex-direction: column;
-  gap: 20px;
-
-  &__title {
-    font-size: $desktop-font-size;
-    color: $red-text;
-  }
-  &__text {
-    font-size: 16px;
-  }
-  &__form {
-    height: 40px;
-    max-width: 80%;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid $white-text;
-    border-radius: 8px;
-
-    &___input {
-      color: $white-text;
-      background-color: transparent;
-      outline: none;
-    }
-
-    &___icon {
-      width: 26px !important; // прийшлось захардкодити розміри бо сама картинка з фігми має інші розміри а не 24х24
-      height: 16px !important;
-    }
-  }
 }
 
 .desk_nav {
@@ -157,10 +142,6 @@
   font-style: normal;
   flex-direction: column;
   gap: 20px;
-  font-size: $desktop-font-size;
-}
-
-.desk_bottomInfo {
   font-size: $desktop-font-size;
 }
 // #endregion
