@@ -5,10 +5,10 @@ import cl from './homePage.module.scss';
 
 export const HomePage = () => {
   return (
-    <main className={cl['home-page-main']}>
+    <div className={cl['home-page-main']}>
       <HomePageBanner />
       <About />
       <New />
-    </main>
+    </div>
   );
 };
