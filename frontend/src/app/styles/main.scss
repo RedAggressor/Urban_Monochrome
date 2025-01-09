@@ -1,6 +1,6 @@
 @import 'normalize.css';
-@import '../styles/variables';
-@import '../styles/mixins';
+@import '../styles/variables.scss';
+@import '../styles/mixins.scss';
 
 @font-face {
   font-family: 'Medium';
@@ -16,20 +16,31 @@
   //overflow-x: hidden;
 }
 
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
 html,
 body {
   height: 100%;
   background-color: #181516;
   color: $white-text;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   letter-spacing: -0.02em;
   font-weight: 400;
 }
 
 .wrapper {
-  display: flex; 
-  flex-direction: column; 
-  min-height: 100vh; 
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 main {
@@ -39,7 +50,7 @@ main {
 a {
   text-decoration: none;
   color: $white-text;
-} 
+}
 
 ul,
 ol,
@@ -50,7 +61,7 @@ li {
 h1,
 h2,
 h3 {
-  font-family: "Medium", sans-serif;
+  font-family: 'Medium', sans-serif;
   font-weight: 400;
 
   padding: 0;
@@ -72,7 +83,3 @@ h3 {
 //     font-size: 56px;
 //   }
 // }
-
-main {
-  flex: 1;
-}

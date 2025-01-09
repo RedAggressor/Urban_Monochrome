@@ -1,0 +1,19 @@
+@import '../../app/styles/mixins';
+@import '../../app/styles/variables';
+
+.home-page-main {
+  display: flex;
+  flex-direction: column;
+  gap: 32px; // відстань між секціями на сторінці
+  margin-bottom: 32px; // відстань до футера
+  margin-top: 16px; // до хедера
+  @include media-query(sm) {
+    gap: 46px;
+    margin-bottom: 46px;
+    margin-top: 0;
+  }
+  @include media-query(lg) {
+    gap: 80px;
+    margin-bottom: 80px;
+  }
+}

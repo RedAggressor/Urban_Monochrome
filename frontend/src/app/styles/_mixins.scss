@@ -1,5 +1,5 @@
 @use 'sass:map';
-@import './variables';
+@import './variables.scss';
 
 $breakpoints: (
   sm: 576px,
@@ -25,12 +25,38 @@ $breakpoints: (
   justify-content: $justify;
 }
 
-@mixin self-align($justify: center,) {
+@mixin self-align($justify: center) {
   display: flex;
   justify-self: $justify;
 }
 
-@mixin word-highlight($big: 24px,) {
+@mixin word-highlight($big: 24px) {
   font-size: $big;
   color: $hover-red;
+}
+
+@mixin hover($property, $toValue, $animDuration: 0.3s) {
+  // для створення анімації при наведенні. Синтаксис: @include hover(transform, scale(1.1), 0.5)
+  transition: #{$property} $animDuration;
+  &:hover {
+    #{$property}: $toValue;
+  }
+}
+
+@mixin page-grid {
+  // полегшує використання гріда. Синтакс: @include page-grid;
+  --columns: 4;
+
+  display: grid;
+
+  column-gap: 16px;
+  grid-template-columns: repeat(var(--columns), 1fr);
+
+  @include media-query(sm) {
+    --columns: 8;
+  }
+  @include media-query(lg) {
+    --columns: 12;
+    column-gap: 20px;
+  }
 }

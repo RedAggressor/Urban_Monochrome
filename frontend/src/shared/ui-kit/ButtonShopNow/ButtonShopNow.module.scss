@@ -1,0 +1,27 @@
+@import '../../../app//styles/variables';
+@import '../../../app//styles/mixins';
+
+.buttonShopNow {
+  cursor: pointer;
+  @include flex-align(center);
+  align-items: center;
+  border-radius: 8px;
+  padding: 16px 24px;
+  height: clamp(52px, 8vw, 73px);
+  color: $black-text;
+  background-color: $white-text;
+
+  @include hover(border, 1px solid $hover-red, 0.5s);
+
+  &:active {
+    border: 1px solid $hover-red;
+  }
+
+  @include media-query-tablet(md, lg) {
+    font-size: 24px;
+  }
+
+  @include media-query(lg) {
+    font-size: 32px;
+  }
+}

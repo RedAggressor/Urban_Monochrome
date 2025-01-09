@@ -1,0 +1,171 @@
+@import '../../app//styles/mixins';
+@import '../../app//styles/variables';
+
+.about {
+  @include page-grid;
+  grid-template-rows: repeat(5, auto);
+}
+
+// #region word-wrappers
+.highlight {
+  color: $hover-light-red;
+  font-style: normal;
+}
+.noWrap {
+  // обгортаєм спаном з цим класом слова, які не можна переносити
+  white-space: nowrap;
+}
+// #endregion
+
+.sectionTitle {
+  @include word-highlight();
+  grid-column: span 2;
+  grid-row: 1;
+
+  @include media-query(md) {
+    @include word-highlight(32px);
+  }
+  @include media-query(lg) {
+    @include word-highlight(32px);
+    margin-bottom: 24px;
+  }
+}
+
+.boldTitle {
+  z-index: 99; // щоб перекривав картинку коли налазить на неї
+  font-size: 22px;
+  @include media-query(sm) {
+    font-size: clamp(1.2rem, 3.7vw, 3.5rem);
+  }
+  @include media-query(md) {
+    font-size: 32px;
+  }
+  @include media-query(lg) {
+    font-size: clamp(1.2rem, 3.8vw, 3.5rem);
+  }
+}
+
+.title-styleThatSpeaks {
+  grid-column: span 2;
+  grid-row: 2;
+  margin-top: 24px;
+  @include media-query(sm) {
+    grid-column: span 3;
+    margin-top: 10px;
+  }
+  @include media-query(lg) {
+    grid-column: span 5;
+    margin-top: 0;
+  }
+}
+
+.title-wearYour {
+  grid-column: span 2;
+  grid-row: 4;
+  margin-top: 16px;
+  @include media-query(sm) {
+    grid-column: 6 / -1;
+    grid-row: 5;
+    text-align: right;
+    display: flex; // на планшетних екранах текст всередині цієї комірки має притискатись до нижнього краю
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  @include media-query(md) {
+    margin-left: -35px;
+  }
+  @include media-query(lg) {
+    grid-column: 8 / -1;
+    grid-row: 5;
+    text-align: left;
+    margin-top: 0;
+    margin-left: 0;
+  }
+}
+
+.text-ourClothing {
+  font-family: 'Lora', serif;
+  grid-column: span 2;
+  grid-row: 3;
+  z-index: 99;
+  margin-top: 8px;
+  font-size: 16px;
+  @include media-query(sm) {
+    grid-column: 6 / -1;
+    grid-row: 2 / 4;
+    font-size: 17px;
+  }
+  @include media-query(md) {
+    font-size: 24px;
+  }
+  @include media-query(lg) {
+    grid-column: 8 / -1;
+    grid-row: 2 / 4;
+    margin-top: 0;
+  }
+  @include media-query(xl) {
+    font-size: 30px;
+  }
+}
+
+.twoTextsContainer {
+  display: flex;
+  justify-content: space-between;
+  grid-column: span 4;
+  grid-row: 5;
+  margin-top: 8px;
+  font-size: 14px;
+
+  @include media-query(sm) {
+    flex-direction: column;
+    grid-column: span 3;
+    grid-row: 3 / -1;
+    font-size: 15px;
+    gap: 8px;
+  }
+  @include media-query(md) {
+    margin-top: 16px;
+    font-size: 20px;
+  }
+  @include media-query(lg) {
+    flex-direction: row;
+    grid-column: span 5;
+    grid-row: 5 / -1;
+    font-size: 20px;
+    margin-top: -40px;
+  }
+  @include media-query(xl) {
+    font-size: 24px;
+  }
+
+  &__text {
+    width: 40%;
+
+    @include media-query(sm) {
+      width: 100%;
+    }
+    @include media-query(lg) {
+      width: 45%;
+    }
+  }
+}
+
+.imgContainer {
+  border-radius: 8px;
+  grid-column: 3 / -1;
+  grid-row: 1 / -2;
+  @include media-query(sm) {
+    grid-column: 4 / 6;
+    grid-row: 1 / -1;
+  }
+  @include media-query(lg) {
+    grid-column: 6 / 8;
+    grid-row: 2 / -1;
+  }
+
+  &__img {
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+  }
+}
