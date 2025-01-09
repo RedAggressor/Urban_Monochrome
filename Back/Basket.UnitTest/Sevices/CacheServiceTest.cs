@@ -202,7 +202,7 @@ namespace Basket.UnitTest.Sevices
 
             //act
 
-            var result = await _cacheService.GetAsync<List<ItemResponse>>(testKey);
+            var result = await _cacheService.GetAsync<List<ItemResponse>>(testKey!);
 
             //asert
 

@@ -44,6 +44,17 @@ namespace IdentityServer
             };
         }
 
+        public static IEnumerable<ApiScope> GetApiScopes()
+        {
+            return new List<ApiScope> 
+            { 
+                new ApiScope("mvc", "MVC Application"),
+                new ApiScope("react", "React Application"),
+                new ApiScope("catalog.catalogbff", "Catalog BFF"),
+                new ApiScope("catalog.catalogitem", "Catalog Item")
+            }; 
+        }
+
         public static IEnumerable<Client> GetClients(IConfiguration configuration)
         {
             return new[]

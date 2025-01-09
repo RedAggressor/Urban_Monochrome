@@ -2,6 +2,7 @@
 using IdentityServer.Data;
 using IdentityServer.Quickstart;
 using Infrastucture.Filters;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -20,33 +21,37 @@ namespace IdentityServer
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables().Build();
 
-            services.AddControllers(option => option.Filters.Add<HttpGlobalExceptionFilter>())
-                .AddJsonOptions(option => option.JsonSerializerOptions.WriteIndented = true);
+            //services.AddControllers(option => option.Filters.Add<HttpGlobalExceptionFilter>())
+            //    .AddJsonOptions(option => option.JsonSerializerOptions.WriteIndented = true);
 
-            //services.Configure<AppSettings>(configuration);
+            services.Configure<AppSettings>(configuration);            
 
-            services.AddDbContext<UserDbContext>(options =>
-                options.UseNpgsql(configuration["ConnectionString"]));
+            //services.AddDbContext<UserDbContext>(options =>
+            //    options.UseNpgsql(configuration["ConnectionString"]));
 
-            services.AddIdentityCore<IdentityUser>()
-                .AddEntityFrameworkStores<UserDbContext>()
-                .AddApiEndpoints();
+            //services.AddIdentity<IdentityUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<UserDbContext>()
+            //    .AddDefaultTokenProviders();
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<UserDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddMvc();
+            services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
 
             services.AddIdentityServer()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApis())
+                .AddInMemoryApiScopes(Config.GetApiScopes())
                 .AddInMemoryClients(Config.GetClients(configuration))
-                .AddTestUsers(TestUsers.Users)
-                .AddAspNetIdentity<IdentityUser>()
-                .AddDeveloperSigningCredential();
+                .AddTestUsers(TestUsers.Users);
+                //.AddAspNetIdentity<IdentityUser>();
+                //.AddDeveloperSigningCredential();
 
-            //services.AddControllersWithViews();
+
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            //})
+            //    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         public void Configure(IApplicationBuilder app)
@@ -61,7 +66,10 @@ namespace IdentityServer
             app.UseAuthentication();            
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+            app.UseEndpoints(endpoints => 
+            { 
+                endpoints.MapDefaultControllerRoute(); 
+            });
         }
     }
 }

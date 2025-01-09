@@ -7,13 +7,11 @@ using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
-using IdentityServer.Quickstart;
-using IdentityServer.Quickstart.Device;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace IdentityServer4.Quickstart.UI.Device
+namespace IdentityServer.Quickstart.Device
 {
     [Authorize]
     [SecurityHeaders]
@@ -82,7 +80,6 @@ namespace IdentityServer4.Quickstart.UI.Device
 
             ConsentResponse grantedConsent = null;
 
-            // user clicked 'no' - send back the standard 'access_denied' response
             if (model.Button == "no")
             {
                 grantedConsent = new ConsentResponse()
@@ -108,7 +105,6 @@ namespace IdentityServer4.Quickstart.UI.Device
                         ScopesValuesConsented = scopes.ToArray()
                     };
 
-                    // emit event
                     await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
                 }
                 else

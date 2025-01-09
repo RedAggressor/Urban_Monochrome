@@ -109,13 +109,14 @@ namespace IdentityServer.Quickstart
                     var claims = new List<Claim>
                     { 
                         new Claim(ClaimTypes.NameIdentifier, user.SubjectId),
-                        new Claim(ClaimTypes.Name, user.Username) 
+                        new Claim(ClaimTypes.Name, user.Username),
+                        new Claim("sub", user.SubjectId)
                     };
 
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
 
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, props);
+                    await HttpContext.SignInAsync(principal, props);
 
                     if (context != null)
                     {

@@ -17,6 +17,7 @@ namespace Infrastucture.Extensions
             var siteAudience = configuration["Authorization:SiteAudience"];
 
             services.AddSingleton<IAuthorizationHandler, ScopeHandler>();
+
             services
                 .AddAuthentication()
                 .AddJwtBearer(AuthScheme.Internal, options =>
@@ -34,6 +35,7 @@ namespace Infrastucture.Extensions
                     options.Audience = siteAudience;
                     options.RequireHttpsMetadata = false;
                 });
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(AuthPolicy.AllowEndUserPolicy, policy =>
@@ -41,6 +43,7 @@ namespace Infrastucture.Extensions
                     policy.AuthenticationSchemes.Add(AuthScheme.Site);
                     policy.RequireClaim(JwtRegisteredClaimNames.Sub);
                 });
+
                 options.AddPolicy(AuthPolicy.AllowClientPolicy, policy =>
                 {
                     policy.AuthenticationSchemes.Add(AuthScheme.Internal);

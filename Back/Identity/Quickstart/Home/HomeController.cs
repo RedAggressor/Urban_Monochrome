@@ -1,10 +1,10 @@
-#pragma warning disable CS0618
-
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace IdentityServer.Quickstart
@@ -14,10 +14,10 @@ namespace IdentityServer.Quickstart
     public class HomeController : Controller
     {
         private readonly IIdentityServerInteractionService _interaction;
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
         private readonly ILogger _logger;
 
-        public HomeController(IIdentityServerInteractionService interaction, IHostingEnvironment environment, ILogger<HomeController> logger)
+        public HomeController(IIdentityServerInteractionService interaction, IWebHostEnvironment environment, ILogger<HomeController> logger)
         {
             _interaction = interaction;
             _environment = environment;
@@ -27,7 +27,7 @@ namespace IdentityServer.Quickstart
         public IActionResult Index()
         {
             if (_environment.IsDevelopment())
-            {
+            { 
                 return View();
             }
 

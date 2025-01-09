@@ -47,6 +47,8 @@ builder.AddConfiguration();
 builder.Services.Configure<RedisConfig>(
     builder.Configuration.GetSection("Redis"));
 
+builder.Services.AddAuthorization(configuration);
+
 builder.Services.AddTransient<IBasketService, BasketService>();
 builder.Services.AddTransient<ICacheService, CacheService>();
 builder.Services.AddTransient<IRedisCacheConnectionService, RedisCacheConnectionService>();
@@ -83,8 +85,8 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-endpoints.MapDefaultControllerRoute();
-endpoints.MapControllers();
+    endpoints.MapDefaultControllerRoute();
+    endpoints.MapControllers();
 });
 
 app.Run();
