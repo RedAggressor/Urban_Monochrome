@@ -2,7 +2,7 @@ import cl from './header.module.scss';
 
 import { Logo } from '../../shared/ui-kit/Logo/Logo';
 import { Container } from '../../shared/Container/Container';
-import { Icon, IconType } from '../../shared/ui-kit/Icon/Icon';
+import { Icon, IconType } from '../../shared/ui-kit/Icons/Icons';
 import {
   NavLinks,
   NavLinksOrigin,
