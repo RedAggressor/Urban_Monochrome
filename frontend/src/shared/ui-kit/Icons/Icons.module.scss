@@ -1,0 +1,40 @@
+@import '../../../app/styles/mixins.scss';
+@import '../../../app/styles/variables.scss';
+
+.icon {
+  --anim-duration: 0.5s;
+
+  cursor: pointer;
+  display: block;
+  height: $icon-size-big;
+  width: $icon-size-big;
+
+  &Small {
+    height: $icon-size-small;
+    width: $icon-size-small;
+  }
+
+  &__svg {
+    display: block;
+    background-size: contain;
+    height: 100%;
+    width: 100%;
+    transition:
+      background-image var(--anim-duration),
+      opacity var(--anim-duration); // анімація буде відбуватись за рахунок зміни фонової картинки і одночасно опасіті
+
+    &Hover {
+      display: block;
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+      transition: opacity var(--anim-duration) ease;
+    }
+
+    &:hover .icon__svgHover {
+      // при наведенні на іконку, її невидимий дочірній блок з іншим кольором стає видимим
+      // і плавно відбувається анімація зміни прозорості
+      opacity: 1;
+    }
+  }
+}
