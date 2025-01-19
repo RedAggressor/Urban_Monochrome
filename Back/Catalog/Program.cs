@@ -1,3 +1,4 @@
+using Catalog.Host.Configurations;
 using Catalog.Host.Data;
 using Catalog.Host.Repositories;
 using Catalog.Host.Repositories.Abstractions;
@@ -26,7 +27,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-//builder.Services.Configure<CatalogConfig>(configuration);
+builder.Services.Configure<CatalogConfig>(configuration);
 
 builder.Services.AddTransient<ICatalogService, CatalogService>();
 builder.Services.AddTransient<IItemRepository, ItemRepository>();
@@ -49,14 +50,16 @@ builder.Services
 builder.Services
     .AddScoped<IDbContextWrapper<CatalogDbContext>, DbContextWrapper<CatalogDbContext>>();
 
-builder.Services.AddCors(options => 
+builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
         builder =>
         {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
+            builder
+                .SetIsOriginAllowed((host) => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
         });
 });
 

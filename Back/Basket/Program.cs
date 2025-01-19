@@ -32,8 +32,8 @@ builder.Services.AddSwaggerGen(options =>
                 AuthorizationUrl = new Uri($"{authority}/connect/authorize"),
                 TokenUrl = new Uri($"{authority}/connect/token"),
                 Scopes = new Dictionary<string, string>()
-                {                    
-                    { "mvc", "website" }
+                {
+                    { "mvc", "MVC Application" }                   
                 }
             }
         }
@@ -57,13 +57,13 @@ builder.Services.AddTransient<ILikeItemService, LikeItemService>();
 
 builder.Services.AddCors(options =>
 {
-options.AddPolicy(
-    "CorsPolicy",
-    builder => builder
-        .SetIsOriginAllowed((host) => true)
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials());
+    options.AddPolicy(
+        "CorsPolicy",
+        builder => builder
+            .SetIsOriginAllowed((host) => true)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 
 var app = builder.Build();

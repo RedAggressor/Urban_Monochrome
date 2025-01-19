@@ -17,7 +17,7 @@ namespace Basket.Host.Services
         public async Task<BaseResponse> AddDataAsync(string key, DataRequest<UniqueItemResponse> data)
         {
             return await SafeExecuteAsync(async () =>
-            {
+            {                
                 var keyRedis = $"{_keyBasket}{key}";
                 return await _cacheService.AddOrUpdateAsync(keyRedis, data);
             });

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 
 namespace Infrastucture.Identity
@@ -12,10 +13,9 @@ namespace Infrastucture.Identity
             var targetScope = GetTargetScope(context);
             if (targetScope != null)
             {
-                var scopes = context.User
-                    .FindAll(c => c.Type == "scope")
-                    .SelectMany(x => x.Value.Split(' '));
-                if (scopes.Contains(targetScope))
+                var scopes = context.User.Claims.Where(c => c.Type == "scope")
+                    .SelectMany(x => x.Value.Split(' ')).ToArray();
+                if (scopes.Contains(targetScope)) 
                 {
                     context.Succeed(requirement);
                 }

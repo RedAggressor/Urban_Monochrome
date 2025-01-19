@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Duende.IdentityServer;
 using IdentityServer.Data;
 using IdentityServer.Quickstart;
 using Infrastucture.Filters;
@@ -22,9 +23,9 @@ namespace IdentityServer
                 .AddEnvironmentVariables().Build();
 
             //services.AddControllers(option => option.Filters.Add<HttpGlobalExceptionFilter>())
-            //    .AddJsonOptions(option => option.JsonSerializerOptions.WriteIndented = true);
+            //    .AddJsonOptions(option => option.JsonSerializerOptions.WriteIndented = true);           
 
-            services.Configure<AppSettings>(configuration);            
+            services.Configure<AppSettings>(configuration);
 
             //services.AddDbContext<UserDbContext>(options =>
             //    options.UseNpgsql(configuration["ConnectionString"]));
@@ -36,22 +37,31 @@ namespace IdentityServer
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
 
-            services.AddIdentityServer()
+            services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+                options.EmitStaticAudienceClaim = true;
+                //options.EmitScopesAsSpaceDelimitedStringInJwt = true;
+            })
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApis())
                 .AddInMemoryApiScopes(Config.GetApiScopes())
                 .AddInMemoryClients(Config.GetClients(configuration))
                 .AddTestUsers(TestUsers.Users);
-                //.AddAspNetIdentity<IdentityUser>();
+                //.AddAspNetIdentity<IdentityUser>()
                 //.AddDeveloperSigningCredential();
 
-
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
-            //})
-            //    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddAuthentication()
+           .AddGoogle(options =>
+           {
+               options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                              
+               options.ClientId = "copy client ID from Google here";
+               options.ClientSecret = "copy client secret from Google here";
+           });
         }
 
         public void Configure(IApplicationBuilder app)
@@ -59,7 +69,12 @@ namespace IdentityServer
             app.UseDeveloperExceptionPage(); 
 
             app.UseIdentityServer();
-            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict });
+            app.UseCookiePolicy(new CookiePolicyOptions 
+            { 
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+                Secure = CookieSecurePolicy.None
+            });
+                        
             app.UseStaticFiles();
             app.UseRouting();
 
@@ -68,7 +83,7 @@ namespace IdentityServer
 
             app.UseEndpoints(endpoints => 
             { 
-                endpoints.MapDefaultControllerRoute(); 
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }

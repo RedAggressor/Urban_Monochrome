@@ -8,7 +8,7 @@ using System.Net;
 namespace Basket.Host.Controllers
 {
     [ApiController]
-    [Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
+    [Authorize(Policy = AuthPolicy.AllowClientPolicy)]
     [Route(ComponentDefaults.DefaultRoute)]
     public class LikeItemBffController : ControllerBase
     {
@@ -19,21 +19,23 @@ namespace Basket.Host.Controllers
             _likeItemService= likeItemService;
         }
 
-        [HttpPost]
+        [HttpPost]        
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> AddLikeItemsAsync(DataRequest<ItemDto>? data)
         {
-            var key = $"{HttpContext.Connection.Id}{_keyLike}";
+            var userId = User.Claims.FirstOrDefault(x => x.Properties.Values.Contains("sub"))?.Value;
+            var key = $"{_keyLike}{userId}";
             var response = await _likeItemService.AddLikeItemsAsync(key, data!);
 
             return Ok(response);
         }
 
-        [HttpPost]
+        [HttpPost]        
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetLikeItemsAsync()
         {
-            var key = $"{HttpContext.Connection.Id}{_keyLike}";
+            var userId = User.Claims.FirstOrDefault(x => x.Properties.Values.Contains("sub"))?.Value;
+            var key = $"{_keyLike}{userId}";
             var response = await _likeItemService.GetLikeItemsAsync(key);
 
             return Ok(response);

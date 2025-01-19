@@ -20,23 +20,23 @@ namespace Basket.Host.Controllers
             _basketService = basketService;
         }        
 
-        [HttpPost]
+        [HttpPost]        
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> AddDataToCache(DataRequest<UniqueItemResponse?>? data)
         {
-            var contextId = HttpContext.Connection.Id;
-            var key = $"{_keyControler}{contextId}";
+            var userId = User.Claims.FirstOrDefault(x => x.Properties.Values.Contains("sub"))?.Value;
+            var key = $"{_keyControler}{userId}";
 
             var response = await _basketService.AddDataAsync(key, data!);
             return Ok(response);
         }
 
-        [HttpPost]
+        [HttpPost]        
         [ProducesResponseType(typeof(DataResponse<UniqueItemResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetDataFromCache()
         {
-            var contextId = HttpContext.Connection.Id;
-            var key = $"{_keyControler}{contextId}";
+            var userId = User.Claims.FirstOrDefault(x => x.Properties.Values.Contains("sub"))?.Value;
+            var key = $"{_keyControler}{userId}";
 
             var response = await _basketService.GetDataAsync(key);
             return Ok(response);

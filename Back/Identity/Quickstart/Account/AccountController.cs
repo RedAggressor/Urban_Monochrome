@@ -95,8 +95,9 @@ namespace IdentityServer.Quickstart
                 {
                     var user = _users.FindByUsername(model.Username);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username));
-
+                    
                     AuthenticationProperties props = null;
+
                     if (AccountOptions.AllowRememberLogin && model.RememberLogin)
                     {
                         props = new AuthenticationProperties
@@ -107,7 +108,7 @@ namespace IdentityServer.Quickstart
                     };
 
                     var claims = new List<Claim>
-                    { 
+                    {
                         new Claim(ClaimTypes.NameIdentifier, user.SubjectId),
                         new Claim(ClaimTypes.Name, user.Username),
                         new Claim("sub", user.SubjectId)

@@ -18,36 +18,32 @@ namespace Infrastucture.Extensions
 
             services.AddSingleton<IAuthorizationHandler, ScopeHandler>();
 
-            services
-                .AddAuthentication()
+            services.AddAuthentication()
                 .AddJwtBearer(AuthScheme.Internal, options =>
                 {
-                    options.Authority = authority;
+                    options.Authority = authority;                    
+                    options.TokenValidationParameters.ValidateAudience = false; 
                     options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = false
-                    };
                 })
                 .AddJwtBearer(AuthScheme.Site, options =>
                 {
                     options.Authority = authority;
                     options.Audience = siteAudience;
+                    options.TokenValidationParameters.ValidateAudience = false; 
                     options.RequireHttpsMetadata = false;
                 });
-
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(AuthPolicy.AllowEndUserPolicy, policy =>
                 {
                     policy.AuthenticationSchemes.Add(AuthScheme.Site);
-                    policy.RequireClaim(JwtRegisteredClaimNames.Sub);
+                    policy.RequireAuthenticatedUser(); 
                 });
 
                 options.AddPolicy(AuthPolicy.AllowClientPolicy, policy =>
                 {
                     policy.AuthenticationSchemes.Add(AuthScheme.Internal);
-                    policy.Requirements.Add(new DenyAnonymousAuthorizationRequirement());
+                    policy.Requirements.Add(new DenyAnonymousAuthorizationRequirement());                    
                     policy.Requirements.Add(new ScopeRequirement());
                 });
             });

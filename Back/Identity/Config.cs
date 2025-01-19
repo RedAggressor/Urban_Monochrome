@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Duende.IdentityServer.Models;
+using Duende.IdentityServer;
 
 namespace IdentityServer
 {
@@ -11,7 +12,8 @@ namespace IdentityServer
             return new IdentityResource[]
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                //new IdentityResource("local", new [] { "localhost" })
             };
         }
 
@@ -19,40 +21,40 @@ namespace IdentityServer
         {
             return new ApiResource[]
             {
-                new ApiResource("www.liqpay.ua")
-                {
-                    Scopes = new List<string>
-                    {
-                        "react"
-                    }
-                },
-                new ApiResource("localhost")
+                //new ApiResource("www.liqpay.ua")
+                //{
+                //    Scopes = new List<string>
+                //    {
+                //        "react"
+                //    }
+                //},
+                new ApiResource("urbanmonochrome.com", "Urban Monochrome")
                 {
                     Scopes = new List<string>
                     {
                         "mvc"
                     },
                 },
-                new ApiResource("catalog")
-                {
-                    Scopes = new List<string>
-                    {
-                        "catalog.catalogbff",
-                        "catalog.catalogitem"
-                    },
-                },
+                //new ApiResource("catalog")
+                //{
+                //    Scopes = new List<string>
+                //    {
+                //        "catalog.catalogbff",
+                //        "catalog.catalogitem"
+                //    },
+                //},
             };
         }
 
         public static IEnumerable<ApiScope> GetApiScopes()
         {
-            return new List<ApiScope> 
-            { 
+            return new List<ApiScope>
+            {
                 new ApiScope("mvc", "MVC Application"),
                 new ApiScope("react", "React Application"),
                 new ApiScope("catalog.catalogbff", "Catalog BFF"),
                 new ApiScope("catalog.catalogitem", "Catalog Item")
-            }; 
+            };
         }
 
         public static IEnumerable<Client> GetClients(IConfiguration configuration)
@@ -69,19 +71,19 @@ namespace IdentityServer
                     RedirectUris = { $"{configuration["ReactClientUrl"]}/callback" },
                     PostLogoutRedirectUris = { $"{configuration["ReactClientUrl"]}/" },
                     AllowedCorsOrigins = { configuration["ReactClientUrl"], "https://www.liqpay.ua" },
-                    AllowedScopes = { "openid", "profile", "react", "mvc", "catalog.catalogbff", "catalog.catalogitem"},                    
-                    AllowAccessTokensViaBrowser = true                   
-                    
+                    AllowedScopes = { "openid", "profile", "react", "mvc", "catalog.catalogbff", "catalog.catalogitem"},
+                    AllowAccessTokensViaBrowser = true
+
                 },
                 new Client
                 {
                     ClientId = "catalog",
-                    
+
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                                        
+
                     ClientSecrets =
                     {
-                        new Secret("secret".Sha256())
+                        new Secret(configuration["Secret"].Sha256())
                     },
                 },
                 new Client
@@ -102,16 +104,24 @@ namespace IdentityServer
                 new Client
                 {
                     ClientId = "basket",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,                    
                     ClientSecrets =
                     {
-                        new Secret("secret".Sha256())
+                        new Secret(configuration["Secret"].Sha256())
+                    },
+                    AllowedScopes = 
+                    {                         
+                        "mvc"                        
                     },
                 },
                 new Client
                 {
                     ClientId = "basketswaggerui",
                     ClientName = "Basket Swagger UI",
+                    ClientSecrets = 
+                    { 
+                        new Secret(configuration["Secret"].Sha256()) 
+                    },
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
 
@@ -119,9 +129,9 @@ namespace IdentityServer
                     PostLogoutRedirectUris = { $"{configuration["BasketApi"]}/swagger/" },
 
                     AllowedScopes =
-                    {
+                    {                         
                         "mvc"
-                    }
+                    },
                 }
             };
         }
