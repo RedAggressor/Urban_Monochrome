@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import cl from './navLinks.module.scss';
 import cn from 'classnames';
 
@@ -19,15 +20,15 @@ export const NavLinks: React.FC<Props> = ({ className, origin }) => {
         [cl.nav__footer]: origin === NavLinksOrigin.Footer,
       })}
     >
-      <a href="#" className={cl.nav_link}>
+      <Link to="catalog" className={cl.nav_link}>
         Shop
-      </a>
-      <a href="#" className={cl.nav_link}>
+      </Link>
+      <Link to="#" className={cl.nav_link}>
         New
-      </a>
-      <a href="#" className={cl.nav_link}>
+      </Link>
+      <Link to="#" className={cl.nav_link}>
         Sale
-      </a>
+      </Link>
     </nav>
   );
 };

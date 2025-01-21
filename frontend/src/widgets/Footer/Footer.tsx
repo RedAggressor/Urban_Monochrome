@@ -5,7 +5,7 @@ import {
   NavLinksOrigin,
 } from '../../shared/ui-kit/NavLinks/NavLinks';
 import { Logo } from '../../shared/ui-kit/Logo/Logo';
-import { Icon, IconType } from '../../shared/ui-kit/Icon/Icon';
+import { Icon, IconType } from '../../shared/ui-kit/Icons/Icons';
 import { useAppSelector } from '../../shared/hooks';
 import { Container } from '../../shared/Container/Container';
 
