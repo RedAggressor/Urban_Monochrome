@@ -17,6 +17,7 @@ using Duende.IdentityServer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace IdentityServer.Quickstart
 {
@@ -24,7 +25,9 @@ namespace IdentityServer.Quickstart
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly TestUserStore _users;
+        //private readonly TestUserStore _users;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
@@ -35,15 +38,55 @@ namespace IdentityServer.Quickstart
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
-            IEventService events, IOptions<AppSettings> config, TestUserStore users = null)
+            IEventService events,
+            IOptions<AppSettings> config,
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager
+            //TestUserStore users = null
+            )
         {
-            _users = users ?? new TestUserStore(TestUsers.Users);
+            //_users = users ?? new TestUserStore(TestUsers.Users);
 
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
             _config = config.Value;
+            _signInManager = signInManager;
+            _userManager = userManager;
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {           
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser
+                {
+                    UserName = model.Name,
+                    Email = model.Email
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("Index", "Home");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(model);
         }
 
         [HttpGet]
@@ -91,12 +134,15 @@ namespace IdentityServer.Quickstart
 
             if (ModelState.IsValid)
             {
-                if (_users.ValidateCredentials(model.Username, model.Password))
+                if (await ValidateCredantialAsync(model.Username, model.Password) )//_users.ValidateCredentials(model.Username, model.Password) )//|| )
                 {
-                    var user = _users.FindByUsername(model.Username);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username));
+                    //var user = _users.FindByUsername(model.Username);
+
+                    var user = await _userManager.FindByNameAsync(model.Username);                      
+
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
                     
-                    AuthenticationProperties props = null;
+                    var props = new AuthenticationProperties();
 
                     if (AccountOptions.AllowRememberLogin && model.RememberLogin)
                     {
@@ -107,17 +153,22 @@ namespace IdentityServer.Quickstart
                         };
                     };
 
-                    var claims = new List<Claim>
+                    //var claims = new List<Claim>
+                    //{
+                    //    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    //    new Claim(ClaimTypes.Name, user.UserName),
+                    //    new Claim("sub", user.Id)
+                    //};
+
+                    //var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    //var principal = new ClaimsPrincipal(identity);
+
+                    var isuser = new IdentityServerUser(user.Id)
                     {
-                        new Claim(ClaimTypes.NameIdentifier, user.SubjectId),
-                        new Claim(ClaimTypes.Name, user.Username),
-                        new Claim("sub", user.SubjectId)
+                        DisplayName = user.UserName
                     };
 
-                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var principal = new ClaimsPrincipal(identity);
-
-                    await HttpContext.SignInAsync(principal, props);
+                    await HttpContext.SignInAsync(isuser, props);
 
                     if (context != null)
                     {
@@ -187,9 +238,22 @@ namespace IdentityServer.Quickstart
             return View("LoggedOut", vm);
         }
 
+        private async Task<bool> ValidateCredantialAsync(string userNameOrMail, string password)
+        {
+            var user = await _userManager.FindByNameAsync(userNameOrMail) ?? await _userManager.FindByEmailAsync(userNameOrMail);
+
+            if (user != null)
+            {
+                var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+                return result.Succeeded;
+            }
+            return false;
+        }
+
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+
             if (context?.IdP != null)
             {
                 var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
