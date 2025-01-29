@@ -1,7 +1,10 @@
 @import '../../app/styles/mixins';
 
 .container {
-  display: flex;
+  display: none;
+  @include media-query(lg) {
+    display: flex;
+  }
   justify-content: space-between;
   max-height: 20vw;
   margin-top: -25px;

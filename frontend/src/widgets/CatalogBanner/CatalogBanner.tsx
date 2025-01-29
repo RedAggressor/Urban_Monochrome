@@ -1,10 +1,10 @@
 import { Container } from '../../shared/Container/Container';
 import cl from './CatalogBanner.module.scss';
 
-export const CatalogBanner = () => {
+export const CatalogBanner = ({ className = '' }) => {
   return (
     <section>
-      <Container className={cl.container}>
+      <Container className={`${cl.container} ${className}`}>
         <div className={cl.textContainer}>
           <h1 className={cl.title}>
             MONOCHROME&nbsp;LOOK FOR{' '}
