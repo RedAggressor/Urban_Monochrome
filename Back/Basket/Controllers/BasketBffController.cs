@@ -1,7 +1,6 @@
 using Basket.Host.Models.Requests;
 using Basket.Host.Models.Responses;
 using Basket.Host.Services.Interfaces;
-using Infrastucture.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -24,7 +23,8 @@ namespace Basket.Host.Controllers
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> AddDataToCache(DataRequest<UniqueItemResponse?>? data)
         {
-            var userId = User.Claims.FirstOrDefault(x => x.Properties.Values.Contains("sub"))?.Value;
+           
+            var userId = HttpContext.GetUserClaimValueByType("sub");            
             var key = $"{_keyControler}{userId}";
 
             var response = await _basketService.AddDataAsync(key, data!);
@@ -35,7 +35,7 @@ namespace Basket.Host.Controllers
         [ProducesResponseType(typeof(DataResponse<UniqueItemResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetDataFromCache()
         {
-            var userId = User.Claims.FirstOrDefault(x => x.Properties.Values.Contains("sub"))?.Value;
+            var userId = HttpContext.GetUserClaimValueByType("sub");
             var key = $"{_keyControler}{userId}";
 
             var response = await _basketService.GetDataAsync(key);

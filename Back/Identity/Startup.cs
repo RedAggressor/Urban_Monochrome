@@ -1,7 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Duende.IdentityServer;
+using Duende.IdentityServer.AspNetIdentity;
 using IdentityServer.Data;
+using IdentityServer.Services;
 using Infrastucture.Filters;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -39,8 +43,7 @@ namespace IdentityServer
             services.AddDbContext<UserDbContext>(options =>
             {
                 options.UseNpgsql(configuration["ConnectionString"]);                
-            });
-                
+            });                
 
             services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<UserDbContext>()
@@ -54,13 +57,16 @@ namespace IdentityServer
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;                
+                options.Events.RaiseSuccessEvents = true;
+
+                options.EmitStaticAudienceClaim = true;
             })
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApis())
                 .AddInMemoryApiScopes(Config.GetApiScopes())
-                .AddInMemoryClients(Config.GetClients(configuration))               
-                .AddAspNetIdentity<IdentityUser>();                          
+                .AddInMemoryClients(Config.GetClients(configuration))
+                .AddAspNetIdentity<IdentityUser>()
+                .AddProfileService<ProfileService>();
 
             var googleClientId = configuration["Authentication:Google:ClientId"];
             var googleClientSecret = configuration["Authentication:Google:ClientSecret"];
@@ -92,7 +98,8 @@ namespace IdentityServer
             app.UseIdentityServer();            
             app.UseAuthorization();
 
-            SeedUser.SeedUserAsync(app);
+            InicializeDB.CreateRoleAsync(app);
+            InicializeDB.SeedUserAsync(app);            
 
             app.UseEndpoints(endpoints => 
             { 

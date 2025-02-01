@@ -5,5 +5,7 @@
         public const string AllowClientPolicy = "AllowClient";
 
         public const string AllowEndUserPolicy = "AllowEndUser";
+
+        public const string AllowRoleUserPolicy = "AllowRoleUser";
     }
 }

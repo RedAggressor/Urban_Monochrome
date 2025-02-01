@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
+using IdentityModel;
 
 
 namespace Infrastucture.Extensions
@@ -24,20 +26,22 @@ namespace Infrastucture.Extensions
                     options.Authority = authority;                    
                     options.TokenValidationParameters.ValidateAudience = false; 
                     options.RequireHttpsMetadata = false;
+                    //options.MapInboundClaims = false;
                 })
                 .AddJwtBearer(AuthScheme.Site, options =>
                 {
                     options.Authority = authority;
-                    options.Audience = siteAudience;
-                    options.TokenValidationParameters.ValidateAudience = false; 
+                    options.Audience = siteAudience;                    
                     options.RequireHttpsMetadata = false;
+                    options.MapInboundClaims = false;
                 });
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(AuthPolicy.AllowEndUserPolicy, policy =>
                 {
                     policy.AuthenticationSchemes.Add(AuthScheme.Site);
-                    policy.RequireAuthenticatedUser(); 
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim(JwtClaimTypes.Subject);
                 });
 
                 options.AddPolicy(AuthPolicy.AllowClientPolicy, policy =>
@@ -46,9 +50,14 @@ namespace Infrastucture.Extensions
                     policy.Requirements.Add(new DenyAnonymousAuthorizationRequirement());                    
                     policy.Requirements.Add(new ScopeRequirement());
                 });
-            });
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+                options.AddPolicy(AuthPolicy.AllowRoleUserPolicy, policy =>
+                {
+                    policy.AddAuthenticationSchemes(AuthScheme.Site);
+                    policy.RequireAuthenticatedUser();                    
+                    policy.RequireRole("Moderator", "Admin");
+                });
+            });
         }
     }
 }

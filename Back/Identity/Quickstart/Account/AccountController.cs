@@ -11,13 +11,13 @@ using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
-using IdentityModel;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using IdentityModel;
 
 namespace IdentityServer.Quickstart
 {
@@ -33,6 +33,7 @@ namespace IdentityServer.Quickstart
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
         private readonly AppSettings _config;
+        private readonly IIdentityProviderStore _identityProviderStore;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
@@ -41,7 +42,8 @@ namespace IdentityServer.Quickstart
             IEventService events,
             IOptions<AppSettings> config,
             SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager
+            UserManager<IdentityUser> userManager,
+            IIdentityProviderStore identityProviderStore
             //TestUserStore users = null
             )
         {
@@ -54,17 +56,23 @@ namespace IdentityServer.Quickstart
             _config = config.Value;
             _signInManager = signInManager;
             _userManager = userManager;
+            _identityProviderStore = identityProviderStore;
         }
 
         [HttpGet]
-        public IActionResult Register()
-        {           
-            return View();
+        public IActionResult Create(string returnUrl)
+        {
+            //var returnUrl = HttpContext.Request.Query["returnUrl"];
+            var model = new RegisterInputModel { ReturnUrl = returnUrl };
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(RegisterInputModel model)
         {
+            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+
             if (ModelState.IsValid)
             {
                 var user = new IdentityUser
@@ -77,8 +85,13 @@ namespace IdentityServer.Quickstart
 
                 if (result.Succeeded)
                 {
-                    //await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return await Login(new LoginInputModel
+                    {
+                        Password = model.Password,
+                        Username = model.Name,
+                        ReturnUrl = model.ReturnUrl,
+                        RememberLogin = true
+                    }, "login");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -93,7 +106,7 @@ namespace IdentityServer.Quickstart
         public async Task<IActionResult> Login(string returnUrl)
         {
             var vm = await BuildLoginViewModelAsync(returnUrl);
-
+            //var returnr = HttpContext.Request.Query["returnUrl"];
             if (vm.IsExternalLoginOnly)
             {
                 return RedirectToAction("Challenge", "External", new { provider = vm.ExternalLoginScheme, returnUrl });
@@ -118,7 +131,7 @@ namespace IdentityServer.Quickstart
                     };
                     await _interaction.GrantConsentAsync(context, consent);
 
-                    
+
                     if (await _clientStore.IsPkceClientAsync(context.Client.ClientId))
                     {
                         return View("Redirect", new RedirectViewModel { RedirectUrl = _config.ReactClientUrl });
@@ -134,63 +147,38 @@ namespace IdentityServer.Quickstart
 
             if (ModelState.IsValid)
             {
-                if (await ValidateCredantialAsync(model.Username, model.Password) )//_users.ValidateCredentials(model.Username, model.Password) )//|| )
+                if (await ValidateCredantialAsync(model.Username, model.Password))
                 {
-                    //var user = _users.FindByUsername(model.Username);
+                    var result = await _signInManager.PasswordSignInAsync(model.Username!, model.Password!, model.RememberLogin, lockoutOnFailure: true);
 
-                    var user = await _userManager.FindByNameAsync(model.Username);                      
-
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
-                    
-                    var props = new AuthenticationProperties();
-
-                    if (AccountOptions.AllowRememberLogin && model.RememberLogin)
+                    if (result.Succeeded)
                     {
-                        props = new AuthenticationProperties
+                        var user = await _userManager.FindByNameAsync(model.Username!);
+
+                        await _events.RaiseAsync(new UserLoginSuccessEvent(user!.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
+
+                        if (context != null)
                         {
-                            IsPersistent = true,
-                            ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
-                        };
-                    };
+                            if (await _clientStore.IsPkceClientAsync(context.Client.ClientId))
+                            {
+                                return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
+                            }
 
-                    //var claims = new List<Claim>
-                    //{
-                    //    new Claim(ClaimTypes.NameIdentifier, user.Id),
-                    //    new Claim(ClaimTypes.Name, user.UserName),
-                    //    new Claim("sub", user.Id)
-                    //};
-
-                    //var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    //var principal = new ClaimsPrincipal(identity);
-
-                    var isuser = new IdentityServerUser(user.Id)
-                    {
-                        DisplayName = user.UserName
-                    };
-
-                    await HttpContext.SignInAsync(isuser, props);
-
-                    if (context != null)
-                    {
-                        if (await _clientStore.IsPkceClientAsync(context.Client.ClientId))
-                        {
-                            return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
+                            return Redirect(model.ReturnUrl);
                         }
 
-                        return Redirect(model.ReturnUrl);
-                    }
-
-                    if (Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else if (string.IsNullOrEmpty(model.ReturnUrl))
-                    {
-                        return Redirect("~/");
-                    }
-                    else
-                    {
-                        throw new Exception("invalid return URL");
+                        if (Url.IsLocalUrl(model.ReturnUrl))
+                        {
+                            return Redirect(model.ReturnUrl);
+                        }
+                        else if (string.IsNullOrEmpty(model.ReturnUrl))
+                        {
+                            return Redirect("~/");
+                        }
+                        else
+                        {
+                            throw new Exception("invalid return URL");
+                        }
                     }
                 }
 
@@ -284,6 +272,12 @@ namespace IdentityServer.Quickstart
                     DisplayName = x.DisplayName,
                     AuthenticationScheme = x.Name
                 }).ToList();
+
+            var dynamicSchemes = (await _identityProviderStore.GetAllSchemeNamesAsync())
+            .Where(x => x.Enabled)
+            .Select(x => x);
+
+            //providers.AddRange(dynamicSchemes);
 
             var allowLocal = true;
             if (context?.Client.ClientId != null)

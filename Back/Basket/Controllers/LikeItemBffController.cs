@@ -1,6 +1,5 @@
 ﻿using Basket.Host.Models.Requests;
 using Basket.Host.Services.Interfaces;
-using Infrastucture.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -23,7 +22,7 @@ namespace Basket.Host.Controllers
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> AddLikeItemsAsync(DataRequest<ItemDto>? data)
         {
-            var userId = User.Claims.FirstOrDefault(x => x.Properties.Values.Contains("sub"))?.Value;
+            var userId = HttpContext.GetUserClaimValueByType("sub");
             var key = $"{_keyLike}{userId}";
             var response = await _likeItemService.AddLikeItemsAsync(key, data!);
 
@@ -34,7 +33,7 @@ namespace Basket.Host.Controllers
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetLikeItemsAsync()
         {
-            var userId = User.Claims.FirstOrDefault(x => x.Properties.Values.Contains("sub"))?.Value;
+            var userId = HttpContext.GetUserClaimValueByType("sub");
             var key = $"{_keyLike}{userId}";
             var response = await _likeItemService.GetLikeItemsAsync(key);
 

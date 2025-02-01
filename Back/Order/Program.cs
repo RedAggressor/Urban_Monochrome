@@ -1,4 +1,6 @@
+using Infrastucture.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Order.Host.Data;
 using Order.Host.Repositories;
 using Order.Host.Repositories.Interfaces;
@@ -18,6 +20,40 @@ builder.Services.AddControllers(options =>
         options.JsonSerializerOptions.WriteIndented = true;       
     });
 
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Urban Monochrome - Order HTTP API",
+        Version = "v1",
+        Description = "The Order Service HTTP API"
+    });
+
+    var authority = configuration["Authorization:Authority"];
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme 
+    { 
+        Type = SecuritySchemeType.OAuth2,
+        Flows = new OpenApiOAuthFlows()
+        {
+            Implicit = new OpenApiOAuthFlow
+            {
+                AuthorizationUrl = new Uri($"{authority}/connect/authorize"),
+                TokenUrl = new Uri($"{authority}/connect/token"),
+                Scopes = new Dictionary<string, string>
+                {
+                    {"mvc", "MVC Application" }
+                }
+            }
+        }
+    });
+
+    options.OperationFilter<AuthorizeCheckOperationFilter>();
+});
+
+builder.AddConfiguration();
+
+builder.Services.AddAuthorization(configuration);
+
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IOrderService, OrderService>();
@@ -32,32 +68,25 @@ builder.Services
     .AddScoped<IDbContextWrapper<OrderDbContext>, DbContextWrapper<OrderDbContext>>();
 
 builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
-});
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    options.AddPolicy("CorsPolicy",
+        builder => builder
+            .SetIsOriginAllowed((host) => true)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials())
+    );
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseCors("AllowAll");
+app.UseCors("CorsPolicy");
 
 app.UseSwagger()
     .UseSwaggerUI(option =>
-        option.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Catalog.API V1"));
+    {
+        option.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Order.API V1");
+        option.OAuthClientId("orderswaggerui");
+        option.OAuthAppName("Order Swagger UI");
+    });
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -67,7 +96,6 @@ app.MapControllers();
 CreateDbIfNotExists(app);
 
 app.Run();
-
 
 IConfiguration GetConfiguration()
 {

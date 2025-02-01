@@ -2,7 +2,7 @@
 
 namespace IdentityServer.Quickstart
 {
-    public class RegisterViewModel
+    public class RegisterInputModel
     {
         [Required]
         [EmailAddress]

@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "eShop - Basket HTTP API",
+        Title = "Urban Monochrome - Basket HTTP API",
         Version = "v1",
         Description = "The Basket Service HTTP API"
     });
@@ -82,6 +82,15 @@ app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.Use(async (context, next) => {
+    Console.WriteLine($"/Claims:{context?.User?.Claims} ");
+    foreach (var claim in context?.User?.Claims!)
+    {
+        Console.WriteLine(claim);
+        Console.WriteLine();
+    }
+    await next();
+});
 
 app.UseEndpoints(endpoints =>
 {

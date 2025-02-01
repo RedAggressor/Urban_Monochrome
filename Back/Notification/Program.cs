@@ -1,3 +1,4 @@
+using Infrastucture.Extensions;
 using Microsoft.OpenApi.Models;
 using Nitifacation.Host.Configs;
 using Nitifacation.Host.Services;
@@ -10,13 +11,39 @@ builder.Services.AddControllers(
     option => option.Filters.Add<HttpGlobalExceptionFilter>())
     .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
 
-builder.Services.AddSwaggerGen(
-    options => options.SwaggerDoc("v1", new OpenApiInfo()
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Urban Monochrome - Notification HTTP API",
+        Title = "Urban Monochrome - Order HTTP API",
         Version = "v1",
-        Description = "The Notification Service HTTP API"
-    }));
+        Description = "The Order Service HTTP API"
+    });
+
+    var authority = configuration["Authorization:Authority"];
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.OAuth2,
+        Flows = new OpenApiOAuthFlows()
+        {
+            Implicit = new OpenApiOAuthFlow
+            {
+                AuthorizationUrl = new Uri($"{authority}/connect/authorize"),
+                TokenUrl = new Uri($"{authority}/connect/token"),
+                Scopes = new Dictionary<string, string>
+                {
+                    {"mvc", "MVC Application" }
+                }
+            }
+        }
+    });
+
+    options.OperationFilter<AuthorizeCheckOperationFilter>();
+});
+
+builder.AddConfiguration();
+
+builder.Services.AddAuthorization(configuration);
 
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<IHttpClientService, HttpClientService>();
@@ -25,34 +52,27 @@ builder.Services.AddTransient<IJsonSerializerService, JsonSerializerService>();
 
 builder.Services.Configure<CredentialConfig>(configuration.GetSection("Credential"));
 
-builder.Services.AddCors(options => 
-    options.AddPolicy("AllowALL",
-        builder =>
-             builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()                   
-    ));
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+    options.AddPolicy("CorsPolicy",
+        builder => builder
+            .SetIsOriginAllowed((host) => true)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials())
+    );
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
-app.UseCors("AllowALL");
+app.UseCors("CorsPolicy");
 
 app.UseSwagger()
     .UseSwaggerUI(option =>
-        option.SwaggerEndpoint(
-            $"{configuration["PathBase"]}/swagger/v1/swagger.json",
-            "Notification.API V1"
-        )
-    );
+    {
+        option.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Notification.API V1");
+        option.OAuthClientId("notificationswaggerui");
+        option.OAuthAppName("Notification Swagger UI");
+    });
 
 app.UseAuthentication();
 app.UseAuthorization();

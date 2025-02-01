@@ -1,10 +1,13 @@
 ﻿using Catalog.Host.Services.Abstractions;
+using Infrastucture.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace Catalog.Host.Controllers
 {
     [ApiController]
+    [Authorize(Policy = AuthPolicy.AllowRoleUserPolicy)]
     [Route(ComponentDefaults.DefaultRoute)]
     public class UniqueItemController : ControllerBase
     {

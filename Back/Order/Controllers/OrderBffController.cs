@@ -1,3 +1,5 @@
+using Infrastucture.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Order.Host.Models.Dto;
 using Order.Host.Services.Interfaces;
@@ -6,6 +8,7 @@ using System.Net;
 namespace Order.Controllers
 {
     [ApiController]
+    [Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
     [Route(ComponentDefaults.DefaultRoute)]
     public class OrderBffController : ControllerBase
     {

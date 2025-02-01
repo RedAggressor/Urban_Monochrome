@@ -1,11 +1,14 @@
 ﻿using Catalog.Host.Models.Dto;
 using Catalog.Host.Services.Abstractions;
+using Infrastucture.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace Catalog.Host.Controllers
 {
     [ApiController]
+    [Authorize(Policy = AuthPolicy.AllowRoleUserPolicy)]
     [Route(ComponentDefaults.DefaultRoute)]
     public class ColorController : ControllerBase
     {
@@ -29,7 +32,8 @@ namespace Catalog.Host.Controllers
         [ProducesResponseType(typeof(DataResponse<ColorDto>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetColorById(DataRequest<int>? request)
         {
-            var response = await _colorService.GetColorByIdAsync(request!);
+            
+            var response = await _colorService.GetColorByIdAsync(request!);            
             return Ok(response);
         }
 

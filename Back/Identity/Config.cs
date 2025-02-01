@@ -20,14 +20,7 @@ namespace IdentityServer
         public static IEnumerable<ApiResource> GetApis()
         {
             return new ApiResource[]
-            {
-                //new ApiResource("www.liqpay.ua")
-                //{
-                //    Scopes = new List<string>
-                //    {
-                //        "react"
-                //    }
-                //},
+            {                
                 new ApiResource("urbanmonochrome.com", "Urban Monochrome")
                 {
                     Scopes = new List<string>
@@ -85,6 +78,10 @@ namespace IdentityServer
                     {
                         new Secret(configuration["Secret"].Sha256())
                     },
+                    AllowedScopes =
+                    {
+                         "mvc", //"catalog.catalogbff", "catalog.catalogitem", "react",
+                    }
                 },
                 new Client
                 {
@@ -98,7 +95,7 @@ namespace IdentityServer
 
                     AllowedScopes =
                     {
-                        "catalog.catalogbff", "catalog.catalogitem", "react", "mvc"
+                        "mvc", //"catalog.catalogbff", "catalog.catalogitem", "react", 
                     }
                 },
                 new Client
@@ -132,7 +129,71 @@ namespace IdentityServer
                     {                         
                         "mvc"
                     },
-                }
+                },
+                new Client
+                {
+                    ClientId = "order",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientSecrets =
+                    {
+                        new Secret(configuration["Secret"].Sha256())
+                    },
+                    AllowedScopes =
+                    {
+                        "mvc"
+                    },
+                },
+                new Client
+                {
+                    ClientId = "orderswaggerui",
+                    ClientName = "Order Swagger UI",
+                    ClientSecrets =
+                    {
+                        new Secret(configuration["Secret"].Sha256())
+                    },
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{configuration["OrderApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{configuration["OrderApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        "mvc"
+                    },
+                },
+                new Client
+                {
+                    ClientId = "notification",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientSecrets =
+                    {
+                        new Secret(configuration["Secret"].Sha256())
+                    },
+                    AllowedScopes =
+                    {
+                        "mvc"
+                    },
+                },
+                new Client
+                {
+                    ClientId = "notificationswaggerui",
+                    ClientName = "Notification Swagger UI",
+                    ClientSecrets =
+                    {
+                        new Secret(configuration["Secret"].Sha256())
+                    },
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{configuration["NotificationApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{configuration["NotificationApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        "mvc"
+                    },
+                },
             };
         }
     }

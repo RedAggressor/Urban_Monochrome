@@ -31,6 +31,7 @@ services:
        - ASPNETCORE_ENVIRONMENT=Development
        - ASPNETCORE_URLS=http://+:5000
        - PathBase=http://www.urbanmonochrome.com:5000
+       - Authorization__Authority=http://www.urbanmonochrome.com:5002
     depends_on:
       - postgres
     ports:
@@ -80,6 +81,8 @@ services:
     container_name: lde.nginx
     ports:
       - 80:80
+    volumes:
+      - ./Proxy/gateway/nginx/conf.d:/etc/nginx/conf.d
   identityserver:
     container_name: lde.identityserver
     build:
@@ -89,8 +92,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5002      
       - BasketApi=http://www.urbanmonochrome.com:5003
+      - CatalogApi=http://www.urbanmonochrome.com:5000
     ports:
       - 5002:5002
+    depends_on:
+      - postgres
 networks:
   default:
     driver: bridge
