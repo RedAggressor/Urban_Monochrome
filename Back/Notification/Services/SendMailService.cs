@@ -15,7 +15,7 @@ namespace Nitifacation.Host.Services
             _credential = options.Value;
         }
 
-        public async Task<BaseResponse> SendMailAsync(SendMailRequest sendMail)
+        public async Task<BaseResponse> SendMailAsync(SendMailRequest sendMail, string to)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
@@ -27,7 +27,7 @@ namespace Nitifacation.Host.Services
                 IsBodyHtml = true
             };
 
-            mailSend.To.Add(sendMail.To!);       
+            mailSend.To.Add(to);       
 
             try
             {

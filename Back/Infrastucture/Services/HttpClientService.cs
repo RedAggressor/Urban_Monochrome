@@ -1,4 +1,8 @@
-﻿using Infrastucture.Services.Abstractions;
+﻿using IdentityModel.Client;
+using Infrastucture.Configuration;
+using Infrastucture.Services.Abstractions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -6,16 +10,32 @@ namespace Infrastucture.Services
 {
     public class HttpClientService : IHttpClientService
     {
-        public readonly IHttpClientFactory _httpClient;
+        private readonly IHttpClientFactory _httpClient;
+        private readonly IConfiguration _configuration;
 
-        public HttpClientService(IHttpClientFactory httpClient)
+        public HttpClientService(
+            IHttpClientFactory httpClient,
+            IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _configuration = configuration;
         }
 
         public async Task<TResponse> SendAsync<TResponse, TRequest>(string url, HttpMethod method, TRequest? content)
         {
             var client = _httpClient.CreateClient();
+
+
+            var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            {
+                 Address = $"{_configuration["Authorization:Authority"]}/connect/token",
+
+                 ClientId = _configuration["Client:Id"]!,
+                 ClientSecret = _configuration["Client:Secret"]                 
+            });
+
+            client.SetBearerToken(tokenResponse.AccessToken!);
+
             var httpMessage = new HttpRequestMessage();
             httpMessage.RequestUri = new Uri(url);
             httpMessage.Method = method;

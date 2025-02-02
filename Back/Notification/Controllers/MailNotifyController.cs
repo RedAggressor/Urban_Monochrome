@@ -1,3 +1,6 @@
+using Infrastucture.Extensions;
+using Infrastucture.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nitifacation.Host.Models;
 using Nitifacation.Host.Services.Interfaces;
@@ -5,6 +8,7 @@ using Nitifacation.Host.Services.Interfaces;
 namespace Nitifacation.Host.Controllers
 {
     [ApiController]
+    [Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
     [ValidateRequestBody]
     [Route(ComponentDefaults.DefaultRoute)]
     public class MailNotifyController : ControllerBase
@@ -20,8 +24,8 @@ namespace Nitifacation.Host.Controllers
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> SendMailMessage(SendMailRequest sendMail)
         {
-            // email costumer from identity
-            var response = await _sendPulseService.SendMailAsync(sendMail);
+            var to = HttpContext.GetUserClaimValueByType("email");
+            var response = await _sendPulseService.SendMailAsync(sendMail, to);
             return Ok(response);
         }
     }

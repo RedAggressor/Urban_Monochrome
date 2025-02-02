@@ -1,3 +1,4 @@
+using Infrastucture.Extensions;
 using Infrastucture.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace Order.Controllers
         [ProducesResponseType(typeof(DataResponse<string>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateOrderAddItems(DataRequest<List<OrderItemDto?>>? data)
         {
-            var userId = HttpContext.Connection.Id;
+            var userId = HttpContext.GetUserClaimValueByType("sub");
             var response = await _orderService.AddItemToOrderAsync(userId, data?.Data!);
 
             return Ok(response);
@@ -43,7 +44,7 @@ namespace Order.Controllers
         [ProducesResponseType(typeof(DataResponse<IEnumerable<OrderDto>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetOrderByUserId()
         {
-            var userId = HttpContext.Connection.Id;
+            var userId = HttpContext.GetUserClaimValueByType("sub");
             var response = await _orderService.GetOrdersByUserIdAsync(userId);
 
             return Ok(response);

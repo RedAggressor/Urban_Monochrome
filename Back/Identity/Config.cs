@@ -12,8 +12,7 @@ namespace IdentityServer
             return new IdentityResource[]
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
-                //new IdentityResource("local", new [] { "localhost" })
+                new IdentityResources.Profile()
             };
         }
 
@@ -27,15 +26,7 @@ namespace IdentityServer
                     {
                         "mvc"
                     },
-                },
-                //new ApiResource("catalog")
-                //{
-                //    Scopes = new List<string>
-                //    {
-                //        "catalog.catalogbff",
-                //        "catalog.catalogitem"
-                //    },
-                //},
+                }
             };
         }
 
@@ -46,7 +37,7 @@ namespace IdentityServer
                 new ApiScope("mvc", "MVC Application"),
                 new ApiScope("react", "React Application"),
                 new ApiScope("catalog.catalogbff", "Catalog BFF"),
-                new ApiScope("catalog.catalogitem", "Catalog Item")
+                new ApiScope("catalog.catalogbfs", "Catalog BFS")
             };
         }
 
@@ -80,7 +71,7 @@ namespace IdentityServer
                     },
                     AllowedScopes =
                     {
-                         "mvc", //"catalog.catalogbff", "catalog.catalogitem", "react",
+                         "mvc", "catalog.catalogbff", "catalog.catalogbfs",// "react",
                     }
                 },
                 new Client
@@ -95,7 +86,7 @@ namespace IdentityServer
 
                     AllowedScopes =
                     {
-                        "mvc", //"catalog.catalogbff", "catalog.catalogitem", "react", 
+                        "mvc", "catalog.catalogbfs"
                     }
                 },
                 new Client
@@ -140,7 +131,7 @@ namespace IdentityServer
                     },
                     AllowedScopes =
                     {
-                        "mvc"
+                        "mvc", "catalog.catalogbfs"
                     },
                 },
                 new Client
@@ -159,7 +150,7 @@ namespace IdentityServer
 
                     AllowedScopes =
                     {
-                        "mvc"
+                        "mvc", "catalog.catalogbfs"
                     },
                 },
                 new Client

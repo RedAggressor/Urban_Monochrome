@@ -1,11 +1,13 @@
-﻿using Catalog.Host.Models.Dto;
-using Catalog.Host.Services.Abstractions;
+﻿using Catalog.Host.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace Catalog.Host.Controllers
 {
     [ApiController]
+    [Authorize(Policy = AuthPolicy.AllowClientPolicy)]
+    [Scope("catalog.catalogbfs")]
     [Route(ComponentDefaults.DefaultRoute)]
     public class CatalogBFSController : ControllerBase
     {

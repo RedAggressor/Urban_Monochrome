@@ -11,3 +11,4 @@ global using System;
 global using System.Text.Json.Serialization;
 global using Infrastucture.Models.Item;
 global using Infrastucture.Extensions;
+global using Infrastucture.Identity;

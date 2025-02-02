@@ -5,7 +5,7 @@ namespace Order.Host.Services
     public class CatalogHttpService : ICatalogHttpService
     {
         private readonly IHttpClientService _httpClient;
-        private readonly string _urlCatalog; //= "http://localhost:5000";
+        private readonly string _urlCatalog; //= "http://www.urbanmonochrome.com:5000";
         private readonly string _blockUrl = "/api/v1/CatalogBFS/";
         public CatalogHttpService(IHttpClientService httpClient, IConfiguration configuration)
         {

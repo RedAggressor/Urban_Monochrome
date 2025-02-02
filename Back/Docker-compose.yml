@@ -44,7 +44,9 @@ services:
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - ASPNETCORE_URLS=http://+:5001
-        - CATALOG_API_URL=http://lde.catalog.api:5000
+        - PathBase=http://www.urbanmonochrome.com:5001
+        - CatalogApi=http://www.urbanmonochrome.com:5000
+        - Authorization__Authority=http://www.urbanmonochrome.com:5002
     depends_on:
       - postgres
     ports:
@@ -57,6 +59,8 @@ services:
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
         - ASPNETCORE_URLS=http://+:5004
+        - Authorization__Authority=http://www.urbanmonochrome.com:5002
+        - PathBase=http://www.urbanmonochrome.com:5004
     ports:
       - 5004:5004
   pgadmin4:
@@ -93,6 +97,8 @@ services:
       - ASPNETCORE_URLS=http://+:5002      
       - BasketApi=http://www.urbanmonochrome.com:5003
       - CatalogApi=http://www.urbanmonochrome.com:5000
+      - OrderApi=http://www.urbanmonochrome.com:5001
+      - NotificationApi=http://www.urbanmonochrome.com:5004
     ports:
       - 5002:5002
     depends_on:
