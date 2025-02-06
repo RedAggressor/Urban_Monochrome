@@ -1,0 +1,165 @@
+@import '../../app/styles/mixins';
+@import '../../app/styles/variables';
+
+.container {
+  border-bottom: 5px solid white !important; // delete
+  background-color: $black-text;
+  display: flex;
+  flex-direction: column;
+  padding-block: 16px;
+  gap: 16px;
+  @include media-query(lg) {
+    padding-block: 20px;
+    gap: 20px;
+  }
+}
+
+.checkboxSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  @include media-query(lg) {
+    gap: 16px;
+  }
+
+  &__titleButtonWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__title {
+    font-family: 'Lora', serif;
+    font-weight: 400;
+    color: $white-text;
+    font-size: 24px;
+    @include media-query(lg) {
+      font-size: 32px;
+    }
+
+    &_size {
+      font-size: 32px;
+    }
+  }
+
+  &__hideButton {
+    height: 24px;
+    width: 24px;
+    background-image: url('/pictures/icons/arrowUp.svg');
+    @include hover(background-image, url('/pictures/icons/arrowUpRed.svg'));
+    transition: transform $anim-duration;
+  }
+  &__showButton {
+    transform: rotate(180deg);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow: hidden;
+    transition: height $anim-duration;
+  }
+
+  &__checkboxItem {
+    cursor: pointer;
+    width: fit-content;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    letter-spacing: 0.5px;
+    font-size: 16px;
+    @include media-query(lg) {
+      font-size: 20px;
+    }
+
+    &:hover .checkboxSection__label {
+      color: $hover-red;
+    }
+  }
+
+  &__checkbox {
+    @include custom-checkbox;
+  }
+
+  &__label {
+    cursor: pointer;
+    transition: all $anim-duration;
+  }
+}
+
+.sizeList {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  overflow: hidden;
+  transition: height $anim-duration;
+
+  &__item {
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+    background-color: $main;
+    border-radius: 8px;
+    flex-grow: 1;
+    text-align: center;
+    transition: all $anim-duration;
+
+    &:hover {
+      border: 1px solid $red-text;
+    }
+
+    &_selected {
+      color: $red-text;
+      border: 1px solid $red-text;
+    }
+  }
+}
+
+.priceContent {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  gap: 16px;
+  transition: height $anim-duration;
+
+  &__inputs {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: fit-content;
+  }
+
+  &__input {
+    display: flex;
+    width: 52px;
+    height: 40px;
+    align-items: center;
+    text-align: center;
+    background-color: $main;
+    border-radius: 8px;
+    color: $white-text;
+    font-size: 16px;
+
+    &:focus {
+      outline: none;
+      border: 1px solid $red-text;
+    }
+  }
+}
+
+.resetButton {
+  height: 40px;
+  color: $black-text;
+  background-color: $white-text;
+  border-radius: 8px;
+  font-size: 16px;
+
+  @include media-query(lg) {
+    font-size: 20px;
+  }
+}
+
+.listHidden {
+  height: 0 !important;
+}

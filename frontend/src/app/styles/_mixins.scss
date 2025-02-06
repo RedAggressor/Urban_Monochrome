@@ -35,7 +35,7 @@ $breakpoints: (
   color: $hover-red;
 }
 
-@mixin hover($property, $toValue, $animDuration: 0.3s) {
+@mixin hover($property, $toValue, $animDuration: $anim-duration) {
   // для створення анімації при наведенні. Синтаксис: @include hover(transform, scale(1.1), 0.5)
   transition: #{$property} $animDuration;
   &:hover {
@@ -58,5 +58,36 @@ $breakpoints: (
   @include media-query(lg) {
     --columns: 12;
     column-gap: 20px;
+  }
+}
+
+@mixin custom-checkbox {
+  cursor: pointer;
+  position: relative;
+  height: 18px;
+  width: 18px;
+  background-color: $black-text;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: $black-text;
+    border: 1px solid $white-text;
+    transition: all $anim-duration;
+  }
+
+  &:hover::after {
+    border: 1px solid $hover-red;
+  }
+
+  &:checked::after {
+    background-image: url('/pictures/icons/customChecked.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    // щоб ця галочка не по низу лежала
+    bottom: 5px;
   }
 }
