@@ -1,0 +1,76 @@
+@import '../../app/styles/mixins';
+@import '../../app/styles/variables';
+
+$content-size: 40px;
+@include media-query(sm) {
+  $content-size: 40px;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.arrowButton {
+  height: $content-size;
+  width: $content-size;
+  background-color: $black-text;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  @include hover(border, 1px solid $red-text);
+
+  &__left {
+    order: -2;
+  }
+
+  &__right {
+    order: -1;
+    @media (min-width: 544px) {
+      order: 0;
+    }
+  }
+
+  &_disabled {
+    display: none;
+  }
+
+  &_iconLeft {
+    height: $icon-size-big;
+    width: $icon-size-big;
+    background-image: url('/pictures/icons/arrowRight.svg');
+    // легким помахом руки стрілка вправо стає вліво))
+    transform: rotate(180deg);
+  }
+  &_iconRight {
+    height: $icon-size-big;
+    width: $icon-size-big;
+    background-image: url('/pictures/icons/arrowRight.svg');
+  }
+}
+
+.pagesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  &__page {
+    cursor: pointer;
+    height: $content-size;
+    width: $content-size;
+    border-radius: 8px;
+    text-align: center;
+    line-height: $content-size;
+    border: 1px solid transparent;
+
+    @include hover(border, 1px solid $hover-light-red);
+
+    &_active {
+      cursor: auto;
+      background-color: $hover-light-red;
+    }
+  }
+}

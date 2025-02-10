@@ -38,6 +38,7 @@ const colorOptions = ['Black', 'White'];
 
 type Props = {
   isFiltersVisible: boolean;
+  setIsFiltersVisible: Dispatch<SetStateAction<boolean>>;
   selectedGenders: string[];
   setSelectedGenders: Dispatch<SetStateAction<string[]>>;
   selectedCategories: string[];
@@ -52,10 +53,14 @@ type Props = {
   setMinPrice: Dispatch<SetStateAction<number>>;
   maxPrice: number;
   setMaxPrice: Dispatch<SetStateAction<number>>;
+  selectedColors: string[];
+  setSelectedColors: Dispatch<SetStateAction<string[]>>;
+  setAppliedFilters: Dispatch<SetStateAction<object>>;
 };
 
 export const DetailedFilters: React.FC<Props> = ({
   isFiltersVisible,
+  setIsFiltersVisible,
   selectedGenders,
   setSelectedGenders,
   selectedCategories,
@@ -70,6 +75,9 @@ export const DetailedFilters: React.FC<Props> = ({
   setMinPrice,
   maxPrice,
   setMaxPrice,
+  selectedColors,
+  setSelectedColors,
+  setAppliedFilters,
 }) => {
   //#region булеві стейти
   const [isGenderListVisible, setIsGenderListVisible] = useState(true);
@@ -101,6 +109,13 @@ export const DetailedFilters: React.FC<Props> = ({
     Size: sizeSectionRef,
     Price: priceSectionRef,
     Color: colorSectionRef,
+  };
+
+  const selectedFiltersStateList = {
+    Gender: selectedGenders,
+    Categories: selectedCategories,
+    Collections: selectedCollections,
+    'Hot Items': selectedHotItems,
   };
 
   const booleanStatesList = {
@@ -175,11 +190,41 @@ export const DetailedFilters: React.FC<Props> = ({
             ? prev.filter(i => i !== option)
             : [...prev, option],
         );
-        console.log(selectedSizes);
+        break;
+      case 'Color':
+        setSelectedColors(prev =>
+          prev.includes(option)
+            ? prev.filter(i => i !== option)
+            : [...prev, option],
+        );
         break;
       default:
         break;
     }
+  }
+
+  function resetFilters() {
+    setSelectedGenders([]);
+    setSelectedCategories([]);
+    setSelectedCollections([]);
+    setSelectedHotItems([]);
+    setSelectedSizes([]);
+    setMinPrice(10);
+    setMaxPrice(250);
+  }
+
+  function applyFilters() {
+    const filters = {
+      genders: selectedGenders,
+      categories: selectedCategories,
+      collections: selectedCollections,
+      hotItems: selectedHotItems,
+      sizes: selectedSizes,
+      priceRange: { min: minPrice, max: maxPrice },
+      colors: selectedColors,
+    };
+    setAppliedFilters({ ...filters });
+    setIsFiltersVisible(false);
   }
 
   return (
@@ -197,6 +242,7 @@ export const DetailedFilters: React.FC<Props> = ({
             <button
               className={cn(cl.checkboxSection__hideButton, {
                 [cl.checkboxSection__showButton]:
+                  // @ts-expect-error - TS не любить чогось коли я беру відповідні властивості з об'єкта
                   !booleanStatesList[section.name],
               })}
               onClick={() => toggleListVisibility(section.name)}
@@ -205,10 +251,13 @@ export const DetailedFilters: React.FC<Props> = ({
 
           <ul
             className={cn(cl.checkboxSection__list, {
+              // @ts-expect-error - аналогічно
               [cl.listHidden]: !booleanStatesList[section.name],
             })}
+            // @ts-expect-error - аналогічно
             ref={refsList[section.name]}
             style={{
+              // @ts-expect-error - аналогічно
               height: refsList[section.name]?.current?.scrollHeight,
             }}
           >
@@ -217,7 +266,11 @@ export const DetailedFilters: React.FC<Props> = ({
                 <input
                   type="checkbox"
                   id={section.name + option}
-                  className={cl.checkboxSection__checkbox}
+                  className={cn(cl.checkboxSection__checkbox, {
+                    [cl.checkboxSection__checkbox_checked]:
+                      // @ts-expect-error - аналогічно
+                      selectedFiltersStateList[section.name].includes(option),
+                  })}
                   onChange={() =>
                     toggleFilterOptionsState(section.name, option)
                   }
@@ -338,7 +391,11 @@ export const DetailedFilters: React.FC<Props> = ({
               <input
                 type="checkbox"
                 id={option}
-                className={cl.checkboxSection__checkbox}
+                className={cn(cl.checkboxSection__checkbox, {
+                  [cl.checkboxSection__checkbox_checked]:
+                    selectedColors.includes(option),
+                })}
+                onChange={() => toggleFilterOptionsState('Color', option)}
               />
               <label htmlFor={option} className={cl.checkboxSection__label}>
                 {option}
@@ -348,7 +405,20 @@ export const DetailedFilters: React.FC<Props> = ({
         </ul>
       </section>
 
-      <button className={cl.resetButton}>Reset filters</button>
+      <div className={cl.bottomButtons}>
+        <button
+          className={cl.bottomButtons__whiteButton}
+          onClick={applyFilters}
+        >
+          Apply changes
+        </button>
+        <button
+          className={cl.bottomButtons__whiteButton}
+          onClick={resetFilters}
+        >
+          Reset filters
+        </button>
+      </div>
     </Container>
   );
 };

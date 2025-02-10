@@ -32,12 +32,11 @@
     font-family: 'Lora', serif;
     font-weight: 400;
     color: $white-text;
-    font-size: 24px;
-    @include media-query(lg) {
-      font-size: 32px;
+    font-size: 16px;
+    @include media-query(sm) {
+      font-size: 24px;
     }
-
-    &_size {
+    @include media-query(lg) {
       font-size: 32px;
     }
   }
@@ -101,9 +100,11 @@
     padding: 10px;
     background-color: $main;
     border-radius: 8px;
-    flex-grow: 1;
+    // flex: 1 1 10%;
+    width: 52px;
     text-align: center;
     transition: all $anim-duration;
+    border: 1px solid transparent;
 
     &:hover {
       border: 1px solid $red-text;
@@ -148,15 +149,23 @@
   }
 }
 
-.resetButton {
-  height: 40px;
-  color: $black-text;
-  background-color: $white-text;
-  border-radius: 8px;
-  font-size: 16px;
+.bottomButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
-  @include media-query(lg) {
-    font-size: 20px;
+  &__whiteButton {
+    height: 40px;
+    color: $black-text;
+    background-color: $white-text;
+    border-radius: 8px;
+    font-size: 16px;
+    border: 1px solid transparent;
+    @include hover(border, 1px solid $red-text);
+
+    @include media-query(lg) {
+      font-size: 20px;
+    }
   }
 }
 

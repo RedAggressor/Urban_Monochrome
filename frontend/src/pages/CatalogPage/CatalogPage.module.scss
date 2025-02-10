@@ -1,1 +1,8 @@
 @import '../../app/styles/mixins';
+
+.catalog-gridContainer {
+  padding-block: 16px;
+  @include media-query(lg) {
+    padding-block: 20px;
+  }
+}

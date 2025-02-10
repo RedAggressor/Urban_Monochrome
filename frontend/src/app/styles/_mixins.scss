@@ -83,7 +83,7 @@ $breakpoints: (
     border: 1px solid $hover-red;
   }
 
-  &:checked::after {
+  &_checked::after {
     background-image: url('/pictures/icons/customChecked.svg');
     background-repeat: no-repeat;
     background-position: center;

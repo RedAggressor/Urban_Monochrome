@@ -37,6 +37,16 @@ body {
   font-weight: 400;
 }
 
+.header-placeholder {
+  height: 154px;
+  @include media-query(sm) {
+    height: 166px;
+  }
+  @include media-query(sm) {
+    height: 120px;
+  }
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;

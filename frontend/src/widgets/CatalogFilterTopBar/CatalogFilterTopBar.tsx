@@ -5,13 +5,15 @@ import { CatalogSortOptions } from '../../pages/CatalogPage/CatalogPage';
 import { Container } from '../../shared/Container/Container';
 
 type Props = {
-  setSelectedSorting: Dispatch<SetStateAction<CatalogSortOptions>>;
+  currentSort: string;
+  onSortOptionChange: (opt: string) => void;
   isFiltersVisible: boolean;
   setIsFiltersVisible: Dispatch<SetStateAction<boolean>>;
 };
 
 export const CatalogFilterTopBar: React.FC<Props> = ({
-  setSelectedSorting,
+  currentSort,
+  onSortOptionChange,
   isFiltersVisible,
   setIsFiltersVisible,
 }) => {
@@ -54,8 +56,10 @@ export const CatalogFilterTopBar: React.FC<Props> = ({
                     name="sortOptions"
                     id={opt}
                     value={opt}
-                    className={cl.sortByOptions__radio}
-                    onChange={() => setSelectedSorting(opt)}
+                    className={cn(cl.sortByOptions__radio, {
+                      [cl.sortByOptions__radio_checked]: currentSort === opt,
+                    })}
+                    onChange={() => onSortOptionChange(opt)}
                   />
                   <label
                     htmlFor={opt}
@@ -69,17 +73,18 @@ export const CatalogFilterTopBar: React.FC<Props> = ({
             </ul>
           </button>
 
-          <button className={cl.textIconButton}>
-            <svg
-              className={`${cl.textIconButton__icon} ${cl.icon_displayList}`}
-            />
-          </button>
-
-          <button className={cl.textIconButton}>
-            <svg
-              className={`${cl.textIconButton__icon} ${cl.icon_displayGrid}`}
-            />
-          </button>
+          <div className={cl.toggleShowcaseButtons}>
+            <button className={cl.textIconButton}>
+              <svg
+                className={`${cl.textIconButton__icon} ${cl.icon_displayList}`}
+              />
+            </button>
+            <button className={cl.textIconButton}>
+              <svg
+                className={`${cl.textIconButton__icon} ${cl.icon_displayGrid}`}
+              />
+            </button>
+          </div>
         </div>
       </nav>
     </Container>

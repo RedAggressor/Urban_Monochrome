@@ -3,12 +3,15 @@
 
 .container {
   background-color: $black-text;
-  border-bottom: 5px solid white; // видалити
 }
 
 .filters {
   display: flex;
   justify-content: space-between;
+  font-size: 15px;
+  @include media-query(sm) {
+    font-size: 20px;
+  }
 }
 
 .textIconButton {
@@ -91,6 +94,13 @@
 .rightButtons {
   display: flex;
   gap: 8px;
+}
+.toggleShowcaseButtons {
+  display: none;
+  @include media-query(sm) {
+    display: flex;
+    gap: 8px;
+  }
 }
 
 .icon_toggleFilters {
