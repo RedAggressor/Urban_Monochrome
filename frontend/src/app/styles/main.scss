@@ -13,7 +13,6 @@
   margin: 0;
   border: 0;
   box-sizing: border-box;
-  //overflow-x: hidden;
 }
 
 button {
@@ -42,7 +41,7 @@ body {
   @include media-query(sm) {
     height: 166px;
   }
-  @include media-query(sm) {
+  @include media-query(lg) {
     height: 120px;
   }
 }

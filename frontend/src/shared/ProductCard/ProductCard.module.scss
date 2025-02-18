@@ -1,0 +1,42 @@
+@import '../../app/styles/variables';
+@import '../../app/styles/mixins';
+
+.redText {
+  color: $red-text;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  @include media-query(lg) {
+    gap: 20px;
+  }
+}
+
+.imgLink {
+  @include hover(transform, scale(1.1));
+
+  &__img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+
+  @include media-query(lg) {
+    font-size: 20px;
+  }
+
+  &__title {
+    font-family: 'Roboto', sans-serif;
+  }
+  &__price {
+    font-weight: 700;
+  }
+}

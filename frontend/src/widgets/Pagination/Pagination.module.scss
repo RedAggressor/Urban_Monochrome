@@ -10,6 +10,13 @@ $content-size: 40px;
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
+
+  @include media-query(sm) {
+    justify-content: center;
+  }
+  @include media-query(lg) {
+    justify-content: right;
+  }
 }
 
 .arrowButton {

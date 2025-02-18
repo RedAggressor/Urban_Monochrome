@@ -1,7 +1,8 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Container } from '../../shared/Container/Container';
 import cl from './DetailedFilters.module.scss';
 import cn from 'classnames';
+import { useAppSelector } from '../../shared/hooks';
 
 const checkboxSections = [
   {
@@ -38,6 +39,7 @@ const colorOptions = ['Black', 'White'];
 
 type Props = {
   isFiltersVisible: boolean;
+  minHeight: number;
   setIsFiltersVisible: Dispatch<SetStateAction<boolean>>;
   selectedGenders: string[];
   setSelectedGenders: Dispatch<SetStateAction<string[]>>;
@@ -56,10 +58,12 @@ type Props = {
   selectedColors: string[];
   setSelectedColors: Dispatch<SetStateAction<string[]>>;
   setAppliedFilters: Dispatch<SetStateAction<object>>;
+  className?: string;
 };
 
 export const DetailedFilters: React.FC<Props> = ({
   isFiltersVisible,
+  minHeight,
   setIsFiltersVisible,
   selectedGenders,
   setSelectedGenders,
@@ -78,7 +82,10 @@ export const DetailedFilters: React.FC<Props> = ({
   selectedColors,
   setSelectedColors,
   setAppliedFilters,
+  className,
 }) => {
+  const { screenWidth } = useAppSelector(st => st.global);
+
   //#region булеві стейти
   const [isGenderListVisible, setIsGenderListVisible] = useState(true);
   const [isCategoriesListVisible, setIsCategoriesListVisible] = useState(true);
@@ -227,12 +234,20 @@ export const DetailedFilters: React.FC<Props> = ({
     setIsFiltersVisible(false);
   }
 
+  useEffect(() => {
+    // заборона прокрутки всієї сторінки лише на моб екранах
+    isFiltersVisible && screenWidth < 567
+      ? (document.body.style.overflowY = 'hidden')
+      : (document.body.style.overflowY = 'auto');
+  }, [isFiltersVisible]);
+
   return (
     <Container
-      className={cl.container}
+      className={`${cl.sectionsWrapper} ${className}`}
       style={{
         transform: `${isFiltersVisible ? 'translateX(0)' : 'translateX(-100%)'}`,
         transition: 'transform 0.3s ease-in-out',
+        minHeight: `${minHeight}px`,
       }}
     >
       {checkboxSections.map(section => (
