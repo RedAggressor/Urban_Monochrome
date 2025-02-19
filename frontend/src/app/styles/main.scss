@@ -13,7 +13,6 @@
   margin: 0;
   border: 0;
   box-sizing: border-box;
-  //overflow-x: hidden;
 }
 
 button {
@@ -35,6 +34,16 @@ body {
   font-family: 'Roboto', sans-serif;
   letter-spacing: -0.02em;
   font-weight: 400;
+}
+
+.header-placeholder {
+  height: 154px;
+  @include media-query(sm) {
+    height: 166px;
+  }
+  @include media-query(lg) {
+    height: 130px;
+  }
 }
 
 .wrapper {

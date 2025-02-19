@@ -1,0 +1,124 @@
+@import '../../app/styles/mixins';
+@import '../../app/styles/variables';
+
+.container {
+  background-color: $black-text;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  @include media-query(sm) {
+    font-size: 20px;
+  }
+}
+
+.textIconButton {
+  height: 64px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  @include hover(color, $hover-red);
+
+  &:hover .icon_toggleFilters {
+    background-image: url('/pictures/icons/toggleFiltersRed.svg');
+  }
+
+  &__icon {
+    height: 24px;
+    width: 24px;
+    transition: background-image $anim-duration;
+  }
+}
+
+.sortByButton {
+  position: relative;
+  // спочатку треба скинути ховер ефект у всього елемента, бо він впливає і на дропдаун список
+  &:hover {
+    color: inherit;
+  }
+  // а тепер додати стилі ховера лише для тексту і іконки, не списку
+  &__text {
+    transition: color $anim-duration;
+  }
+  &:hover .sortByButton__text {
+    color: $red-text;
+  }
+  &:hover .icon_arrowDown {
+    background-image: url('/pictures/icons/arrowDownRed.svg');
+  }
+}
+.sortByOptions {
+  cursor: initial;
+  background-color: $black-text;
+  position: absolute;
+  z-index: 999;
+  top: 100%;
+  left: 0;
+  padding: 8px;
+  width: 200%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform $anim-duration;
+  transform: scaleY(1);
+  transform-origin: top;
+
+  &_hidden {
+    transform: scaleY(0);
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    @include hover(color, $red-text);
+  }
+
+  &__radio {
+    @include custom-checkbox;
+  }
+
+  &__label {
+    // така сама як розмір радіо (у custom-checkbox)
+    line-height: 18px;
+  }
+
+  &__radio,
+  .sortByOptions__label {
+    cursor: pointer;
+  }
+}
+
+.rightButtons {
+  display: flex;
+  gap: 8px;
+}
+.toggleShowcaseButtons {
+  display: none;
+  @include media-query(sm) {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.icon_toggleFilters {
+  background-image: url('/pictures/icons/toggleFilters.svg');
+}
+
+.icon_arrowDown {
+  background-image: url('/pictures/icons/arrowDown.svg');
+}
+
+.icon_displayList {
+  width: 40px;
+  background-image: url('/pictures/icons/displayList.svg');
+  @include hover(background-image, url('/pictures/icons/displayListRed.svg'));
+}
+
+.icon_displayGrid {
+  width: 40px;
+  background-image: url('/pictures/icons/displayGrid.svg');
+  @include hover(background-image, url('/pictures/icons/displayGridRed.svg'));
+}

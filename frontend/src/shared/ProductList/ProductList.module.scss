@@ -1,0 +1,31 @@
+@import '../../app/styles/variables';
+@import '../../app/styles/mixins';
+
+.list {
+  @include page-grid;
+  row-gap: 16px;
+
+  @include media-query(lg) {
+    row-gap: 20px;
+  }
+
+  &__item {
+    grid-column: span 2;
+
+    @include media-query(sm) {
+      grid-column: span 2;
+
+      &_filtersOpen {
+        grid-column: span 4;
+      }
+    }
+
+    @include media-query(lg) {
+      grid-column: span 3;
+
+      &_filtersOpen {
+        grid-column: span 4;
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+@import '../../app/styles/mixins';
+@import '../../app/styles/variables';
+
+.catalog-gridContainer {
+  padding-block: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+  @include media-query(sm) {
+    @include page-grid;
+    grid-template-rows: auto auto;
+  }
+
+  @include media-query(lg) {
+    padding-block: 20px;
+  }
+}
+
+.detailedFilters {
+  width: 100%;
+  @include media-query(sm) {
+    overflow: hidden;
+    grid-row: 1;
+    width: 40%;
+  }
+  @include media-query(lg) {
+    width: 30%;
+  }
+}
+
+.prodList {
+  @include media-query(sm) {
+    grid-column: 1 / -1;
+    grid-row: 1;
+
+    &_filtersOpen {
+      grid-column: 4 / -1;
+    }
+  }
+}
+
+.pagination {
+  @include media-query(sm) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  @include media-query(lg) {
+    grid-column: 5 / -1;
+  }
+}

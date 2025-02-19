@@ -3,7 +3,7 @@ import cl from './Logo.module.scss';
 
 export const Logo = () => {
   return (
-    <Link to="#" className={cl.logo}>
+    <Link to="/" className={cl.logo}>
       <img src="/pictures/logo.png" alt="logo" className={cl.logo__img} />
     </Link>
   );

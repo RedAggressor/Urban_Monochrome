@@ -14,7 +14,7 @@ export const Header = () => {
   const [inputValue, setInputValue] = useState('');
 
   return (
-    <Container>
+    <Container className={cl.container}>
       {' '}
       <header className={cl.header}>
         <div className={cl.header__topContainer}>
