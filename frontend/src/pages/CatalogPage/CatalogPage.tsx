@@ -108,11 +108,16 @@ export const CatalogPage = () => {
   );
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
+  const gridContainerRef = useRef<HTMLDivElement>(null);
   const [listHeight, setListHeight] = useState(listRef.current?.clientHeight);
+  const [gridContainerHeight, setGridContainerHeight] = useState(
+    gridContainerRef.current?.clientHeight,
+  );
 
   useEffect(() => {
     setListHeight(listRef.current?.clientHeight);
-  }, [isFiltersVisible, listRef]);
+    setGridContainerHeight(gridContainerRef.current?.clientHeight);
+  }, [isFiltersVisible, listRef, gridContainerRef]);
   console.log(listHeight, listRef);
 
   //#region стейти фільтрів
@@ -150,10 +155,11 @@ export const CatalogPage = () => {
         setIsFiltersVisible={setIsFiltersVisible}
       />
 
-      <div className={cl['catalog-gridContainer']}>
+      <div className={cl['catalog-gridContainer']} ref={gridContainerRef}>
         <DetailedFilters
           isFiltersVisible={isFiltersVisible}
-          minHeight={listHeight || 0}
+          minHeightTablet={listHeight || 0}
+          minHeightDesk={gridContainerHeight || 0}
           setIsFiltersVisible={setIsFiltersVisible}
           selectedGenders={selectedGenders}
           setSelectedGenders={setSelectedGenders}

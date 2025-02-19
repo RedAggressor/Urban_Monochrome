@@ -39,7 +39,8 @@ const colorOptions = ['Black', 'White'];
 
 type Props = {
   isFiltersVisible: boolean;
-  minHeight: number;
+  minHeightTablet: number;
+  minHeightDesk: number;
   setIsFiltersVisible: Dispatch<SetStateAction<boolean>>;
   selectedGenders: string[];
   setSelectedGenders: Dispatch<SetStateAction<string[]>>;
@@ -63,7 +64,8 @@ type Props = {
 
 export const DetailedFilters: React.FC<Props> = ({
   isFiltersVisible,
-  minHeight,
+  minHeightTablet,
+  minHeightDesk,
   setIsFiltersVisible,
   selectedGenders,
   setSelectedGenders,
@@ -241,13 +243,24 @@ export const DetailedFilters: React.FC<Props> = ({
       : (document.body.style.overflowY = 'auto');
   }, [isFiltersVisible]);
 
+  function getElementMinHeight() {
+    if (screenWidth < 567) {
+      return 'none';
+    } else if (screenWidth > 567 && screenWidth < 1024) {
+      return minHeightTablet + 'px';
+    }
+    // на декстопі мін висота менша на 40пкс щоб компенсувати падінги контейнера і нижній край фільтрів був вирівняний з пагінацією
+    return minHeightDesk - 40 + 'px';
+  }
+  const filtersMenuMinHeight = getElementMinHeight();
+
   return (
     <Container
       className={`${cl.sectionsWrapper} ${className}`}
       style={{
         transform: `${isFiltersVisible ? 'translateX(0)' : 'translateX(-100%)'}`,
         transition: 'transform 0.3s ease-in-out',
-        minHeight: `${minHeight}px`,
+        minHeight: filtersMenuMinHeight,
       }}
     >
       {checkboxSections.map(section => (
